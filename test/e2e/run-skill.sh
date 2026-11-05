@@ -95,7 +95,7 @@ wait_until 20 '[[ $($X curl -s -o /dev/null -w %{http_code} http://127.0.0.1:910
 sleep 3
 post=$($X sh -c "$ENV bima check -config /etc/bima/config.yaml --json --send")
 check "bima check --send: ok=true" "echo '$post' | jq -e '.ok' >/dev/null"
-check "all checks pass except mode=detect warn & geoip skip" "[[ \$(echo '$post' | jq -r '[.checks[]|select(.status!=\"pass\")|.name]|sort|join(\",\")') == geoip,mode ]]"
+check "all checks pass except mode=detect warn, geoip skip, trusted_proxies warn (none given)" "[[ \$(echo '$post' | jq -r '[.checks[]|select(.status!=\"pass\")|.name]|sort|join(\",\")') == geoip,mode,trusted_proxies ]]"
 check "test alert delivered via Discord bot API" '$X curl -s http://127.0.0.1:8090/messages | jq -e "[.messages[]|select(.channel==\"discord-bot\")]|length>0" >/dev/null'
 check "probe ;id in detect mode → 200" '[[ $($X curl -s -o /dev/null -w %{http_code} "http://127.0.0.1/?x=;id") == 200 ]]'
 check "would-block alert sent" "wait_until 10 '$X curl -s http://127.0.0.1:8090/messages | grep -q WOULD-BLOCK'"

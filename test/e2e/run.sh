@@ -315,6 +315,11 @@ reset_scores
 out=$($COMPOSE run --rm -T --no-deps --entrypoint /usr/local/bin/scenariorun app -url http://haproxy:8080 2>&1); rc=$?
 echo "$out" | sed 's/^/      /'
 check "scenario runner: $(echo "$out" | grep '^RESULT' )" '(( rc == 0 ))'
+sect "Forged X-Forwarded-For flows (own container = own TCP peer; it ends up banned)"
+out=$($COMPOSE run --rm -T --no-deps --entrypoint /usr/local/bin/scenariorun app -url http://haproxy:8080 -only spoof 2>&1); rc=$?
+echo "$out" | sed 's/^/      /'
+check "spoof flows: $(echo "$out" | grep '^RESULT' )" '(( rc == 0 ))'
+check "peer flagged as header spoofer (bima_spoofers_total)" "(( \$(metric $M1 bima_spoofers_total) >= 1 ))"
 fi
 
 printf "\n════════ RESULT: ${G}%d passed${N}, ${R}%d failed${N} ════════\n" $PASS $FAIL

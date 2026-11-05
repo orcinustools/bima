@@ -40,6 +40,8 @@ func (h *Handler) request(w *encoding.ActionWriter, m *encoding.Message) {
 			r.ID = string(k.ValueBytes())
 		case k.NameEquals("src"):
 			r.IP = addr(k)
+		case k.NameEquals("peer"):
+			r.Peer = addr(k)
 		case k.NameEquals("method"):
 			r.Method = string(k.ValueBytes())
 		case k.NameEquals("path"):
@@ -84,7 +86,7 @@ func (h *Handler) request(w *encoding.ActionWriter, m *encoding.Message) {
 func (h *Handler) response(m *encoding.Message) {
 	var (
 		id, method, path, fp string
-		ip                   netip.Addr
+		ip, peer             netip.Addr
 		status               int
 	)
 	k := encoding.AcquireKVEntry()
@@ -95,6 +97,8 @@ func (h *Handler) response(m *encoding.Message) {
 			id = string(k.ValueBytes())
 		case k.NameEquals("src"):
 			ip = addr(k)
+		case k.NameEquals("peer"):
+			peer = addr(k)
 		case k.NameEquals("method"):
 			method = string(k.ValueBytes())
 		case k.NameEquals("path"):
@@ -110,7 +114,7 @@ func (h *Handler) response(m *encoding.Message) {
 		return
 	}
 	if ip.IsValid() {
-		h.Engine.OnResponse(id, ip, method, path, status, fp)
+		h.Engine.OnResponse(id, ip, peer, method, path, status, fp)
 	}
 }
 

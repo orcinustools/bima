@@ -29,7 +29,7 @@ func TestDistributedEnumerationBansGroup(t *testing.T) {
 		for j := 0; j < 8; j++ {
 			p := fmt.Sprintf("/w-%d-%d", i, j)
 			e.OnRequest(&Request{IP: ip, Method: "GET", Path: p})
-			e.OnResponse("", ip, "GET", p, 404, fp)
+			e.OnResponse("", ip, netip.Addr{}, "GET", p, 404, fp)
 		}
 	}
 	banned := 0
@@ -49,7 +49,7 @@ func TestDistributedNeedsMultipleIPs(t *testing.T) {
 	// one IP, 19 distinct 404s: below per-IP threshold and only 1 IP in group
 	for j := 0; j < 19; j++ {
 		p := fmt.Sprintf("/x-%d", j)
-		e.OnResponse("", ip, "GET", p, 404, "fp1")
+		e.OnResponse("", ip, netip.Addr{}, "GET", p, 404, "fp1")
 	}
 	if e.bans.IsBanned(ip.String()) {
 		t.Fatal("single IP below threshold must not be banned by group logic")

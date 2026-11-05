@@ -40,7 +40,8 @@ type Request struct {
 	Version string
 	Headers [][2]string
 	Body    []byte
-	JA3     string // empty for plain HTTP
+	JA3     string     // empty for plain HTTP
+	Peer    netip.Addr // TCP peer (HAProxy fc_src); IP may differ when taken from a header
 }
 
 func (r *Request) Header(name string) string {
@@ -69,6 +70,8 @@ type Engine struct {
 	Report *Report
 
 	crsSlots chan struct{} // bounds concurrent CRS evaluations
+	spoof    *spoofTracker
+	bots     *botVerifier
 }
 
 func New(cfg *config.Config, crs *detect.CRS, scorer *enum.Scorer, bans *ban.Manager, alerts *alert.Alerter, geo *geoip.DB) *Engine {
@@ -76,8 +79,23 @@ func New(cfg *config.Config, crs *detect.CRS, scorer *enum.Scorer, bans *ban.Man
 	if cfg.CRS.Timeout <= 0 {
 		cfg.CRS.Timeout = 50 * time.Millisecond
 	}
-	return &Engine{cfg: cfg, crs: crs, scorer: scorer, bans: bans, alerts: alerts, geo: geo, Report: newReport(),
-		crsSlots: make(chan struct{}, 4*runtime.NumCPU())}
+	e := &Engine{cfg: cfg, crs: crs, scorer: scorer, bans: bans, alerts: alerts, geo: geo, Report: newReport(),
+		crsSlots: make(chan struct{}, 4*runtime.NumCPU()),
+		spoof:    newSpoofTracker(scorer.Store(), cfg.Score.Window)}
+	if cfg.Bots.Verify {
+		e.bots = newBotVerifier(nil, cfg.Bots.Timeout)
+	}
+	return e
+}
+
+// ResetIP clears the behavioural score of ip (manual unban).
+func (e *Engine) ResetIP(ip string) { e.scorer.ResetScore(ip) }
+
+// SetResolver replaces the DNS resolver used for crawler verification (tests).
+func (e *Engine) SetResolver(r Resolver) {
+	if e.bots != nil {
+		e.bots = newBotVerifier(r, e.cfg.Bots.Timeout)
+	}
 }
 
 // targets splits request data into individually inspected values so that
@@ -304,7 +322,31 @@ func (e *Engine) OnRequest(r *Request) Verdict {
 	metrics.Requests.Inc()
 
 	fp := e.fingerprint(r)
-	if e.cfg.Allowed(r.IP) {
+
+	// Decide who is accountable BEFORE the allowlist: a forged
+	// X-Forwarded-For must not buy an allowlisted identity.
+	var pre []detect.Finding
+	claims := forwardedClaims(r.Headers, r.IP)
+	// Who is rotating the headers? A public src was appended by a proxy in
+	// front of us (the real client): blame it. An internal src means HAProxy
+	// took a forged value: blame the TCP peer. Never blame a proxy for its
+	// clients' headers.
+	key := r.IP
+	if !public(r.IP) && r.Peer.IsValid() {
+		key = r.Peer
+	}
+	if f := e.observeSpoofing(key.Unmap().String(), claims); f != nil {
+		pre = append(pre, *f)
+	}
+	claimed := r.IP
+	id, reason := e.identity(r.IP, r.Peer)
+	r.IP = id
+	if reason != "" && e.cfg.Allowed(claimed) && !e.cfg.Allowed(id) {
+		pre = append(pre, detect.Finding{RuleID: "BIMA-SPOOF-203", Category: "ip-spoofing", Severity: detect.High,
+			Msg:      "Allowlist bypass attempt: forwarding header claims allowlisted " + claimed.String() + " (" + reason + ")",
+			Location: "header:x-forwarded-for", Match: claimed.String(), Score: 50, Block: true})
+	}
+	if len(pre) == 0 && e.cfg.Allowed(r.IP) {
 		metrics.Verdicts.WithLabelValues("allow").Inc()
 		return Verdict{Action: Allow, FP: fp}
 	}
@@ -315,7 +357,7 @@ func (e *Engine) OnRequest(r *Request) Verdict {
 	}
 
 	t0 := time.Now()
-	findings := detect.Signatures(e.targets(r))
+	findings := append(pre, detect.Signatures(e.targets(r))...)
 	findings = append(findings, detect.VirtualPatches(&detect.HTTPRequest{Method: r.Method, Path: r.Path, Query: r.Query, Headers: r.Headers, Body: r.Body})...)
 	metrics.Inspect.WithLabelValues("signatures").Observe(time.Since(t0).Seconds())
 	findings = e.filter(findings, r.Path)
@@ -361,7 +403,17 @@ func (e *Engine) OnRequest(r *Request) Verdict {
 	for _, f := range findings {
 		add += f.Score
 	}
-	beh, score := e.scorer.ObserveRequest(ip, r.Path, r.Header("user-agent"), add)
+	ua := r.Header("user-agent")
+	botFs, verifiedBot := e.botFindings(r.IP, ua, enum.IsSensitivePath(r.Path))
+	botFs = e.filter(botFs, r.Path)
+	for _, f := range botFs {
+		add += f.Score
+	}
+	findings = append(findings, botFs...)
+	if verifiedBot {
+		ua = "" // verified crawlers are not scored as scanners
+	}
+	beh, score := e.scorer.ObserveRequest(ip, r.Path, ua, add)
 	findings = append(findings, e.filter(beh, r.Path)...)
 
 	v := Verdict{Action: Allow, Score: score, FP: fp}
@@ -408,10 +460,14 @@ func (e *Engine) groups(ip, fp string) []string {
 }
 
 // OnResponse feeds the response status into the behavioural scorer.
-func (e *Engine) OnResponse(id string, ipAddr netip.Addr, method, path string, status int, fp string) {
+func (e *Engine) OnResponse(id string, ipAddr, peer netip.Addr, method, path string, status int, fp string) {
 	metrics.Responses.Inc()
+	ipAddr, _ = e.identity(ipAddr, peer)
 	if e.cfg.Allowed(ipAddr) {
 		return
+	}
+	if e.bots != nil && status == 404 && e.bots.verified(ipAddr.Unmap()) {
+		return // verified crawlers follow stale links; don't score their 404s
 	}
 	ip := ipAddr.Unmap().String()
 	findings, others := e.scorer.ObserveResponse(ip, path, status, e.groups(ip, fp))

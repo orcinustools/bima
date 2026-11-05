@@ -10,6 +10,8 @@ syntax (`10m`, `1h`). Secrets are env-only.
 | `mode` | `enforce` | `detect` = shadow (alerts as `would-*`, never blocks). Env `BIMA_MODE` overrides. |
 | `host` | `bima` | Label shown in alerts. |
 | `allowlist` | `[]` | CIDRs never inspected (office, monitoring, payment-provider webhooks). |
+| `trusted_proxies` | `[]` | CDN/LB CIDRs allowed to set the client IP via X-Forwarded-For — **same list as `set-src` in haproxy.cfg**. If HAProxy takes the IP from a header sent by anyone else, Bima holds the TCP peer accountable instead (forged headers cannot frame or impersonate clients, nor buy an allowlisted identity). |
+| `bots.verify` / `bots.timeout` | `true` / `2s` | Reverse-DNS + forward-confirm check of UAs claiming Googlebot, Bingbot, Applebot, YandexBot, Baiduspider, PetalBot, Amazonbot (async, cached). Fake → `BIMA-BOT-301`; any crawler UA probing secrets → `BIMA-BOT-302`; verified crawlers are not scored for 404s. |
 | `max_body_inspect` | `65536` | Bytes of body inspected. ≤ HAProxy `tune.bufsize`. |
 | `crs.enabled` / `paranoia` / `inbound_threshold` | `true` / `1` / `5` | OWASP CRS v4 via Coraza. Raise paranoia only with thorough tuning. |
 | `crs.allowed_methods` | `GET HEAD POST OPTIONS PUT PATCH DELETE` | |

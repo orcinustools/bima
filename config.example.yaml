@@ -5,6 +5,12 @@ metrics_addr: "127.0.0.1:9101"   # /healthz /metrics /bans /report — keep priv
 mode: detect                      # shadow mode first; switch to enforce after tuning (GET /report)
 host: api.example.com
 allowlist: []                     # office / monitoring / payment-provider webhook CIDRs
+# CDN/LB addresses HAProxy trusts for X-Forwarded-For (same list as haproxy.cfg set-src).
+# Needed so a forged X-Forwarded-For can never frame or impersonate another client.
+trusted_proxies: []
+bots:
+  verify: true                    # reverse-DNS check of UAs claiming Googlebot/Bingbot/Applebot/...
+  timeout: 2s
 max_body_inspect: 65536
 crs:
   enabled: true

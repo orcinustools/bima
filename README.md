@@ -29,6 +29,8 @@ Grafana ◄─ "Bima WAF" dashboard
 | Virtual patches `BIMA-VP-*` | VP-001..010 + SQLI-014: request-level rules for specific CVEs (Next.js middleware bypass, SharePoint ToolShell, Tomcat partial PUT, TeamCity `;.jsp`, malformed Host, CrushFTP, PHP-CGI, dot-segments, abusive multipart, SAP NetWeaver, SQLi in auth headers) | block |
 | OWASP CRS v4 | Coraza, paranoia 1. Protocol-only hits (920/911/922) are logged only. Skipped for trivially plain requests (fast path) and capped by its own deadline | block, score +30/+50 |
 | Behaviour `BIMA-ENUM-*` | 101 scanner UA, 102 sensitive path, 103 ID enumeration, 104 ≥20 distinct 404s, 105 auth brute force, 106 error ratio | score |
+| Identity `BIMA-SPOOF-*` | Client identity from the TCP peer (`fc_src`) when a forwarding header is forged: untrusted forwarder, internal address claimed by a public peer, header rotation across networks (202), allowlist bypass attempt (203) | identity / block |
+| Crawlers `BIMA-BOT-*` | Claimed Googlebot/Bingbot/Applebot/… verified by reverse DNS (301 fake); crawler UA probing secrets (302); verified crawlers spared from 404 scoring | score |
 | Groups `BIMA-ENUM-107` | ≥60 distinct 404s from ≥3 IPs sharing an ASN **or** a client fingerprint; every contributing IP is penalised | group ban |
 
 Per-IP scores decay (half-life 5 min). **≥50 → tarpit**, **≥80 → ban** with an escalation

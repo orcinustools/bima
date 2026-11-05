@@ -183,6 +183,8 @@ metrics_addr: {{quote .Metrics}}       # /healthz /metrics /bans /report — kee
 mode: {{.Mode}}                          # detect = shadow mode (alerts only). Switch to enforce after tuning.
 host: {{quote .Host}}
 allowlist: []                          # office / monitoring / payment-provider webhook CIDRs
+trusted_proxies: [{{range $i, $a := .TrustedProxies}}{{if $i}}, {{end}}{{quote $a}}{{end}}]   # must match set-src trust in haproxy.cfg
+bots: {verify: true, timeout: 2s}      # reverse-DNS check of claimed crawlers
 max_body_inspect: 65536
 crs:
   enabled: true
@@ -236,6 +238,7 @@ const frontendBlock = `    option http-buffer-request
 {{- end}}
     # L0: IPs banned by Bima never reach the agent
     http-request deny deny_status 403 if { src,map_ip({{.MapFile}}) -m found }
+    http-request deny deny_status 403 if { fc_src,map_ip({{.MapFile}}) -m found }
     # L1-2: Bima via SPOE (fail-open on agent error/timeout)
     http-request set-var(txn.path) path
     http-request set-var(txn.method) method

@@ -60,6 +60,9 @@ func isScannerUA(ua string) bool {
 var sensitivePath = regexp.MustCompile(`(?i)/\.(?:env(?:\.[a-z]+)?|git|svn|hg|bzr|ds_store|aws|ssh|docker|kube|npmrc|htaccess|htpasswd|bash_history|vscode|idea)(?:/|$)|` +
 	`/(?:wp-admin|wp-login\.php|wp-config\.php|xmlrpc\.php|phpinfo(?:\.php)?|phpmyadmin|pma|adminer(?:\.php)?|server-status|server-info|actuator(?:/|$)|` +
 	`_profiler|telescope|elmah\.axd|trace\.axd|web\.config|id_[rd]sa|vendor/phpunit|cgi-bin/|boaform|hnap1|solr/admin|jmx-console|manager/html)|` +
+	// JS build/deploy artifacts and ORM schemas scanned for leaked secrets
+	`/\.(?:next|vercel|netlify|output|nuxt|svelte-kit|turbo|terraform|serverless|firebase|circleci|github/workflows)/|` +
+	`/(?:prisma/schema\.prisma|terraform\.tfstate(?:\.backup)?|docker-compose\.ya?ml|appsettings(?:\.\w+)?\.json|credentials\.json|secrets?\.(?:json|ya?ml)|\.env\.[\w-]+)$|` +
 	`\.(?:bak|old|orig|save|swp|sql|sqlite|db|tar|tgz|tar\.gz|7z|rar|zip|pem|key)$`)
 
 var authPath = regexp.MustCompile(`(?i)login|signin|sign-in|auth|token|session|password|otp|2fa|mfa`)
@@ -88,6 +91,12 @@ type Scorer struct {
 	consecutive atomic.Int32
 	openUntil   atomic.Int64 // unix nanos
 }
+
+// IsSensitivePath reports whether path is a typical secret/config probe.
+func IsSensitivePath(path string) bool { return sensitivePath.MatchString(path) }
+
+// Store exposes the state store (shared with identity/spoof tracking).
+func (s *Scorer) Store() store.Store { return s.st }
 
 func NewScorer(st store.Store, halfLife, window time.Duration, th Thresholds) *Scorer {
 	return &Scorer{st: st, halfLife: halfLife, window: window, th: th}

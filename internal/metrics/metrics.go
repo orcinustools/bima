@@ -31,6 +31,12 @@ var (
 		Name: "bima_crs_timeouts_total", Help: "CRS evaluations abandoned at the CRS deadline (verdict from other layers)."})
 	CRSOverload = prometheus.NewCounter(prometheus.CounterOpts{
 		Name: "bima_crs_overload_total", Help: "Requests where CRS was skipped because all CRS slots were busy."})
+	UntrustedForwarder = prometheus.NewCounter(prometheus.CounterOpts{
+		Name: "bima_untrusted_forwarder_total", Help: "Requests where HAProxy took the client IP from a header sent by a peer outside trusted_proxies."})
+	Spoofers = prometheus.NewCounter(prometheus.CounterOpts{
+		Name: "bima_spoofers_total", Help: "Peers flagged for rotating forwarding-header addresses."})
+	BotChecks = prometheus.NewCounterVec(prometheus.CounterOpts{
+		Name: "bima_bot_verifications_total", Help: "Crawler verifications by result."}, []string{"crawler", "result"})
 	Bans = prometheus.NewCounter(prometheus.CounterOpts{
 		Name: "bima_bans_total", Help: "Bans placed."})
 	AlertsSent = prometheus.NewCounterVec(prometheus.CounterOpts{
@@ -40,7 +46,7 @@ var (
 )
 
 func init() {
-	Registry.MustRegister(CRSSkipped, CRSTimeouts, CRSOverload, Requests, Responses, Verdicts, Detections, Excluded, Inspect, Bans, AlertsSent, Mode,
+	Registry.MustRegister(UntrustedForwarder, Spoofers, BotChecks, CRSSkipped, CRSTimeouts, CRSOverload, Requests, Responses, Verdicts, Detections, Excluded, Inspect, Bans, AlertsSent, Mode,
 		collectors.NewGoCollector(), collectors.NewProcessCollector(collectors.ProcessCollectorOpts{}))
 }
 

@@ -55,6 +55,12 @@ func cmdCheck(args []string) int {
 		c.add("mode", "pass", "enforce", "")
 	}
 
+	if len(cfg.TrustedProxies) == 0 {
+		c.add("trusted_proxies", "warn", "empty: fine only if HAProxy never takes the client IP from X-Forwarded-For",
+			"if haproxy.cfg uses set-src from a header, list those proxies here so forged headers cannot frame or impersonate clients")
+	} else {
+		c.add("trusted_proxies", "pass", strings.Join(cfg.TrustedProxies, ", "), "")
+	}
 	if cfg.CRS.Enabled {
 		t := time.Now()
 		if _, err := detect.NewCRS(cfg.CRS.Paranoia, cfg.CRS.Threshold, cfg.CRS.AllowedMethods, cfg.CRS.ExtraDirectives); err != nil {

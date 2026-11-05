@@ -66,7 +66,9 @@ func send(ip, method, path string, headers map[string]string, body string) resp 
 		}
 		fmt.Fprintf(&b, "%s: %s\r\n", k, h[k])
 	}
-	fmt.Fprintf(&b, "X-Forwarded-For: %s\r\n", ip)
+	if ip != "" {
+		fmt.Fprintf(&b, "X-Forwarded-For: %s\r\n", ip)
+	}
 	if body != "" || method == "POST" || method == "PUT" || method == "PATCH" {
 		fmt.Fprintf(&b, "Content-Length: %d\r\n", len(body))
 	}
@@ -117,7 +119,7 @@ type result struct {
 func main() {
 	flag.StringVar(&target, "url", "http://haproxy:8080", "HAProxy frontend")
 	jsonOut := flag.String("json", "", "write full results to this file")
-	only := flag.String("only", "", "comma-separated parts: corpus,flows (default both)")
+	only := flag.String("only", "", "comma-separated parts: corpus,flows,spoof (default corpus,flows; run spoof from its own container: it gets that container banned)")
 	flag.Parse()
 
 	var results []result
@@ -146,6 +148,9 @@ func main() {
 	}
 	if *only == "" || strings.Contains(*only, "flows") {
 		results = append(results, runFlows()...)
+	}
+	if strings.Contains(*only, "spoof") {
+		results = append(results, runSpoofFlows()...)
 	}
 
 	// matrix
@@ -369,5 +374,84 @@ func runFlows() []result {
 	a := get(ip, "/search?q=%3Cscript%3Ealert(1)%3C%2Fscript%3E", browser).status
 	b := get(ip, "/products", browser).status
 	out = append(out, flow("flow-14", "single suspicious search → that request blocked, next request served", a == 403 && b == 200, fmt.Sprintf("%d then %d", a, b)))
+
+	// F15 fake Googlebot from a public address without googlebot.com rDNS
+	ip = flowIP()
+	gb := map[string]string{"User-Agent": "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"}
+	get(ip, "/products", gb) // triggers async verification
+	time.Sleep(3 * time.Second)
+	var seq []string
+	for i := 0; i < 4; i++ {
+		seq = append(seq, strconv.Itoa(get(ip, "/products", gb).status))
+	}
+	out = append(out, flow("flow-15", "fake Googlebot (no googlebot.com rDNS) → throttled after verification",
+		strings.Contains(strings.Join(seq, ","), "429") || strings.Contains(strings.Join(seq, ","), "403"), strings.Join(seq, ",")))
+
+	// F16 real Googlebot address following 45 stale links: never banned
+	if names, err := net.LookupAddr("66.249.66.1"); err == nil && len(names) > 0 {
+		get("66.249.66.1", "/", gb)
+		time.Sleep(3 * time.Second)
+		bad = 0
+		for i := 0; i < 45; i++ {
+			if st := get("66.249.66.1", fmt.Sprintf("/old-link-%d", i), gb).status; st == 403 || st == 429 {
+				bad++
+			}
+		}
+		out = append(out, flow("flow-16", "verified Googlebot (rDNS "+strings.TrimSuffix(names[0], ".")+") follows 45 dead links → never blocked", bad == 0, fmt.Sprintf("%d blocked", bad)))
+	} else {
+		r := flow("flow-16", "verified Googlebot follows dead links", false, "")
+		r.Gap = "no outbound DNS in this environment: " + fmt.Sprint(err)
+		out = append(out, r)
+	}
+	return out
+}
+
+// runSpoofFlows: forged X-Forwarded-For traffic. Run in a dedicated container
+// (its own TCP peer): the last flow gets that peer banned.
+func runSpoofFlows() []result {
+	var out []result
+	// S1 corporate proxy: many employees from ONE internal network
+	bad := 0
+	for i := 1; i <= 30; i++ {
+		st := send(fmt.Sprintf("10.1.%d.%d", i%3, i), "GET", []string{"/", "/products", "/search?q=kopi", "/api/users/42"}[i%4], map[string]string{"User-Agent": "Mozilla/5.0 Chrome/130"}, "").status
+		if st == 403 || st == 429 {
+			bad++
+		}
+	}
+	out = append(out, flow("spoof-01", "corporate proxy: 30 users from one internal /16 → never blocked", bad == 0, fmt.Sprintf("%d blocked", bad)))
+
+	// S2 the real access log: random internal XFF + rotating fake crawler UAs
+	replay := []struct{ xff, path, ua string }{
+		{"192.168.60.245", "/.vercel/project.json", "Mozilla/5.0 (compatible; cohere-ai; +https://cohere.com/crawler)"},
+		{"10.100.20.99", "/.next/prerender-manifest.json", "Mozilla/5.0 (compatible; ChatGLM-Spider/1.0; +https://zhipuai.cn/)"},
+		{"192.168.121.22", "/.next/routes-manifest.json", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15 (Applebot/0.1; +http://www.apple.com/go/applebot)"},
+		{"10.184.8.39", "/.netlify/state.json", "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; PerplexityBot/1.0; +https://perplexity.ai/perplexitybot)"},
+		{"192.168.179.141", "/.next/server/pages/index.js", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (Applebot/0.1; +http://www.apple.com/go/applebot)"},
+		{"192.168.120.248", "/.next/required-server-files.json", "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; ClaudeBot/1.0; +claudebot@anthropic.com)"},
+		{"10.169.175.104", "/prisma/schema.prisma", "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; Claude-User/1.0; +claudebot@anthropic.com)"},
+		{"100.127.105.44", "/.output/nitro.json", "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; PerplexityBot/1.0; +https://perplexity.ai/perplexitybot)"},
+		{"192.168.143.14", "/.output/server/index.mjs", "Mozilla/5.0 (compatible; Bytespider; spider-feedback@bytedance.com) AppleWebKit/537.36"},
+		{"192.168.135.194", "/.next/server/app/page.js", "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; Perplexity-User/1.0; +https://perplexity.ai/perplexity-user)"},
+		{"192.168.224.109", "/.env.shared", "CCBot/2.0 (https://commoncrawl.org/faq/)"},
+		{"172.26.54.205", "/packages/api/.env", "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"},
+		{"10.213.25.60", "/prisma/.env", "Mozilla/5.0 (compatible; ChatGLM-Spider/1.0; +https://zhipuai.cn/)"},
+		{"10.160.196.240", "/.env.monorepo", "Mozilla/5.0 (compatible; Amazonbot/0.1; +https://developer.amazon.com/support/amazonbot)"},
+		{"10.114.183.186", "/.env.common", "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; Perplexity-User/1.0; +https://perplexity.ai/perplexity-user)"},
+	}
+	var codes []string
+	served := 0
+	for _, l := range replay {
+		st := send(l.xff, "GET", l.path, map[string]string{"User-Agent": l.ua}, "").status
+		codes = append(codes, strconv.Itoa(st))
+		if st != 403 && st != 429 {
+			served++
+		}
+	}
+	out = append(out, flow("spoof-02", "replay of the real log (15 probes, rotating internal XFF + fake crawler UAs) → stopped early", served <= 8 && codes[len(codes)-1] == "403", strings.Join(codes, ",")))
+
+	// S3 the scanner is held accountable by its TCP address, whatever it claims
+	st1 := send("8.8.8.8", "GET", "/products", map[string]string{"User-Agent": "Mozilla/5.0 Chrome/130"}, "").status
+	st2 := send("", "GET", "/products", map[string]string{"User-Agent": "Mozilla/5.0 Chrome/130"}, "").status
+	out = append(out, flow("spoof-03", "after the replay, a clean request with a new forged or no XFF is still refused (peer banned)", st1 == 403 && st2 == 403, fmt.Sprintf("%d,%d", st1, st2)))
 	return out
 }

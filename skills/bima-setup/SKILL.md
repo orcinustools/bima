@@ -14,6 +14,7 @@ non-interactive and print machine-readable output with `--json`:
 | `bima check -config F [--json] [--send]` | Validate config and live wiring (CRS, Runtime API, map, SPOE backend, agent, Redis, GeoIP, notifiers) |
 | `bima run -config F` | Run the agent (what systemd starts) |
 | `bima test-alert -config F` | Send one test alert to every notifier |
+| `bima unban -config F IP...` | Lift bans on every HAProxy node and reset the score (false positive / support request) |
 | `bima skills show bima-setup <file>` | Print a reference file of this skill |
 
 ## Ground rules (production safety)

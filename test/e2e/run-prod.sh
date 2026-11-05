@@ -38,6 +38,34 @@ docker compose restart haproxy >/dev/null 2>&1; sleep 1; wait_until 30 '[[ $(cod
 check "ban re-applied to fresh HAProxy map via unix socket" "wait_until 15 '[[ \$(code https://127.0.0.1:28443/) == 403 ]]'"
 check "alerts delivered (telegram+discord)" '[[ $(curl -s http://127.0.0.1:28090/messages | jq "[.messages[].channel]|unique|length") == 2 ]]'
 check "Bima metrics exposed" 'curl -s $M/metrics | grep -q bima_bans_total'
+
+printf "\n\033[36m━━━━ REAL LOG REPLAY: forged internal X-Forwarded-For + fake crawler UAs ━━━━\033[0m\n"
+curl -s -X DELETE http://127.0.0.1:28090/messages >/dev/null
+for b in $(curl -s $M/bans | jq -r 'keys[]'); do docker compose exec -T bima bima unban -config /etc/bima/config.yaml "$b"; done
+check "bima unban lifted every ban" "[[ \$(curl -s $M/bans | jq length) == 0 ]] && wait_until 10 '[[ \$(code https://127.0.0.1:28443/) == 200 ]]'"
+codes=()
+while IFS='|' read -r xff path ua; do
+  codes+=("$(code -H "X-Forwarded-For: $xff" -A "$ua" "https://127.0.0.1:28443$path")")
+done <<'LOG'
+192.168.60.245|/.vercel/project.json|Mozilla/5.0 (compatible; cohere-ai; +https://cohere.com/crawler)
+10.100.20.99|/.next/prerender-manifest.json|Mozilla/5.0 (compatible; ChatGLM-Spider/1.0; +https://zhipuai.cn/)
+192.168.121.22|/.next/routes-manifest.json|Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (Applebot/0.1; +http://www.apple.com/go/applebot)
+10.184.8.39|/.netlify/state.json|Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; PerplexityBot/1.0; +https://perplexity.ai/perplexitybot)
+192.168.120.248|/.next/required-server-files.json|Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; ClaudeBot/1.0; +claudebot@anthropic.com)
+10.169.175.104|/prisma/schema.prisma|Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; Claude-User/1.0; +claudebot@anthropic.com)
+192.168.224.109|/.env.shared|CCBot/2.0 (https://commoncrawl.org/faq/)
+172.26.54.205|/packages/api/.env|Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)
+10.160.196.240|/.env.monorepo|Mozilla/5.0 (compatible; Amazonbot/0.1; +https://developer.amazon.com/support/amazonbot)
+LOG
+check "scanner stopped at its first probe, everything after refused (${codes[*]})" '[[ ${codes[0]} == 403 || ${codes[0]} == 429 ]] && [[ ! " ${codes[*]:1} " =~ " 200 " ]]'
+check "forged X-Forwarded-For ignored: the TCP client is the banned identity" "curl -s $M/bans | jq -e 'keys|length==1' >/dev/null && ! curl -s $M/bans | jq -e 'has(\"192.168.60.245\")' >/dev/null"
+sleep 6
+curl -s http://127.0.0.1:28090/messages | jq -r '.messages[].text' > /tmp/bima-prod-alerts.txt
+for kw in BIMA-ENUM-102 BIMA-BOT-301; do
+  check "alert explains it ($kw)" "grep -q $kw /tmp/bima-prod-alerts.txt"
+done
+# same IP + category (fake-crawler) is deduplicated into one alert; the report keeps every rule
+check "report records the crawler probing secrets (BIMA-BOT-302)" "curl -s $M/report | jq -e '.rules[]|select(.rule==\"BIMA-BOT-302\")' >/dev/null"
 printf "\n════════ PROD RESULT: %d passed, %d failed ════════\n" $PASS $FAIL
 for f in "${FAILED[@]}"; do printf "  - %s\n" "$f"; done
 docker compose down -v >/dev/null 2>&1

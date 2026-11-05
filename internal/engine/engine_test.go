@@ -142,7 +142,7 @@ func TestEnumerationEscalates(t *testing.T) {
 		if last.Action == Block {
 			break
 		}
-		e.OnResponse("", ip, "GET", r.Path, 404, "")
+		e.OnResponse("", ip, netip.Addr{}, "GET", r.Path, 404, "")
 	}
 	if last.Action != Block {
 		t.Fatalf("expected ban/block after 404 flood, got %s score=%.0f", last.Action, last.Score)

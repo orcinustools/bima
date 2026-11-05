@@ -28,6 +28,19 @@ type Config struct {
 	Allowlist []string       `yaml:"allowlist"` // CIDRs never inspected
 	allow     []netip.Prefix `yaml:"-"`
 
+	// TrustedProxies are the CDN/LB addresses allowed to set the client IP via
+	// X-Forwarded-For. When HAProxy rewrote the client IP for a peer outside this
+	// list (misconfiguration), Bima uses the TCP peer as the client identity.
+	TrustedProxies []string       `yaml:"trusted_proxies"`
+	trusted        []netip.Prefix `yaml:"-"`
+
+	// Bots: verify User-Agents that claim to be well-known crawlers
+	// (reverse DNS + forward confirmation, asynchronous and cached).
+	Bots struct {
+		Verify  bool          `yaml:"verify"`
+		Timeout time.Duration `yaml:"timeout"`
+	} `yaml:"bots"`
+
 	MaxBodyInspect int `yaml:"max_body_inspect"` // bytes of body to inspect
 
 	CRS struct {
@@ -162,6 +175,8 @@ func Default() *Config {
 	c.CRS.Threshold = 5
 	c.CRS.FastPath = true
 	c.CRS.Timeout = 50 * time.Millisecond
+	c.Bots.Verify = true
+	c.Bots.Timeout = 2 * time.Second
 	c.Score.Tarpit = 50
 	c.Score.Ban = 80
 	c.Score.HalfLife = 5 * time.Minute
@@ -251,18 +266,63 @@ func Load(path string) (*Config, error) {
 	if len(c.Ban.Durations) == 0 {
 		return nil, fmt.Errorf("ban.durations must not be empty")
 	}
-	for _, s := range c.Allowlist {
+	var err error
+	if c.allow, err = parsePrefixes(c.Allowlist); err != nil {
+		return nil, fmt.Errorf("allowlist: %w", err)
+	}
+	if c.trusted, err = parsePrefixes(c.TrustedProxies); err != nil {
+		return nil, fmt.Errorf("trusted_proxies: %w", err)
+	}
+	return c, nil
+}
+
+func parsePrefixes(list []string) ([]netip.Prefix, error) {
+	var out []netip.Prefix
+	for _, s := range list {
 		p, err := netip.ParsePrefix(s)
 		if err != nil {
 			a, err2 := netip.ParseAddr(s)
 			if err2 != nil {
-				return nil, fmt.Errorf("allowlist %q: %w", s, err)
+				return nil, fmt.Errorf("%q: %w", s, err)
 			}
 			p = netip.PrefixFrom(a, a.BitLen())
 		}
-		c.allow = append(c.allow, p)
+		out = append(out, p)
 	}
-	return c, nil
+	return out, nil
+}
+
+// SetAllowlist replaces the allowlist (tests).
+func (c *Config) SetAllowlist(list []string) error {
+	p, err := parsePrefixes(list)
+	if err == nil {
+		c.Allowlist, c.allow = list, p
+	}
+	return err
+}
+
+// SetTrustedProxies replaces the trusted proxy list (tests).
+func (c *Config) SetTrustedProxies(list []string) error {
+	p, err := parsePrefixes(list)
+	if err == nil {
+		c.TrustedProxies, c.trusted = list, p
+	}
+	return err
+}
+
+// Trusted reports whether a is a configured trusted proxy. ok=false when no
+// trusted proxies are configured (unknown).
+func (c *Config) Trusted(a netip.Addr) (trusted, configured bool) {
+	if len(c.trusted) == 0 {
+		return false, false
+	}
+	a = a.Unmap()
+	for _, p := range c.trusted {
+		if p.Contains(a) {
+			return true, true
+		}
+	}
+	return false, true
 }
 
 func (c *Config) Allowed(a netip.Addr) bool {

@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"log/slog"
 	"net/http"
+	"net/netip"
 	"os"
 	"os/signal"
 	"strings"
@@ -39,6 +40,7 @@ Usage:
                                                validate config + live wiring (HAProxy, Redis, notifiers)
   bima init       [flags]                      generate config, HAProxy snippet, SPOE, systemd unit, monitoring
   bima test-alert -config FILE                 send a test alert to every notifier
+  bima unban      -config FILE IP...           lift bans (all HAProxy nodes) and reset scores
   bima skills     list | show [NAME [FILE]] | install [--dir DIR] [--force]
                                                agent skills embedded in this binary (e.g. for Claude Code)
   bima version
@@ -62,6 +64,8 @@ func main() {
 		os.Exit(cmdInit(args))
 	case "test-alert":
 		os.Exit(cmdTestAlert(args))
+	case "unban":
+		os.Exit(cmdUnban(args))
 	case "skills":
 		os.Exit(cmdSkills(args))
 	case "version", "--version":
@@ -108,6 +112,50 @@ func cmdTestAlert(args []string) int {
 		return 1
 	}
 	return 0
+}
+
+func cmdUnban(args []string) int {
+	fs := flag.NewFlagSet("unban", flag.ExitOnError)
+	cfgPath := fs.String("config", "config.yaml", "path to config file")
+	_ = fs.Parse(args)
+	if fs.NArg() == 0 {
+		fmt.Fprintln(os.Stderr, "usage: bima unban -config FILE IP...")
+		return 2
+	}
+	cfg, err := config.Load(*cfgPath)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, "config:", err)
+		return 1
+	}
+	base := cfg.MetricsAddr
+	if strings.HasPrefix(base, ":") {
+		base = "127.0.0.1" + base
+	}
+	rc := 0
+	for _, ip := range fs.Args() {
+		req, _ := http.NewRequest(http.MethodDelete, "http://"+base+"/bans/"+ip, nil)
+		resp, err := (&http.Client{Timeout: 5 * time.Second}).Do(req)
+		if err != nil {
+			fmt.Printf("✘ %s: agent not reachable at %s: %v\n", ip, base, err)
+			rc = 1
+			continue
+		}
+		var out struct {
+			WasBanned bool `json:"was_banned"`
+		}
+		_ = json.NewDecoder(resp.Body).Decode(&out)
+		resp.Body.Close()
+		switch {
+		case resp.StatusCode != 200:
+			fmt.Printf("✘ %s: HTTP %d\n", ip, resp.StatusCode)
+			rc = 1
+		case out.WasBanned:
+			fmt.Printf("✔ %s: unbanned, score reset\n", ip)
+		default:
+			fmt.Printf("✔ %s: was not banned (score reset)\n", ip)
+		}
+	}
+	return rc
 }
 
 func cmdRun(args []string) {
@@ -218,6 +266,25 @@ func serveHTTP(addr string, eng *engine.Engine, bans *ban.Manager) {
 	mux.HandleFunc("/bans", func(w http.ResponseWriter, _ *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		_ = json.NewEncoder(w).Encode(bans.Active())
+	})
+	// DELETE /bans/<ip>: lift a ban everywhere (store + every HAProxy map) and
+	// reset the IP's score. Used by `bima unban`. Keep metrics_addr private.
+	mux.HandleFunc("DELETE /bans/{ip}", func(w http.ResponseWriter, r *http.Request) {
+		a, err := netip.ParseAddr(r.PathValue("ip"))
+		if err != nil {
+			http.Error(w, "invalid ip", http.StatusBadRequest)
+			return
+		}
+		ip := a.Unmap().String()
+		was := bans.IsBanned(ip)
+		if err := bans.Unban(ip); err != nil {
+			http.Error(w, err.Error(), http.StatusBadGateway)
+			return
+		}
+		eng.ResetIP(ip)
+		slog.Warn("ban lifted manually", "ip", ip, "was_banned", was)
+		w.Header().Set("Content-Type", "application/json")
+		_ = json.NewEncoder(w).Encode(map[string]any{"ip": ip, "was_banned": was})
 	})
 	// Shadow-mode tuning report: hits per rule, top paths/locations, FP hints.
 	mux.HandleFunc("/report", func(w http.ResponseWriter, r *http.Request) {
