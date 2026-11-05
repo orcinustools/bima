@@ -1,0 +1,47 @@
+# Same as config.yaml but WITHOUT the exclusions learned in shadow mode (phase 5 baseline).
+listen: ":12345"
+metrics_addr: ":9101"
+mode: enforce                 # overridden by BIMA_MODE env (phase 5 shadow test)
+host: e2e.bima.local
+allowlist:
+  - 10.200.0.0/16             # e.g. office / monitoring
+max_body_inspect: 65536
+crs:
+  enabled: true
+  paranoia: 1
+  inbound_threshold: 5
+score:
+  tarpit: 50
+  ban: 80
+  half_life: 5m
+  window: 1m
+group:
+  by: [asn, fingerprint]
+  distinct_404: 60
+  min_ips: 3
+  member_404: 3
+  penalty: 80
+  flag_ttl: 2m
+state:
+  backend: redis              # both agents share scores, windows and bans
+  redis:
+    addr: redis:6379
+    prefix: "bima:"
+geoip:
+  country_db: /usr/share/bima/geo/country.mmdb
+  asn_db: /usr/share/bima/geo/asn.mmdb
+ban:
+  enabled: true
+  runtime_apis: ["tcp:haproxy:9999", "tcp:haproxy2:9999"]
+  map_file: /usr/local/etc/haproxy/bima-blocklist.map
+  durations: [20s, 40s, 1m]   # short ladder for e2e (prod: 10m, 1h, 24h)
+  reconcile_interval: 2s
+alert:
+  dedup_window: 30s
+  digest_interval: 5s
+  telegram:
+    enabled: true
+    api_base: "http://notify:8090"   # mock; prod: https://api.telegram.org
+  discord:
+    enabled: true
+exclusions: []

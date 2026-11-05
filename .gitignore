@@ -1,0 +1,15 @@
+# binaries
+/bima
+/dist/
+*.test
+*.out
+# local / generated
+/bima-setup/
+deploy/e2e/certs/
+deploy/e2e-prod/certs/
+deploy/e2e-prod/bima-blocklist.map
+*.pem
+*.key
+*.env
+!deploy/**/*.env.example
+.DS_Store

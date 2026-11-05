@@ -1,0 +1,37 @@
+# Runs deploy/haproxy.cfg UNCHANGED with the production image (target runtime).
+# app and bima share HAProxy's network namespace so 127.0.0.1 backends and the
+# unix Runtime API socket work exactly as on a single production host.
+name: bima-prod
+services:
+  haproxy:
+    image: haproxy:3.0-alpine
+    user: root
+    volumes:
+      - ../haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+      - ../bima-spoe.conf:/etc/haproxy/bima-spoe.conf:ro
+      - ./bima-blocklist.map:/etc/haproxy/bima-blocklist.map:ro
+      - ./certs:/etc/haproxy/certs:ro      # only combined cert+key PEM files
+      - run:/var/run/haproxy
+    ports: ["127.0.0.1:28080:80", "127.0.0.1:28443:443", "127.0.0.1:28404:8404", "127.0.0.1:28101:9101"]
+  app:
+    image: bima:e2e
+    command: ["/usr/local/bin/mockapp"]
+    network_mode: "service:haproxy"
+  bima:
+    image: bima:prod
+    build: {context: ../.., dockerfile: Dockerfile, target: runtime}
+    user: root              # test: socket is root:root 660 (prod: add bima to haproxy group)
+    network_mode: "service:haproxy"
+    volumes:
+      - ./config.yaml:/etc/bima/config.yaml:ro
+      - run:/var/run/haproxy
+      - state:/var/lib/bima
+    environment:
+      BIMA_TELEGRAM_TOKEN: "123456:TEST-TOKEN"
+      BIMA_TELEGRAM_CHAT_ID: "-1001234567890"
+      BIMA_DISCORD_WEBHOOK: "http://notify:8090/discord/webhook"
+  notify:
+    image: bima:e2e
+    command: ["/usr/local/bin/mocknotify"]
+    ports: ["127.0.0.1:28090:8090"]
+volumes: {run: {}, state: {}}

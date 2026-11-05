@@ -1,0 +1,20 @@
+# Production config (config.example.yaml) with test-only deltas:
+# metrics on all interfaces (reachable from the host), mock notifiers, enforce mode.
+listen: "127.0.0.1:12345"
+metrics_addr: ":9101"
+mode: enforce
+host: prod-test.bima.local
+crs: {enabled: true, paranoia: 1, inbound_threshold: 5, fast_path: true}
+state:
+  backend: memory
+  ban_file: /var/lib/bima/bans.json
+ban:
+  enabled: true
+  runtime_apis: ["unix:/var/run/haproxy/admin.sock"]
+  map_file: /etc/haproxy/bima-blocklist.map
+  durations: [10m, 1h, 24h]
+alert:
+  dedup_window: 5m
+  digest_interval: 5s
+  telegram: {enabled: true, api_base: "http://notify:8090"}
+  discord: {enabled: true}

@@ -1,0 +1,18 @@
+# E2E: deliver to the mock Telegram/Discord. Prod template: deploy/monitoring/alertmanager.yml
+route:
+  receiver: chat
+  group_by: [alertname, instance]
+  group_wait: 5s
+  group_interval: 10s
+  repeat_interval: 1h
+receivers:
+  - name: chat
+    telegram_configs:
+      - api_url: http://notify:8090
+        bot_token: "123456:TEST-TOKEN"
+        chat_id: -1001234567890
+        parse_mode: HTML
+        send_resolved: true
+    discord_configs:
+      - webhook_url: http://notify:8090/discord/webhook
+        send_resolved: true

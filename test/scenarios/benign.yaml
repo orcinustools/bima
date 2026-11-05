@@ -1,0 +1,907 @@
+scenarios:
+- id: benign-browse-001
+  cat: browse
+  desc: page /
+  m: GET
+  p: /
+  x: allow
+- id: benign-browse-002
+  cat: browse
+  desc: page /products
+  m: GET
+  p: /products
+  x: allow
+- id: benign-browse-003
+  cat: browse
+  desc: page /products?page=3&sort=price_asc
+  m: GET
+  p: /products?page=3&sort=price_asc
+  x: allow
+- id: benign-browse-004
+  cat: browse
+  desc: page /products?cat=ebook&min=10000&max=500000
+  m: GET
+  p: /products?cat=ebook&min=10000&max=500000
+  x: allow
+- id: benign-browse-005
+  cat: browse
+  desc: page /static/app.js?v=20261105
+  m: GET
+  p: /static/app.js?v=20261105
+  x: allow
+- id: benign-browse-006
+  cat: browse
+  desc: page /static/style.css?v=3
+  m: GET
+  p: /static/style.css?v=3
+  x: allow
+- id: benign-browse-007
+  cat: browse
+  desc: page /favicon.ico
+  m: GET
+  p: /favicon.ico
+  x: allow
+- id: benign-browse-008
+  cat: browse
+  desc: page /robots.txt
+  m: GET
+  p: /robots.txt
+  x: allow
+- id: benign-browse-009
+  cat: browse
+  desc: page /sitemap.xml
+  m: GET
+  p: /sitemap.xml
+  x: allow
+- id: benign-browse-010
+  cat: browse
+  desc: page /api/users/42
+  m: GET
+  p: /api/users/42
+  x: allow
+- id: benign-browse-011
+  cat: browse
+  desc: page /api/users/1337/orders?status=paid&limit=20
+  m: GET
+  p: /api/users/1337/orders?status=paid&limit=20
+  x: allow
+- id: benign-browse-012
+  cat: browse
+  desc: page /blog/2026/11/cara-jualan-online
+  m: GET
+  p: /blog/2026/11/cara-jualan-online
+  x: allow
+- id: benign-browse-013
+  cat: browse
+  desc: page /p/kelas-ui-ux-pemula-2026
+  m: GET
+  p: /p/kelas-ui-ux-pemula-2026
+  x: allow
+- id: benign-browse-014
+  cat: browse
+  desc: page /u/budi.santoso
+  m: GET
+  p: /u/budi.santoso
+  x: allow
+- id: benign-browse-015
+  cat: browse
+  desc: page /checkout?ref=ig_story&utm_source=instagram&utm_medium=social
+  m: GET
+  p: /checkout?ref=ig_story&utm_source=instagram&utm_medium=social
+  x: allow
+- id: benign-search-001
+  cat: search
+  desc: 'search: select a gift for mom'
+  m: GET
+  p: /search?q=select%20a%20gift%20for%20mom
+  x: allow
+- id: benign-search-002
+  cat: search
+  desc: 'search: union jack t-shirt'
+  m: GET
+  p: /search?q=union%20jack%20t-shirt
+  x: allow
+- id: benign-search-003
+  cat: search
+  desc: 'search: drop shipping jakarta'
+  m: GET
+  p: /search?q=drop%20shipping%20jakarta
+  x: allow
+- id: benign-search-004
+  cat: search
+  desc: 'search: order by price'
+  m: GET
+  p: /search?q=order%20by%20price
+  x: allow
+- id: benign-search-005
+  cat: search
+  desc: 'search: insert coin arcade'
+  m: GET
+  p: /search?q=insert%20coin%20arcade
+  x: allow
+- id: benign-search-006
+  cat: search
+  desc: 'search: delete account how'
+  m: GET
+  p: /search?q=delete%20account%20how
+  x: allow
+- id: benign-search-007
+  cat: search
+  desc: 'search: update aplikasi'
+  m: GET
+  p: /search?q=update%20aplikasi
+  x: allow
+- id: benign-search-008
+  cat: search
+  desc: 'search: where to buy cat food'
+  m: GET
+  p: /search?q=where%20to%20buy%20cat%20food
+  x: allow
+- id: benign-search-009
+  cat: search
+  desc: 'search: how to cat a file in linux'
+  m: GET
+  p: /search?q=how%20to%20cat%20a%20file%20in%20linux
+  x: allow
+- id: benign-search-010
+  cat: search
+  desc: 'search: ls vs dir windows'
+  m: GET
+  p: /search?q=ls%20vs%20dir%20windows
+  x: allow
+- id: benign-search-011
+  cat: search
+  desc: 'search: rm -rf node_modules tips'
+  m: GET
+  p: /search?q=rm%20-rf%20node_modules%20tips
+  x: allow
+- id: benign-search-012
+  cat: search
+  desc: 'search: kopi susu gula aren 1L'
+  m: GET
+  p: /search?q=kopi%20susu%20gula%20aren%201L
+  x: allow
+- id: benign-search-013
+  cat: search
+  desc: 'search: harga <100rb'
+  m: GET
+  p: /search?q=harga%20%3C100rb
+  x: allow
+- id: benign-search-014
+  cat: search
+  desc: 'search: diskon 50% & cashback'
+  m: GET
+  p: /search?q=diskon%2050%25%20%26%20cashback
+  x: allow
+- id: benign-search-015
+  cat: search
+  desc: 'search: promo 12.12 | flash sale'
+  m: GET
+  p: /search?q=promo%2012.12%20%7C%20flash%20sale
+  x: allow
+- id: benign-search-016
+  cat: search
+  desc: 'search: kelas (pemula)'
+  m: GET
+  p: /search?q=kelas%20%28pemula%29
+  x: allow
+- id: benign-search-017
+  cat: search
+  desc: 'search: sepatu size 42; hitam'
+  m: GET
+  p: /search?q=sepatu%20size%2042%3B%20hitam
+  x: allow
+- id: benign-search-018
+  cat: search
+  desc: 'search: C:\Program Files help'
+  m: GET
+  p: /search?q=C%3A%5CProgram%20Files%20help
+  x: allow
+- id: benign-search-019
+  cat: search
+  desc: 'search: apa itu ${variable} di bash'
+  m: GET
+  p: /search?q=apa%20itu%20%24%7Bvariable%7D%20di%20bash
+  x: allow
+- id: benign-search-020
+  cat: search
+  desc: 'search: 100% cotton'
+  m: GET
+  p: /search?q=100%25%20cotton
+  x: allow
+- id: benign-search-021
+  cat: search
+  desc: 'search: it''s my mom''s birthday'
+  m: GET
+  p: /search?q=it%27s%20my%20mom%27s%20birthday
+  x: allow
+- id: benign-search-022
+  cat: search
+  desc: 'search: buku "atomic habits"'
+  m: GET
+  p: /search?q=buku%20%22atomic%20habits%22
+  x: allow
+- id: benign-search-023
+  cat: search
+  desc: 'search: script writing course'
+  m: GET
+  p: /search?q=script%20writing%20course
+  x: allow
+- id: benign-search-024
+  cat: search
+  desc: 'search: java vs python 2026'
+  m: GET
+  p: /search?q=java%20vs%20python%202026
+  x: allow
+- id: benign-search-025
+  cat: search
+  desc: 'search: sql course for beginners'
+  m: GET
+  p: /search?q=sql%20course%20for%20beginners
+  x: allow
+- id: benign-search-026
+  cat: search
+  desc: 'search: 1 or 2 tiket'
+  m: GET
+  p: /search?q=1%20or%202%20tiket
+  x: allow
+- id: benign-search-027
+  cat: search
+  desc: 'search: true or false quiz'
+  m: GET
+  p: /search?q=true%20or%20false%20quiz
+  x: allow
+- id: benign-search-028
+  cat: search
+  desc: 'search: echo dot speaker'
+  m: GET
+  p: /search?q=echo%20dot%20speaker
+  x: allow
+- id: benign-search-029
+  cat: search
+  desc: 'search: ping pong table'
+  m: GET
+  p: /search?q=ping%20pong%20table
+  x: allow
+- id: benign-search-030
+  cat: search
+  desc: 'search: curl hair tutorial'
+  m: GET
+  p: /search?q=curl%20hair%20tutorial
+  x: allow
+- id: benign-search-031
+  cat: search
+  desc: 'search: wget alternatives'
+  m: GET
+  p: /search?q=wget%20alternatives
+  x: allow
+- id: benign-search-032
+  cat: search
+  desc: 'search: bash festival bali'
+  m: GET
+  p: /search?q=bash%20festival%20bali
+  x: allow
+- id: benign-search-033
+  cat: search
+  desc: 'search: alert sound effect'
+  m: GET
+  p: /search?q=alert%20sound%20effect
+  x: allow
+- id: benign-search-034
+  cat: search
+  desc: 'search: onload pengertian'
+  m: GET
+  p: /search?q=onload%20pengertian
+  x: allow
+- id: benign-search-035
+  cat: search
+  desc: 'search: javascript tutorial pemula'
+  m: GET
+  p: /search?q=javascript%20tutorial%20pemula
+  x: allow
+- id: benign-search-036
+  cat: search
+  desc: 'search: <3 love you'
+  m: GET
+  p: /search?q=%3C3%20love%20you
+  x: allow
+- id: benign-search-037
+  cat: search
+  desc: 'search: jl. sudirman no. 5'
+  m: GET
+  p: /search?q=jl.%20sudirman%20no.%205
+  x: allow
+- id: benign-search-038
+  cat: search
+  desc: 'search: #hashtag ramadan'
+  m: GET
+  p: /search?q=%23hashtag%20ramadan
+  x: allow
+- id: benign-search-039
+  cat: search
+  desc: 'search: @mayar_id promo'
+  m: GET
+  p: /search?q=%40mayar_id%20promo
+  x: allow
+- id: benign-search-040
+  cat: search
+  desc: 'search: emoji 😀 sticker pack'
+  m: GET
+  p: /search?q=emoji%20%F0%9F%98%80%20sticker%20pack
+  x: allow
+- id: benign-search-041
+  cat: search
+  desc: 'search: 日本語 kelas'
+  m: GET
+  p: /search?q=%E6%97%A5%E6%9C%AC%E8%AA%9E%20kelas
+  x: allow
+- id: benign-search-042
+  cat: search
+  desc: 'search: a+b=c rumus'
+  m: GET
+  p: /search?q=a%2Bb%3Dc%20rumus
+  x: allow
+- id: benign-search-043
+  cat: search
+  desc: 'search: 10:00-12:00 jadwal'
+  m: GET
+  p: /search?q=10%3A00-12%3A00%20jadwal
+  x: allow
+- id: benign-search-044
+  cat: search
+  desc: 'search: rp 10.000 - rp 50.000'
+  m: GET
+  p: /search?q=rp%2010.000%20-%20rp%2050.000
+  x: allow
+- id: benign-search-045
+  cat: search
+  desc: 'search: file.pdf download'
+  m: GET
+  p: /search?q=file.pdf%20download
+  x: allow
+- id: benign-search-046
+  cat: search
+  desc: 'search: ../ meaning in path'
+  m: GET
+  p: /search?q=..%2F%20meaning%20in%20path
+  x: allow
+- id: benign-search-047
+  cat: search
+  desc: 'search: /etc folder linux explained'
+  m: GET
+  p: /search?q=%2Fetc%20folder%20linux%20explained
+  x: allow
+- id: benign-form-001
+  cat: form
+  desc: login normal
+  m: POST
+  p: /login
+  x: allow
+  b: email=budi%40example.com&password=S3cret%21%40%23%24%25%5E%26%2A%28%29
+  ct: application/x-www-form-urlencoded
+- id: benign-form-002
+  cat: form
+  desc: login password with quotes
+  m: POST
+  p: /login
+  x: allow
+  b: email=a%40b.co&password=it%27s%22complex%27%3B--
+  ct: application/x-www-form-urlencoded
+- id: benign-form-003
+  cat: form
+  desc: login password with shell-ish
+  m: POST
+  p: /login
+  x: allow
+  b: email=a%40b.co&password=p%40ss%3Bw0rd%7Cx%24%28y%29
+  ct: application/x-www-form-urlencoded
+- id: benign-form-004
+  cat: form
+  desc: register indonesian name
+  m: POST
+  p: /api/notes
+  x: allow
+  b: name=Siti+Nur%27aini&phone=%2B62+812-3456-7890&city=Yogyakarta
+  ct: application/x-www-form-urlencoded
+- id: benign-form-005
+  cat: form
+  desc: contact form text
+  m: POST
+  p: /api/notes
+  x: allow
+  b: name=Andi&message=Halo%2C+saya+mau+tanya%3A+apakah+bisa+bayar+via+QRIS+%26+transfer%3F+Terima+kasih+%3A%29
+  ct: application/x-www-form-urlencoded
+- id: benign-form-006
+  cat: form
+  desc: address with semicolons
+  m: POST
+  p: /api/notes
+  x: allow
+  b: address=Jl.+Gatot+Subroto+Kav.+52%3B+Lt.+3+%28belakang%29%3B+RT+01%2FRW+02
+  ct: application/x-www-form-urlencoded
+- id: benign-form-007
+  cat: form
+  desc: comment with math
+  m: POST
+  p: /api/notes
+  x: allow
+  b: comment=Hasilnya+10%2A5%3D50%2C+lalu+%2850%2F2%29%2B3+%3D+28
+  ct: application/x-www-form-urlencoded
+- id: benign-form-008
+  cat: form
+  desc: newsletter
+  m: POST
+  p: /api/notes
+  x: allow
+  b: email=user%2Bpromo%40example.co.id&consent=on
+  ct: application/x-www-form-urlencoded
+- id: benign-json-001
+  cat: json
+  desc: product plain
+  m: POST
+  p: /api/products
+  x: allow
+  b: '{"name": "Kelas Kopi''s Blend #3", "price": 150000, "tags": ["kopi", "kelas"]}'
+  ct: application/json
+- id: benign-json-002
+  cat: json
+  desc: product with emoji & unicode
+  m: POST
+  p: /api/products
+  x: allow
+  b: '{"name": "Ebook 🚀 Startup — Edisi 2", "description": "Bahasa Indonesia & English; 300 hlm."}'
+  ct: application/json
+- id: benign-json-003
+  cat: json
+  desc: checkout
+  m: POST
+  p: /api/checkout
+  x: allow
+  b: '{"items": [{"id": 12, "qty": 2}], "note": "Tolong dibungkus rapi & cepat ya!", "voucher": "HEMAT50"}'
+  ct: application/json
+- id: benign-json-004
+  cat: json
+  desc: notes punctuation
+  m: POST
+  p: /api/notes
+  x: allow
+  b: '{"note": "Meeting jam 10; bawa laptop & charger | jangan lupa"}'
+  ct: application/json
+- id: benign-json-005
+  cat: json
+  desc: notes code mention
+  m: POST
+  p: /api/notes
+  x: allow
+  b: '{"note": "Use `go test ./...` before pushing"}'
+  ct: application/json
+- id: benign-json-006
+  cat: json
+  desc: markdown
+  m: POST
+  p: /api/notes
+  x: allow
+  b: '{"note": "# Judul\n\n- item 1\n- item 2\n\n**bold** _italic_ [link](https://mayar.id)"}'
+  ct: application/json
+- id: benign-json-007
+  cat: json
+  desc: url fields
+  m: PUT
+  p: /api/profile
+  x: allow
+  b: '{"website": "https://budi.dev/?a=1&b=2", "github": "https://github.com/budi?tab=repos"}'
+  ct: application/json
+- id: benign-json-008
+  cat: json
+  desc: redirect param external
+  m: POST
+  p: /api/oauth/start
+  x: allow
+  b: '{"redirect_uri": "https://app.mayar.id/callback?state=xyz"}'
+  ct: application/json
+- id: benign-json-009
+  cat: json
+  desc: payment webhook
+  m: POST
+  p: /api/webhooks/payment
+  x: allow
+  b: '{"event": "payment.received", "data": {"id": "inv_8f2a", "amount": 250000, "status": "PAID", "customer": {"name": "Budi", "email": "budi@example.com"}}, "signature": "a3f5a3f5a3f5a3f5a3f5a3f5a3f5a3f5a3f5a3f5a3f5a3f5a3f5a3f5a3f5a3f5"}'
+  ct: application/json
+- id: benign-json-010
+  cat: json
+  desc: webhook base64 payload
+  m: POST
+  p: /api/webhooks/payment
+  x: allow
+  b: '{"data": "eyJldmVudCI6InBheW1lbnQuc3VjY2VzcyIsImFtb3VudCI6OTkwMDB9", "sig": "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8gISIjJCUmJygpKissLS4vMDEyMzQ1Njc4OTo7PD0+Pw=="}'
+  ct: application/json
+- id: benign-json-011
+  cat: json
+  desc: graphql query
+  m: POST
+  p: /graphql
+  x: allow
+  b: '{"query": "query GetUser($id: ID!) { user(id: $id) { name orders(first: 10) { edges { node { id total } } } } }", "variables": {"id": "42"}}'
+  ct: application/json
+- id: benign-json-012
+  cat: json
+  desc: graphql mutation
+  m: POST
+  p: /graphql
+  x: allow
+  b: '{"query": "mutation { updateProfile(input: {bio: \"hi\"}) { id } }"}'
+  ct: application/json
+- id: benign-json-013
+  cat: json
+  desc: csp report
+  m: POST
+  p: /api/csp-report
+  x: allow
+  b: '{"csp-report": {"document-uri": "https://mayar.id/", "blocked-uri": "inline", "violated-directive": "script-src"}}'
+  ct: application/json
+- id: benign-json-014
+  cat: json
+  desc: analytics beacon
+  m: POST
+  p: /api/events
+  x: allow
+  b: '{"events": [{"type": "click", "selector": "div.card > a[href=''/products'']"}, {"type": "scroll", "y": 1200}]}'
+  ct: application/json
+- id: benign-json-015
+  cat: json
+  desc: image data url
+  m: PUT
+  p: /api/profile
+  x: allow
+  b: '{"avatar": "data:image/png;base64,iVBORw0KGgoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"}'
+  ct: application/json
+- id: benign-json-016
+  cat: json
+  desc: nested arrays
+  m: POST
+  p: /api/report
+  x: allow
+  b: '{"rows": [[1, 2, 3], [4, 5, 6]], "range": {"from": "2026-01-01", "to": "2026-02-01"}}'
+  ct: application/json
+- id: benign-json-017
+  cat: json
+  desc: uuid & ids
+  m: POST
+  p: /api/orders
+  x: allow
+  b: '{"order_id": "3f2b8c1e-9a7d-4e5f-b6c3-2d1e0f9a8b7c", "items": [101, 102]}'
+  ct: application/json
+- id: benign-json-018
+  cat: json
+  desc: long text article
+  m: POST
+  p: /api/posts
+  x: allow
+  b: '{"title": "Tips jualan", "body": "Jualan online itu gampang-gampang susah. Jualan online itu gampang-gampang susah. Jualan online itu gampang-gampang susah. Jualan online itu gampang-gampang susah. Jualan online itu gampang-gampang susah. Jualan online itu gampang-gampang susah. Jualan online itu gampang-gampang susah. Jualan online itu gampang-gampang susah. Jualan online itu gampang-gampang susah. Jualan online itu gampang-gampang susah. Jualan online itu gampang-gampang susah. Jualan online itu gampang-gampang susah. Jualan online itu gampang-gampang susah. Jualan online itu gampang-gampang susah. Jualan online itu gampang-gampang susah. Jualan online itu gampang-gampang susah. Jualan online itu gampang-gampang susah. Jualan online itu gampang-gampang susah. Jualan online itu gampang-gampang susah. Jualan online itu gampang-gampang susah. Jualan online itu gampang-gampang susah. Jualan online itu gampang-gampang susah. Jualan online itu gampang-gampang susah. Jualan online itu gampang-gampang susah. Jualan online itu gampang-gampang susah. Jualan online itu gampang-gampang susah. Jualan online itu gampang-gampang susah. Jualan online itu gampang-gampang susah. Jualan online itu gampang-gampang susah. Jualan online itu gampang-gampang susah. Jualan online itu gampang-gampang susah. Jualan online itu gampang-gampang susah. Jualan online itu gampang-gampang susah. Jualan online itu gampang-gampang susah. Jualan online itu gampang-gampang susah. Jualan online itu gampang-gampang susah. Jualan online itu gampang-gampang susah. Jualan online itu gampang-gampang susah. Jualan online itu gampang-gampang susah. Jualan online itu gampang-gampang susah. "}'
+  ct: application/json
+- id: benign-json-019
+  cat: json
+  desc: phone & money
+  m: POST
+  p: /api/checkout
+  x: allow
+  b: '{"phone": "+62 (21) 555-0123", "total": "Rp 1.250.000,00"}'
+  ct: application/json
+- id: benign-json-020
+  cat: json
+  desc: time ranges
+  m: POST
+  p: /api/schedule
+  x: allow
+  b: '{"slots": ["09:00-10:30", "13:00-15:00"], "tz": "Asia/Jakarta"}'
+  ct: application/json
+- id: benign-json-021
+  cat: json
+  desc: windows path in text
+  m: POST
+  p: /api/notes
+  x: allow
+  b: '{"note": "File ada di C:\\Users\\Budi\\Documents\\laporan.xlsx"}'
+  ct: application/json
+- id: benign-json-022
+  cat: json
+  desc: sql words in description
+  m: POST
+  p: /api/products
+  x: allow
+  b: '{"description": "Kursus SQL: select, insert, update, delete, join, union — lengkap dengan latihan"}'
+  ct: application/json
+- id: benign-json-023
+  cat: json
+  desc: delete method api
+  m: DELETE
+  p: /api/notes/42
+  x: allow
+  b: '{}'
+  ct: application/json
+- id: benign-json-024
+  cat: json
+  desc: patch method api
+  m: PATCH
+  p: /api/profile
+  x: allow
+  b: '{"theme": "dark"}'
+  ct: application/json
+- id: benign-json-025
+  cat: json
+  desc: support ticket mentions hosts file
+  m: POST
+  p: /api/tickets
+  x: allow
+  b: '{"body": "Saya sudah edit /etc/hosts tapi domain belum resolve"}'
+  ct: application/json
+  gap: 'known FP shape: text mentioning /etc/hosts trips BIMA-LFI-008; tune with an exclusion on the ticket endpoint'
+- id: benign-json-026
+  cat: json
+  desc: dev snippet with shell
+  m: POST
+  p: /api/tickets
+  x: allow
+  b: '{"body": "Saya jalankan: cd app; npm install && npm run build"}'
+  ct: application/json
+- id: benign-client-001
+  cat: client
+  desc: chrome desktop
+  m: GET
+  p: /products
+  x: allow
+  h:
+    User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36
+- id: benign-client-002
+  cat: client
+  desc: safari iphone
+  m: GET
+  p: /products
+  x: allow
+  h:
+    User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 18_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Mobile/15E148 Safari/604.1
+- id: benign-client-003
+  cat: client
+  desc: android app okhttp
+  m: GET
+  p: /products
+  x: allow
+  h:
+    User-Agent: okhttp/4.12.0
+- id: benign-client-004
+  cat: client
+  desc: python requests integration
+  m: GET
+  p: /products
+  x: allow
+  h:
+    User-Agent: python-requests/2.32.3
+- id: benign-client-005
+  cat: client
+  desc: curl uptime check
+  m: GET
+  p: /products
+  x: allow
+  h:
+    User-Agent: curl/8.10.1
+- id: benign-client-006
+  cat: client
+  desc: googlebot
+  m: GET
+  p: /products
+  x: allow
+  h:
+    User-Agent: Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)
+- id: benign-client-007
+  cat: client
+  desc: bearer jwt
+  m: GET
+  p: /products
+  x: allow
+  h:
+    Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkJ1ZGkifQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+- id: benign-client-008
+  cat: client
+  desc: basic auth
+  m: GET
+  p: /products
+  x: allow
+  h:
+    Authorization: Basic YnVkaTpzM2NyZXQ=
+- id: benign-client-009
+  cat: client
+  desc: cookies typical
+  m: GET
+  p: /products
+  x: allow
+  h:
+    Cookie: _ga=GA1.2.123456789.1700000000; _fbp=fb.1.1700000000.123; session=eyJ1aWQiOjQyfQ%3D%3D; theme=dark
+- id: benign-client-010
+  cat: client
+  desc: referer with query
+  m: GET
+  p: /products
+  x: allow
+  h:
+    Referer: https://www.google.com/search?q=mayar+jualan+online&hl=id
+- id: benign-client-011
+  cat: client
+  desc: accept-language complex
+  m: GET
+  p: /products
+  x: allow
+  h:
+    Accept-Language: id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7
+- id: benign-client-012
+  cat: client
+  desc: custom api headers
+  m: GET
+  p: /products
+  x: allow
+  h:
+    X-Api-Key: pk_live_51HxYzAbCdEf
+    X-Client-Version: android-5.2.1
+    X-Request-Id: req_8f2a9c
+- id: benign-client-013
+  cat: client
+  desc: sec-ch headers
+  m: GET
+  p: /products
+  x: allow
+  h:
+    Sec-Ch-Ua: '"Chromium";v="130", "Google Chrome";v="130"'
+    Sec-Fetch-Mode: navigate
+- id: benign-client-014
+  cat: client
+  desc: if-none-match etag
+  m: GET
+  p: /products
+  x: allow
+  h:
+    If-None-Match: W/"5e15153d-120f"
+- id: benign-query-001
+  cat: query
+  desc: oauth callback
+  m: GET
+  p: /oauth/callback?code=4%2F0AfJohXm-abc_def&state=xyz123&scope=email%20profile
+  x: allow
+- id: benign-query-002
+  cat: query
+  desc: redirect url param
+  m: GET
+  p: /login?next=%2Fdashboard%2Forders%3Fpage%3D2
+  x: allow
+- id: benign-query-003
+  cat: query
+  desc: absolute redirect to own domain
+  m: GET
+  p: /login?next=https%3A%2F%2Fapp.mayar.id%2Fdashboard
+  x: allow
+- id: benign-query-004
+  cat: query
+  desc: array params
+  m: GET
+  p: /products?tags[]=kopi&tags[]=teh&ids=1,2,3
+  x: allow
+- id: benign-query-005
+  cat: query
+  desc: json in query
+  m: GET
+  p: /api/report?filter=%7B%22status%22%3A%22paid%22%2C%22min%22%3A1000%7D
+  x: allow
+- id: benign-query-006
+  cat: query
+  desc: date range
+  m: GET
+  p: /api/report?from=2026-01-01T00:00:00%2B07:00&to=2026-02-01
+  x: allow
+- id: benign-query-007
+  cat: query
+  desc: base64 cursor
+  m: GET
+  p: /api/orders?cursor=eyJpZCI6MTIzNCwidHMiOjE3MDAwMDAwMDB9
+  x: allow
+- id: benign-query-008
+  cat: query
+  desc: email in query
+  m: GET
+  p: /api/users?email=budi%40example.com
+  x: allow
+- id: benign-query-009
+  cat: query
+  desc: plus spaces
+  m: GET
+  p: /search?q=kopi+susu+gula+aren
+  x: allow
+- id: benign-query-010
+  cat: query
+  desc: utm params
+  m: GET
+  p: /?utm_source=newsletter&utm_campaign=promo_11.11&utm_content=btn-1
+  x: allow
+- id: benign-query-011
+  cat: query
+  desc: signed url
+  m: GET
+  p: /files/report.pdf?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA%2F20261105%2Fap-southeast-1%2Fs3%2Faws4_request&X-Amz-Signature=abcdef0123
+  x: allow
+- id: benign-query-012
+  cat: query
+  desc: percent literal
+  m: GET
+  p: /search?q=diskon%2050%25
+  x: allow
+- id: benign-query-013
+  cat: query
+  desc: filename with spaces/parens
+  m: GET
+  p: /download?file=laporan%20(final)%20v2.pdf
+  x: allow
+- id: benign-query-014
+  cat: query
+  desc: folder path param
+  m: GET
+  p: /api/files?folder=/docs/2026/q1
+  x: allow
+- id: benign-query-015
+  cat: query
+  desc: webhook test url param
+  m: GET
+  p: /api/fetch?url=https%3A%2F%2Fhooks.example.com%2Fmayar
+  x: allow
+- id: benign-upload-001
+  cat: upload
+  desc: jpeg photo
+  m: POST
+  p: /upload
+  x: allow
+  b: "--B\r\nContent-Disposition: form-data; name=\"f\"; filename=\"foto profil.jpg\"\r\nContent-Type: image/jpeg\r\n\r\nÿØÿJFIF data\r\n--B\r\nContent-Disposition: form-data; name=\"caption\"\r\n\r\nLiburan ke Bali (2026) — seru!\r\n--B--\r\n"
+  ct: multipart/form-data; boundary=B
+- id: benign-upload-002
+  cat: upload
+  desc: pdf document
+  m: POST
+  p: /upload
+  x: allow
+  b: "--B\r\nContent-Disposition: form-data; name=\"f\"; filename=\"invoice_2026-11.pdf\"\r\nContent-Type: application/pdf\r\n\r\n%PDF-1.7 fake\r\n--B\r\nContent-Disposition: form-data; name=\"caption\"\r\n\r\nLiburan ke Bali (2026) — seru!\r\n--B--\r\n"
+  ct: multipart/form-data; boundary=B
+- id: benign-upload-003
+  cat: upload
+  desc: csv export
+  m: POST
+  p: /upload
+  x: allow
+  b: "--B\r\nContent-Disposition: form-data; name=\"f\"; filename=\"orders.csv\"\r\nContent-Type: text/csv\r\n\r\nid,name,total\n1,Budi,150000\n2,Siti,99000\r\n--B\r\nContent-Disposition: form-data; name=\"caption\"\r\n\r\nLiburan ke Bali (2026) — seru!\r\n--B--\r\n"
+  ct: multipart/form-data; boundary=B
+- id: benign-upload-004
+  cat: upload
+  desc: docx
+  m: POST
+  p: /upload
+  x: allow
+  b: "--B\r\nContent-Disposition: form-data; name=\"f\"; filename=\"proposal (v2).docx\"\r\nContent-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document\r\n\r\nPK fake docx\r\n--B\r\nContent-Disposition: form-data; name=\"caption\"\r\n\r\nLiburan ke Bali (2026) — seru!\r\n--B--\r\n"
+  ct: multipart/form-data; boundary=B
+- id: benign-upload-005
+  cat: upload
+  desc: png with dots in name
+  m: POST
+  p: /upload
+  x: allow
+  b: "--B\r\nContent-Disposition: form-data; name=\"f\"; filename=\"screenshot.2026.11.05.png\"\r\nContent-Type: image/png\r\n\r\n\x89PNG fake\r\n--B\r\nContent-Disposition: form-data; name=\"caption\"\r\n\r\nLiburan ke Bali (2026) — seru!\r\n--B--\r\n"
+  ct: multipart/form-data; boundary=B
+- id: benign-upload-006
+  cat: upload
+  desc: zip archive
+  m: POST
+  p: /upload
+  x: allow
+  b: "--B\r\nContent-Disposition: form-data; name=\"f\"; filename=\"assets.zip\"\r\nContent-Type: application/zip\r\n\r\nPK fake zip\r\n--B\r\nContent-Disposition: form-data; name=\"caption\"\r\n\r\nLiburan ke Bali (2026) — seru!\r\n--B--\r\n"
+  ct: multipart/form-data; boundary=B
+- id: benign-json-027
+  cat: json
+  desc: bulk import JSON ~80KB (beyond inspection window)
+  m: POST
+  p: /api/import
+  x: allow
+  b: '{"rows": [{"sku": "SKU-00000", "name": "Produk 0", "price": 10000, "stock": 0}, {"sku": "SKU-00001", "name": "Produk 1", "price": 10001, "stock": 1}, {"sku": "SKU-00002", "name": "Produk 2", "price": 10002, "stock": 2}, {"sku": "SKU-00003", "name": "Produk 3", "price": 10003, "stock": 3}, {"sku": "SKU-00004", "name": "Produk 4", "price": 10004, "stock": 4}, {"sku": "SKU-00005", "name": "Produk 5", "price": 10005, "stock": 5}, {"sku": "SKU-00006", "name": "Produk 6", "price": 10006, "stock": 6}, {"sku": "SKU-00007", "name": "Produk 7", "price": 10007, "stock": 7}, {"sku": "SKU-00008", "name": "Produk 8", "price": 10008, "stock": 8}, {"sku": "SKU-00009", "name": "Produk 9", "price": 10009, "stock": 9}, {"sku": "SKU-00010", "name": "Produk 10", "price": 10010, "stock": 10}, {"sku": "SKU-00011", "name": "Produk 11", "price": 10011, "stock": 11}, {"sku": "SKU-00012", "name": "Produk 12", "price": 10012, "stock": 12}, {"sku": "SKU-00013", "name": "Produk 13", "price": 10013, "stock": 13}, {"sku": "SKU-00014", "name": "Produk 14", "price": 10014, "stock": 14}, {"sku": "SKU-00015", "name": "Produk 15", "price": 10015, "stock": 15}, {"sku": "SKU-00016", "name": "Produk 16", "price": 10016, "stock": 16}, {"sku": "SKU-00017", "name": "Produk 17", "price": 10017, "stock": 17}, {"sku": "SKU-00018", "name": "Produk 18", "price": 10018, "stock": 18}, {"sku": "SKU-00019", "name": "Produk 19", "price": 10019, "stock": 19}, {"sku": "SKU-00020", "name": "Produk 20", "price": 10020, "stock": 20}, {"sku": "SKU-00021", "name": "Produk 21", "price": 10021, "stock": 21}, {"sku": "SKU-00022", "name": "Produk 22", "price": 10022, "stock": 22}, {"sku": "SKU-00023", "name": "Produk 23", "price": 10023, "stock": 23}, {"sku": "SKU-00024", "name": "Produk 24", "price": 10024, "stock": 24}, {"sku": "SKU-00025", "name": "Produk 25", "price": 10025, "stock": 25}, {"sku": "SKU-00026", "name": "Produk 26", "price": 10026, "stock": 26}, {"sku": "SKU-00027", "name": "Produk 27", "price": 10027, "stock": 27}, {"sku": "SKU-00028", "name": "Produk 28", "price": 10028, "stock": 28}, {"sku": "SKU-00029", "name": "Produk 29", "price": 10029, "stock": 29}, {"sku": "SKU-00030", "name": "Produk 30", "price": 10030, "stock": 30}, {"sku": "SKU-00031", "name": "Produk 31", "price": 10031, "stock": 31}, {"sku": "SKU-00032", "name": "Produk 32", "price": 10032, "stock": 32}, {"sku": "SKU-00033", "name": "Produk 33", "price": 10033, "stock": 33}, {"sku": "SKU-00034", "name": "Produk 34", "price": 10034, "stock": 34}, {"sku": "SKU-00035", "name": "Produk 35", "price": 10035, "stock": 35}, {"sku": "SKU-00036", "name": "Produk 36", "price": 10036, "stock": 36}, {"sku": "SKU-00037", "name": "Produk 37", "price": 10037, "stock": 37}, {"sku": "SKU-00038", "name": "Produk 38", "price": 10038, "stock": 38}, {"sku": "SKU-00039", "name": "Produk 39", "price": 10039, "stock": 39}, {"sku": "SKU-00040", "name": "Produk 40", "price": 10040, "stock": 40}, {"sku": "SKU-00041", "name": "Produk 41", "price": 10041, "stock": 41}, {"sku": "SKU-00042", "name": "Produk 42", "price": 10042, "stock": 42}, {"sku": "SKU-00043", "name": "Produk 43", "price": 10043, "stock": 43}, {"sku": "SKU-00044", "name": "Produk 44", "price": 10044, "stock": 44}, {"sku": "SKU-00045", "name": "Produk 45", "price": 10045, "stock": 45}, {"sku": "SKU-00046", "name": "Produk 46", "price": 10046, "stock": 46}, {"sku": "SKU-00047", "name": "Produk 47", "price": 10047, "stock": 47}, {"sku": "SKU-00048", "name": "Produk 48", "price": 10048, "stock": 48}, {"sku": "SKU-00049", "name": "Produk 49", "price": 10049, "stock": 49}, {"sku": "SKU-00050", "name": "Produk 50", "price": 10050, "stock": 0}, {"sku": "SKU-00051", "name": "Produk 51", "price": 10051, "stock": 1}, {"sku": "SKU-00052", "name": "Produk 52", "price": 10052, "stock": 2}, {"sku": "SKU-00053", "name": "Produk 53", "price": 10053, "stock": 3}, {"sku": "SKU-00054", "name": "Produk 54", "price": 10054, "stock": 4}, {"sku": "SKU-00055", "name": "Produk 55", "price": 10055, "stock": 5}, {"sku": "SKU-00056", "name": "Produk 56", "price": 10056, "stock": 6}, {"sku": "SKU-00057", "name": "Produk 57", "price": 10057, "stock": 7}, {"sku": "SKU-00058", "name": "Produk 58", "price": 10058, "stock": 8}, {"sku": "SKU-00059", "name": "Produk 59", "price": 10059, "stock": 9}, {"sku": "SKU-00060", "name": "Produk 60", "price": 10060, "stock": 10}, {"sku": "SKU-00061", "name": "Produk 61", "price": 10061, "stock": 11}, {"sku": "SKU-00062", "name": "Produk 62", "price": 10062, "stock": 12}, {"sku": "SKU-00063", "name": "Produk 63", "price": 10063, "stock": 13}, {"sku": "SKU-00064", "name": "Produk 64", "price": 10064, "stock": 14}, {"sku": "SKU-00065", "name": "Produk 65", "price": 10065, "stock": 15}, {"sku": "SKU-00066", "name": "Produk 66", "price": 10066, "stock": 16}, {"sku": "SKU-00067", "name": "Produk 67", "price": 10067, "stock": 17}, {"sku": "SKU-00068", "name": "Produk 68", "price": 10068, "stock": 18}, {"sku": "SKU-00069", "name": "Produk 69", "price": 10069, "stock": 19}, {"sku": "SKU-00070", "name": "Produk 70", "price": 10070, "stock": 20}, {"sku": "SKU-00071", "name": "Produk 71", "price": 10071, "stock": 21}, {"sku": "SKU-00072", "name": "Produk 72", "price": 10072, "stock": 22}, {"sku": "SKU-00073", "name": "Produk 73", "price": 10073, "stock": 23}, {"sku": "SKU-00074", "name": "Produk 74", "price": 10074, "stock": 24}, {"sku": "SKU-00075", "name": "Produk 75", "price": 10075, "stock": 25}, {"sku": "SKU-00076", "name": "Produk 76", "price": 10076, "stock": 26}, {"sku": "SKU-00077", "name": "Produk 77", "price": 10077, "stock": 27}, {"sku": "SKU-00078", "name": "Produk 78", "price": 10078, "stock": 28}, {"sku": "SKU-00079", "name": "Produk 79", "price": 10079, "stock": 29}, {"sku": "SKU-00080", "name": "Produk 80", "price": 10080, "stock": 30}, {"sku": "SKU-00081", "name": "Produk 81", "price": 10081, "stock": 31}, {"sku": "SKU-00082", "name": "Produk 82", "price": 10082, "stock": 32}, {"sku": "SKU-00083", "name": "Produk 83", "price": 10083, "stock": 33}, {"sku": "SKU-00084", "name": "Produk 84", "price": 10084, "stock": 34}, {"sku": "SKU-00085", "name": "Produk 85", "price": 10085, "stock": 35}, {"sku": "SKU-00086", "name": "Produk 86", "price": 10086, "stock": 36}, {"sku": "SKU-00087", "name": "Produk 87", "price": 10087, "stock": 37}, {"sku": "SKU-00088", "name": "Produk 88", "price": 10088, "stock": 38}, {"sku": "SKU-00089", "name": "Produk 89", "price": 10089, "stock": 39}, {"sku": "SKU-00090", "name": "Produk 90", "price": 10090, "stock": 40}, {"sku": "SKU-00091", "name": "Produk 91", "price": 10091, "stock": 41}, {"sku": "SKU-00092", "name": "Produk 92", "price": 10092, "stock": 42}, {"sku": "SKU-00093", "name": "Produk 93", "price": 10093, "stock": 43}, {"sku": "SKU-00094", "name": "Produk 94", "price": 10094, "stock": 44}, {"sku": "SKU-00095", "name": "Produk 95", "price": 10095, "stock": 45}, {"sku": "SKU-00096", "name": "Produk 96", "price": 10096, "stock": 46}, {"sku": "SKU-00097", "name": "Produk 97", "price": 10097, "stock": 47}, {"sku": "SKU-00098", "name": "Produk 98", "price": 10098, "stock": 48}, {"sku": "SKU-00099", "name": "Produk 99", "price": 10099, "stock": 49}, {"sku": "SKU-00100", "name": "Produk 100", "price": 10100, "stock": 0}, {"sku": "SKU-00101", "name": "Produk 101", "price": 10101, "stock": 1}, {"sku": "SKU-00102", "name": "Produk 102", "price": 10102, "stock": 2}, {"sku": "SKU-00103", "name": "Produk 103", "price": 10103, "stock": 3}, {"sku": "SKU-00104", "name": "Produk 104", "price": 10104, "stock": 4}, {"sku": "SKU-00105", "name": "Produk 105", "price": 10105, "stock": 5}, {"sku": "SKU-00106", "name": "Produk 106", "price": 10106, "stock": 6}, {"sku": "SKU-00107", "name": "Produk 107", "price": 10107, "stock": 7}, {"sku": "SKU-00108", "name": "Produk 108", "price": 10108, "stock": 8}, {"sku": "SKU-00109", "name": "Produk 109", "price": 10109, "stock": 9}, {"sku": "SKU-00110", "name": "Produk 110", "price": 10110, "stock": 10}, {"sku": "SKU-00111", "name": "Produk 111", "price": 10111, "stock": 11}, {"sku": "SKU-00112", "name": "Produk 112", "price": 10112, "stock": 12}, {"sku": "SKU-00113", "name": "Produk 113", "price": 10113, "stock": 13}, {"sku": "SKU-00114", "name": "Produk 114", "price": 10114, "stock": 14}, {"sku": "SKU-00115", "name": "Produk 115", "price": 10115, "stock": 15}, {"sku": "SKU-00116", "name": "Produk 116", "price": 10116, "stock": 16}, {"sku": "SKU-00117", "name": "Produk 117", "price": 10117, "stock": 17}, {"sku": "SKU-00118", "name": "Produk 118", "price": 10118, "stock": 18}, {"sku": "SKU-00119", "name": "Produk 119", "price": 10119, "stock": 19}, {"sku": "SKU-00120", "name": "Produk 120", "price": 10120, "stock": 20}, {"sku": "SKU-00121", "name": "Produk 121", "price": 10121, "stock": 21}, {"sku": "SKU-00122", "name": "Produk 122", "price": 10122, "stock": 22}, {"sku": "SKU-00123", "name": "Produk 123", "price": 10123, "stock": 23}, {"sku": "SKU-00124", "name": "Produk 124", "price": 10124, "stock": 24}, {"sku": "SKU-00125", "name": "Produk 125", "price": 10125, "stock": 25}, {"sku": "SKU-00126", "name": "Produk 126", "price": 10126, "stock": 26}, {"sku": "SKU-00127", "name": "Produk 127", "price": 10127, "stock": 27}, {"sku": "SKU-00128", "name": "Produk 128", "price": 10128, "stock": 28}, {"sku": "SKU-00129", "name": "Produk 129", "price": 10129, "stock": 29}, {"sku": "SKU-00130", "name": "Produk 130", "price": 10130, "stock": 30}, {"sku": "SKU-00131", "name": "Produk 131", "price": 10131, "stock": 31}, {"sku": "SKU-00132", "name": "Produk 132", "price": 10132, "stock": 32}, {"sku": "SKU-00133", "name": "Produk 133", "price": 10133, "stock": 33}, {"sku": "SKU-00134", "name": "Produk 134", "price": 10134, "stock": 34}, {"sku": "SKU-00135", "name": "Produk 135", "price": 10135, "stock": 35}, {"sku": "SKU-00136", "name": "Produk 136", "price": 10136, "stock": 36}, {"sku": "SKU-00137", "name": "Produk 137", "price": 10137, "stock": 37}, {"sku": "SKU-00138", "name": "Produk 138", "price": 10138, "stock": 38}, {"sku": "SKU-00139", "name": "Produk 139", "price": 10139, "stock": 39}, {"sku": "SKU-00140", "name": "Produk 140", "price": 10140, "stock": 40}, {"sku": "SKU-00141", "name": "Produk 141", "price": 10141, "stock": 41}, {"sku": "SKU-00142", "name": "Produk 142", "price": 10142, "stock": 42}, {"sku": "SKU-00143", "name": "Produk 143", "price": 10143, "stock": 43}, {"sku": "SKU-00144", "name": "Produk 144", "price": 10144, "stock": 44}, {"sku": "SKU-00145", "name": "Produk 145", "price": 10145, "stock": 45}, {"sku": "SKU-00146", "name": "Produk 146", "price": 10146, "stock": 46}, {"sku": "SKU-00147", "name": "Produk 147", "price": 10147, "stock": 47}, {"sku": "SKU-00148", "name": "Produk 148", "price": 10148, "stock": 48}, {"sku": "SKU-00149", "name": "Produk 149", "price": 10149, "stock": 49}, {"sku": "SKU-00150", "name": "Produk 150", "price": 10150, "stock": 0}, {"sku": "SKU-00151", "name": "Produk 151", "price": 10151, "stock": 1}, {"sku": "SKU-00152", "name": "Produk 152", "price": 10152, "stock": 2}, {"sku": "SKU-00153", "name": "Produk 153", "price": 10153, "stock": 3}, {"sku": "SKU-00154", "name": "Produk 154", "price": 10154, "stock": 4}, {"sku": "SKU-00155", "name": "Produk 155", "price": 10155, "stock": 5}, {"sku": "SKU-00156", "name": "Produk 156", "price": 10156, "stock": 6}, {"sku": "SKU-00157", "name": "Produk 157", "price": 10157, "stock": 7}, {"sku": "SKU-00158", "name": "Produk 158", "price": 10158, "stock": 8}, {"sku": "SKU-00159", "name": "Produk 159", "price": 10159, "stock": 9}, {"sku": "SKU-00160", "name": "Produk 160", "price": 10160, "stock": 10}, {"sku": "SKU-00161", "name": "Produk 161", "price": 10161, "stock": 11}, {"sku": "SKU-00162", "name": "Produk 162", "price": 10162, "stock": 12}, {"sku": "SKU-00163", "name": "Produk 163", "price": 10163, "stock": 13}, {"sku": "SKU-00164", "name": "Produk 164", "price": 10164, "stock": 14}, {"sku": "SKU-00165", "name": "Produk 165", "price": 10165, "stock": 15}, {"sku": "SKU-00166", "name": "Produk 166", "price": 10166, "stock": 16}, {"sku": "SKU-00167", "name": "Produk 167", "price": 10167, "stock": 17}, {"sku": "SKU-00168", "name": "Produk 168", "price": 10168, "stock": 18}, {"sku": "SKU-00169", "name": "Produk 169", "price": 10169, "stock": 19}, {"sku": "SKU-00170", "name": "Produk 170", "price": 10170, "stock": 20}, {"sku": "SKU-00171", "name": "Produk 171", "price": 10171, "stock": 21}, {"sku": "SKU-00172", "name": "Produk 172", "price": 10172, "stock": 22}, {"sku": "SKU-00173", "name": "Produk 173", "price": 10173, "stock": 23}, {"sku": "SKU-00174", "name": "Produk 174", "price": 10174, "stock": 24}, {"sku": "SKU-00175", "name": "Produk 175", "price": 10175, "stock": 25}, {"sku": "SKU-00176", "name": "Produk 176", "price": 10176, "stock": 26}, {"sku": "SKU-00177", "name": "Produk 177", "price": 10177, "stock": 27}, {"sku": "SKU-00178", "name": "Produk 178", "price": 10178, "stock": 28}, {"sku": "SKU-00179", "name": "Produk 179", "price": 10179, "stock": 29}, {"sku": "SKU-00180", "name": "Produk 180", "price": 10180, "stock": 30}, {"sku": "SKU-00181", "name": "Produk 181", "price": 10181, "stock": 31}, {"sku": "SKU-00182", "name": "Produk 182", "price": 10182, "stock": 32}, {"sku": "SKU-00183", "name": "Produk 183", "price": 10183, "stock": 33}, {"sku": "SKU-00184", "name": "Produk 184", "price": 10184, "stock": 34}, {"sku": "SKU-00185", "name": "Produk 185", "price": 10185, "stock": 35}, {"sku": "SKU-00186", "name": "Produk 186", "price": 10186, "stock": 36}, {"sku": "SKU-00187", "name": "Produk 187", "price": 10187, "stock": 37}, {"sku": "SKU-00188", "name": "Produk 188", "price": 10188, "stock": 38}, {"sku": "SKU-00189", "name": "Produk 189", "price": 10189, "stock": 39}, {"sku": "SKU-00190", "name": "Produk 190", "price": 10190, "stock": 40}, {"sku": "SKU-00191", "name": "Produk 191", "price": 10191, "stock": 41}, {"sku": "SKU-00192", "name": "Produk 192", "price": 10192, "stock": 42}, {"sku": "SKU-00193", "name": "Produk 193", "price": 10193, "stock": 43}, {"sku": "SKU-00194", "name": "Produk 194", "price": 10194, "stock": 44}, {"sku": "SKU-00195", "name": "Produk 195", "price": 10195, "stock": 45}, {"sku": "SKU-00196", "name": "Produk 196", "price": 10196, "stock": 46}, {"sku": "SKU-00197", "name": "Produk 197", "price": 10197, "stock": 47}, {"sku": "SKU-00198", "name": "Produk 198", "price": 10198, "stock": 48}, {"sku": "SKU-00199", "name": "Produk 199", "price": 10199, "stock": 49}, {"sku": "SKU-00200", "name": "Produk 200", "price": 10200, "stock": 0}, {"sku": "SKU-00201", "name": "Produk 201", "price": 10201, "stock": 1}, {"sku": "SKU-00202", "name": "Produk 202", "price": 10202, "stock": 2}, {"sku": "SKU-00203", "name": "Produk 203", "price": 10203, "stock": 3}, {"sku": "SKU-00204", "name": "Produk 204", "price": 10204, "stock": 4}, {"sku": "SKU-00205", "name": "Produk 205", "price": 10205, "stock": 5}, {"sku": "SKU-00206", "name": "Produk 206", "price": 10206, "stock": 6}, {"sku": "SKU-00207", "name": "Produk 207", "price": 10207, "stock": 7}, {"sku": "SKU-00208", "name": "Produk 208", "price": 10208, "stock": 8}, {"sku": "SKU-00209", "name": "Produk 209", "price": 10209, "stock": 9}, {"sku": "SKU-00210", "name": "Produk 210", "price": 10210, "stock": 10}, {"sku": "SKU-00211", "name": "Produk 211", "price": 10211, "stock": 11}, {"sku": "SKU-00212", "name": "Produk 212", "price": 10212, "stock": 12}, {"sku": "SKU-00213", "name": "Produk 213", "price": 10213, "stock": 13}, {"sku": "SKU-00214", "name": "Produk 214", "price": 10214, "stock": 14}, {"sku": "SKU-00215", "name": "Produk 215", "price": 10215, "stock": 15}, {"sku": "SKU-00216", "name": "Produk 216", "price": 10216, "stock": 16}, {"sku": "SKU-00217", "name": "Produk 217", "price": 10217, "stock": 17}, {"sku": "SKU-00218", "name": "Produk 218", "price": 10218, "stock": 18}, {"sku": "SKU-00219", "name": "Produk 219", "price": 10219, "stock": 19}, {"sku": "SKU-00220", "name": "Produk 220", "price": 10220, "stock": 20}, {"sku": "SKU-00221", "name": "Produk 221", "price": 10221, "stock": 21}, {"sku": "SKU-00222", "name": "Produk 222", "price": 10222, "stock": 22}, {"sku": "SKU-00223", "name": "Produk 223", "price": 10223, "stock": 23}, {"sku": "SKU-00224", "name": "Produk 224", "price": 10224, "stock": 24}, {"sku": "SKU-00225", "name": "Produk 225", "price": 10225, "stock": 25}, {"sku": "SKU-00226", "name": "Produk 226", "price": 10226, "stock": 26}, {"sku": "SKU-00227", "name": "Produk 227", "price": 10227, "stock": 27}, {"sku": "SKU-00228", "name": "Produk 228", "price": 10228, "stock": 28}, {"sku": "SKU-00229", "name": "Produk 229", "price": 10229, "stock": 29}, {"sku": "SKU-00230", "name": "Produk 230", "price": 10230, "stock": 30}, {"sku": "SKU-00231", "name": "Produk 231", "price": 10231, "stock": 31}, {"sku": "SKU-00232", "name": "Produk 232", "price": 10232, "stock": 32}, {"sku": "SKU-00233", "name": "Produk 233", "price": 10233, "stock": 33}, {"sku": "SKU-00234", "name": "Produk 234", "price": 10234, "stock": 34}, {"sku": "SKU-00235", "name": "Produk 235", "price": 10235, "stock": 35}, {"sku": "SKU-00236", "name": "Produk 236", "price": 10236, "stock": 36}, {"sku": "SKU-00237", "name": "Produk 237", "price": 10237, "stock": 37}, {"sku": "SKU-00238", "name": "Produk 238", "price": 10238, "stock": 38}, {"sku": "SKU-00239", "name": "Produk 239", "price": 10239, "stock": 39}, {"sku": "SKU-00240", "name": "Produk 240", "price": 10240, "stock": 40}, {"sku": "SKU-00241", "name": "Produk 241", "price": 10241, "stock": 41}, {"sku": "SKU-00242", "name": "Produk 242", "price": 10242, "stock": 42}, {"sku": "SKU-00243", "name": "Produk 243", "price": 10243, "stock": 43}, {"sku": "SKU-00244", "name": "Produk 244", "price": 10244, "stock": 44}, {"sku": "SKU-00245", "name": "Produk 245", "price": 10245, "stock": 45}, {"sku": "SKU-00246", "name": "Produk 246", "price": 10246, "stock": 46}, {"sku": "SKU-00247", "name": "Produk 247", "price": 10247, "stock": 47}, {"sku": "SKU-00248", "name": "Produk 248", "price": 10248, "stock": 48}, {"sku": "SKU-00249", "name": "Produk 249", "price": 10249, "stock": 49}, {"sku": "SKU-00250", "name": "Produk 250", "price": 10250, "stock": 0}, {"sku": "SKU-00251", "name": "Produk 251", "price": 10251, "stock": 1}, {"sku": "SKU-00252", "name": "Produk 252", "price": 10252, "stock": 2}, {"sku": "SKU-00253", "name": "Produk 253", "price": 10253, "stock": 3}, {"sku": "SKU-00254", "name": "Produk 254", "price": 10254, "stock": 4}, {"sku": "SKU-00255", "name": "Produk 255", "price": 10255, "stock": 5}, {"sku": "SKU-00256", "name": "Produk 256", "price": 10256, "stock": 6}, {"sku": "SKU-00257", "name": "Produk 257", "price": 10257, "stock": 7}, {"sku": "SKU-00258", "name": "Produk 258", "price": 10258, "stock": 8}, {"sku": "SKU-00259", "name": "Produk 259", "price": 10259, "stock": 9}, {"sku": "SKU-00260", "name": "Produk 260", "price": 10260, "stock": 10}, {"sku": "SKU-00261", "name": "Produk 261", "price": 10261, "stock": 11}, {"sku": "SKU-00262", "name": "Produk 262", "price": 10262, "stock": 12}, {"sku": "SKU-00263", "name": "Produk 263", "price": 10263, "stock": 13}, {"sku": "SKU-00264", "name": "Produk 264", "price": 10264, "stock": 14}, {"sku": "SKU-00265", "name": "Produk 265", "price": 10265, "stock": 15}, {"sku": "SKU-00266", "name": "Produk 266", "price": 10266, "stock": 16}, {"sku": "SKU-00267", "name": "Produk 267", "price": 10267, "stock": 17}, {"sku": "SKU-00268", "name": "Produk 268", "price": 10268, "stock": 18}, {"sku": "SKU-00269", "name": "Produk 269", "price": 10269, "stock": 19}, {"sku": "SKU-00270", "name": "Produk 270", "price": 10270, "stock": 20}, {"sku": "SKU-00271", "name": "Produk 271", "price": 10271, "stock": 21}, {"sku": "SKU-00272", "name": "Produk 272", "price": 10272, "stock": 22}, {"sku": "SKU-00273", "name": "Produk 273", "price": 10273, "stock": 23}, {"sku": "SKU-00274", "name": "Produk 274", "price": 10274, "stock": 24}, {"sku": "SKU-00275", "name": "Produk 275", "price": 10275, "stock": 25}, {"sku": "SKU-00276", "name": "Produk 276", "price": 10276, "stock": 26}, {"sku": "SKU-00277", "name": "Produk 277", "price": 10277, "stock": 27}, {"sku": "SKU-00278", "name": "Produk 278", "price": 10278, "stock": 28}, {"sku": "SKU-00279", "name": "Produk 279", "price": 10279, "stock": 29}, {"sku": "SKU-00280", "name": "Produk 280", "price": 10280, "stock": 30}, {"sku": "SKU-00281", "name": "Produk 281", "price": 10281, "stock": 31}, {"sku": "SKU-00282", "name": "Produk 282", "price": 10282, "stock": 32}, {"sku": "SKU-00283", "name": "Produk 283", "price": 10283, "stock": 33}, {"sku": "SKU-00284", "name": "Produk 284", "price": 10284, "stock": 34}, {"sku": "SKU-00285", "name": "Produk 285", "price": 10285, "stock": 35}, {"sku": "SKU-00286", "name": "Produk 286", "price": 10286, "stock": 36}, {"sku": "SKU-00287", "name": "Produk 287", "price": 10287, "stock": 37}, {"sku": "SKU-00288", "name": "Produk 288", "price": 10288, "stock": 38}, {"sku": "SKU-00289", "name": "Produk 289", "price": 10289, "stock": 39}, {"sku": "SKU-00290", "name": "Produk 290", "price": 10290, "stock": 40}, {"sku": "SKU-00291", "name": "Produk 291", "price": 10291, "stock": 41}, {"sku": "SKU-00292", "name": "Produk 292", "price": 10292, "stock": 42}, {"sku": "SKU-00293", "name": "Produk 293", "price": 10293, "stock": 43}, {"sku": "SKU-00294", "name": "Produk 294", "price": 10294, "stock": 44}, {"sku": "SKU-00295", "name": "Produk 295", "price": 10295, "stock": 45}, {"sku": "SKU-00296", "name": "Produk 296", "price": 10296, "stock": 46}, {"sku": "SKU-00297", "name": "Produk 297", "price": 10297, "stock": 47}, {"sku": "SKU-00298", "name": "Produk 298", "price": 10298, "stock": 48}, {"sku": "SKU-00299", "name": "Produk 299", "price": 10299, "stock": 49}, {"sku": "SKU-00300", "name": "Produk 300", "price": 10300, "stock": 0}, {"sku": "SKU-00301", "name": "Produk 301", "price": 10301, "stock": 1}, {"sku": "SKU-00302", "name": "Produk 302", "price": 10302, "stock": 2}, {"sku": "SKU-00303", "name": "Produk 303", "price": 10303, "stock": 3}, {"sku": "SKU-00304", "name": "Produk 304", "price": 10304, "stock": 4}, {"sku": "SKU-00305", "name": "Produk 305", "price": 10305, "stock": 5}, {"sku": "SKU-00306", "name": "Produk 306", "price": 10306, "stock": 6}, {"sku": "SKU-00307", "name": "Produk 307", "price": 10307, "stock": 7}, {"sku": "SKU-00308", "name": "Produk 308", "price": 10308, "stock": 8}, {"sku": "SKU-00309", "name": "Produk 309", "price": 10309, "stock": 9}, {"sku": "SKU-00310", "name": "Produk 310", "price": 10310, "stock": 10}, {"sku": "SKU-00311", "name": "Produk 311", "price": 10311, "stock": 11}, {"sku": "SKU-00312", "name": "Produk 312", "price": 10312, "stock": 12}, {"sku": "SKU-00313", "name": "Produk 313", "price": 10313, "stock": 13}, {"sku": "SKU-00314", "name": "Produk 314", "price": 10314, "stock": 14}, {"sku": "SKU-00315", "name": "Produk 315", "price": 10315, "stock": 15}, {"sku": "SKU-00316", "name": "Produk 316", "price": 10316, "stock": 16}, {"sku": "SKU-00317", "name": "Produk 317", "price": 10317, "stock": 17}, {"sku": "SKU-00318", "name": "Produk 318", "price": 10318, "stock": 18}, {"sku": "SKU-00319", "name": "Produk 319", "price": 10319, "stock": 19}, {"sku": "SKU-00320", "name": "Produk 320", "price": 10320, "stock": 20}, {"sku": "SKU-00321", "name": "Produk 321", "price": 10321, "stock": 21}, {"sku": "SKU-00322", "name": "Produk 322", "price": 10322, "stock": 22}, {"sku": "SKU-00323", "name": "Produk 323", "price": 10323, "stock": 23}, {"sku": "SKU-00324", "name": "Produk 324", "price": 10324, "stock": 24}, {"sku": "SKU-00325", "name": "Produk 325", "price": 10325, "stock": 25}, {"sku": "SKU-00326", "name": "Produk 326", "price": 10326, "stock": 26}, {"sku": "SKU-00327", "name": "Produk 327", "price": 10327, "stock": 27}, {"sku": "SKU-00328", "name": "Produk 328", "price": 10328, "stock": 28}, {"sku": "SKU-00329", "name": "Produk 329", "price": 10329, "stock": 29}, {"sku": "SKU-00330", "name": "Produk 330", "price": 10330, "stock": 30}, {"sku": "SKU-00331", "name": "Produk 331", "price": 10331, "stock": 31}, {"sku": "SKU-00332", "name": "Produk 332", "price": 10332, "stock": 32}, {"sku": "SKU-00333", "name": "Produk 333", "price": 10333, "stock": 33}, {"sku": "SKU-00334", "name": "Produk 334", "price": 10334, "stock": 34}, {"sku": "SKU-00335", "name": "Produk 335", "price": 10335, "stock": 35}, {"sku": "SKU-00336", "name": "Produk 336", "price": 10336, "stock": 36}, {"sku": "SKU-00337", "name": "Produk 337", "price": 10337, "stock": 37}, {"sku": "SKU-00338", "name": "Produk 338", "price": 10338, "stock": 38}, {"sku": "SKU-00339", "name": "Produk 339", "price": 10339, "stock": 39}, {"sku": "SKU-00340", "name": "Produk 340", "price": 10340, "stock": 40}, {"sku": "SKU-00341", "name": "Produk 341", "price": 10341, "stock": 41}, {"sku": "SKU-00342", "name": "Produk 342", "price": 10342, "stock": 42}, {"sku": "SKU-00343", "name": "Produk 343", "price": 10343, "stock": 43}, {"sku": "SKU-00344", "name": "Produk 344", "price": 10344, "stock": 44}, {"sku": "SKU-00345", "name": "Produk 345", "price": 10345, "stock": 45}, {"sku": "SKU-00346", "name": "Produk 346", "price": 10346, "stock": 46}, {"sku": "SKU-00347", "name": "Produk 347", "price": 10347, "stock": 47}, {"sku": "SKU-00348", "name": "Produk 348", "price": 10348, "stock": 48}, {"sku": "SKU-00349", "name": "Produk 349", "price": 10349, "stock": 49}, {"sku": "SKU-00350", "name": "Produk 350", "price": 10350, "stock": 0}, {"sku": "SKU-00351", "name": "Produk 351", "price": 10351, "stock": 1}, {"sku": "SKU-00352", "name": "Produk 352", "price": 10352, "stock": 2}, {"sku": "SKU-00353", "name": "Produk 353", "price": 10353, "stock": 3}, {"sku": "SKU-00354", "name": "Produk 354", "price": 10354, "stock": 4}, {"sku": "SKU-00355", "name": "Produk 355", "price": 10355, "stock": 5}, {"sku": "SKU-00356", "name": "Produk 356", "price": 10356, "stock": 6}, {"sku": "SKU-00357", "name": "Produk 357", "price": 10357, "stock": 7}, {"sku": "SKU-00358", "name": "Produk 358", "price": 10358, "stock": 8}, {"sku": "SKU-00359", "name": "Produk 359", "price": 10359, "stock": 9}, {"sku": "SKU-00360", "name": "Produk 360", "price": 10360, "stock": 10}, {"sku": "SKU-00361", "name": "Produk 361", "price": 10361, "stock": 11}, {"sku": "SKU-00362", "name": "Produk 362", "price": 10362, "stock": 12}, {"sku": "SKU-00363", "name": "Produk 363", "price": 10363, "stock": 13}, {"sku": "SKU-00364", "name": "Produk 364", "price": 10364, "stock": 14}, {"sku": "SKU-00365", "name": "Produk 365", "price": 10365, "stock": 15}, {"sku": "SKU-00366", "name": "Produk 366", "price": 10366, "stock": 16}, {"sku": "SKU-00367", "name": "Produk 367", "price": 10367, "stock": 17}, {"sku": "SKU-00368", "name": "Produk 368", "price": 10368, "stock": 18}, {"sku": "SKU-00369", "name": "Produk 369", "price": 10369, "stock": 19}, {"sku": "SKU-00370", "name": "Produk 370", "price": 10370, "stock": 20}, {"sku": "SKU-00371", "name": "Produk 371", "price": 10371, "stock": 21}, {"sku": "SKU-00372", "name": "Produk 372", "price": 10372, "stock": 22}, {"sku": "SKU-00373", "name": "Produk 373", "price": 10373, "stock": 23}, {"sku": "SKU-00374", "name": "Produk 374", "price": 10374, "stock": 24}, {"sku": "SKU-00375", "name": "Produk 375", "price": 10375, "stock": 25}, {"sku": "SKU-00376", "name": "Produk 376", "price": 10376, "stock": 26}, {"sku": "SKU-00377", "name": "Produk 377", "price": 10377, "stock": 27}, {"sku": "SKU-00378", "name": "Produk 378", "price": 10378, "stock": 28}, {"sku": "SKU-00379", "name": "Produk 379", "price": 10379, "stock": 29}, {"sku": "SKU-00380", "name": "Produk 380", "price": 10380, "stock": 30}, {"sku": "SKU-00381", "name": "Produk 381", "price": 10381, "stock": 31}, {"sku": "SKU-00382", "name": "Produk 382", "price": 10382, "stock": 32}, {"sku": "SKU-00383", "name": "Produk 383", "price": 10383, "stock": 33}, {"sku": "SKU-00384", "name": "Produk 384", "price": 10384, "stock": 34}, {"sku": "SKU-00385", "name": "Produk 385", "price": 10385, "stock": 35}, {"sku": "SKU-00386", "name": "Produk 386", "price": 10386, "stock": 36}, {"sku": "SKU-00387", "name": "Produk 387", "price": 10387, "stock": 37}, {"sku": "SKU-00388", "name": "Produk 388", "price": 10388, "stock": 38}, {"sku": "SKU-00389", "name": "Produk 389", "price": 10389, "stock": 39}, {"sku": "SKU-00390", "name": "Produk 390", "price": 10390, "stock": 40}, {"sku": "SKU-00391", "name": "Produk 391", "price": 10391, "stock": 41}, {"sku": "SKU-00392", "name": "Produk 392", "price": 10392, "stock": 42}, {"sku": "SKU-00393", "name": "Produk 393", "price": 10393, "stock": 43}, {"sku": "SKU-00394", "name": "Produk 394", "price": 10394, "stock": 44}, {"sku": "SKU-00395", "name": "Produk 395", "price": 10395, "stock": 45}, {"sku": "SKU-00396", "name": "Produk 396", "price": 10396, "stock": 46}, {"sku": "SKU-00397", "name": "Produk 397", "price": 10397, "stock": 47}, {"sku": "SKU-00398", "name": "Produk 398", "price": 10398, "stock": 48}, {"sku": "SKU-00399", "name": "Produk 399", "price": 10399, "stock": 49}, {"sku": "SKU-00400", "name": "Produk 400", "price": 10400, "stock": 0}, {"sku": "SKU-00401", "name": "Produk 401", "price": 10401, "stock": 1}, {"sku": "SKU-00402", "name": "Produk 402", "price": 10402, "stock": 2}, {"sku": "SKU-00403", "name": "Produk 403", "price": 10403, "stock": 3}, {"sku": "SKU-00404", "name": "Produk 404", "price": 10404, "stock": 4}, {"sku": "SKU-00405", "name": "Produk 405", "price": 10405, "stock": 5}, {"sku": "SKU-00406", "name": "Produk 406", "price": 10406, "stock": 6}, {"sku": "SKU-00407", "name": "Produk 407", "price": 10407, "stock": 7}, {"sku": "SKU-00408", "name": "Produk 408", "price": 10408, "stock": 8}, {"sku": "SKU-00409", "name": "Produk 409", "price": 10409, "stock": 9}, {"sku": "SKU-00410", "name": "Produk 410", "price": 10410, "stock": 10}, {"sku": "SKU-00411", "name": "Produk 411", "price": 10411, "stock": 11}, {"sku": "SKU-00412", "name": "Produk 412", "price": 10412, "stock": 12}, {"sku": "SKU-00413", "name": "Produk 413", "price": 10413, "stock": 13}, {"sku": "SKU-00414", "name": "Produk 414", "price": 10414, "stock": 14}, {"sku": "SKU-00415", "name": "Produk 415", "price": 10415, "stock": 15}, {"sku": "SKU-00416", "name": "Produk 416", "price": 10416, "stock": 16}, {"sku": "SKU-00417", "name": "Produk 417", "price": 10417, "stock": 17}, {"sku": "SKU-00418", "name": "Produk 418", "price": 10418, "stock": 18}, {"sku": "SKU-00419", "name": "Produk 419", "price": 10419, "stock": 19}, {"sku": "SKU-00420", "name": "Produk 420", "price": 10420, "stock": 20}, {"sku": "SKU-00421", "name": "Produk 421", "price": 10421, "stock": 21}, {"sku": "SKU-00422", "name": "Produk 422", "price": 10422, "stock": 22}, {"sku": "SKU-00423", "name": "Produk 423", "price": 10423, "stock": 23}, {"sku": "SKU-00424", "name": "Produk 424", "price": 10424, "stock": 24}, {"sku": "SKU-00425", "name": "Produk 425", "price": 10425, "stock": 25}, {"sku": "SKU-00426", "name": "Produk 426", "price": 10426, "stock": 26}, {"sku": "SKU-00427", "name": "Produk 427", "price": 10427, "stock": 27}, {"sku": "SKU-00428", "name": "Produk 428", "price": 10428, "stock": 28}, {"sku": "SKU-00429", "name": "Produk 429", "price": 10429, "stock": 29}, {"sku": "SKU-00430", "name": "Produk 430", "price": 10430, "stock": 30}, {"sku": "SKU-00431", "name": "Produk 431", "price": 10431, "stock": 31}, {"sku": "SKU-00432", "name": "Produk 432", "price": 10432, "stock": 32}, {"sku": "SKU-00433", "name": "Produk 433", "price": 10433, "stock": 33}, {"sku": "SKU-00434", "name": "Produk 434", "price": 10434, "stock": 34}, {"sku": "SKU-00435", "name": "Produk 435", "price": 10435, "stock": 35}, {"sku": "SKU-00436", "name": "Produk 436", "price": 10436, "stock": 36}, {"sku": "SKU-00437", "name": "Produk 437", "price": 10437, "stock": 37}, {"sku": "SKU-00438", "name": "Produk 438", "price": 10438, "stock": 38}, {"sku": "SKU-00439", "name": "Produk 439", "price": 10439, "stock": 39}, {"sku": "SKU-00440", "name": "Produk 440", "price": 10440, "stock": 40}, {"sku": "SKU-00441", "name": "Produk 441", "price": 10441, "stock": 41}, {"sku": "SKU-00442", "name": "Produk 442", "price": 10442, "stock": 42}, {"sku": "SKU-00443", "name": "Produk 443", "price": 10443, "stock": 43}, {"sku": "SKU-00444", "name": "Produk 444", "price": 10444, "stock": 44}, {"sku": "SKU-00445", "name": "Produk 445", "price": 10445, "stock": 45}, {"sku": "SKU-00446", "name": "Produk 446", "price": 10446, "stock": 46}, {"sku": "SKU-00447", "name": "Produk 447", "price": 10447, "stock": 47}, {"sku": "SKU-00448", "name": "Produk 448", "price": 10448, "stock": 48}, {"sku": "SKU-00449", "name": "Produk 449", "price": 10449, "stock": 49}, {"sku": "SKU-00450", "name": "Produk 450", "price": 10450, "stock": 0}, {"sku": "SKU-00451", "name": "Produk 451", "price": 10451, "stock": 1}, {"sku": "SKU-00452", "name": "Produk 452", "price": 10452, "stock": 2}, {"sku": "SKU-00453", "name": "Produk 453", "price": 10453, "stock": 3}, {"sku": "SKU-00454", "name": "Produk 454", "price": 10454, "stock": 4}, {"sku": "SKU-00455", "name": "Produk 455", "price": 10455, "stock": 5}, {"sku": "SKU-00456", "name": "Produk 456", "price": 10456, "stock": 6}, {"sku": "SKU-00457", "name": "Produk 457", "price": 10457, "stock": 7}, {"sku": "SKU-00458", "name": "Produk 458", "price": 10458, "stock": 8}, {"sku": "SKU-00459", "name": "Produk 459", "price": 10459, "stock": 9}, {"sku": "SKU-00460", "name": "Produk 460", "price": 10460, "stock": 10}, {"sku": "SKU-00461", "name": "Produk 461", "price": 10461, "stock": 11}, {"sku": "SKU-00462", "name": "Produk 462", "price": 10462, "stock": 12}, {"sku": "SKU-00463", "name": "Produk 463", "price": 10463, "stock": 13}, {"sku": "SKU-00464", "name": "Produk 464", "price": 10464, "stock": 14}, {"sku": "SKU-00465", "name": "Produk 465", "price": 10465, "stock": 15}, {"sku": "SKU-00466", "name": "Produk 466", "price": 10466, "stock": 16}, {"sku": "SKU-00467", "name": "Produk 467", "price": 10467, "stock": 17}, {"sku": "SKU-00468", "name": "Produk 468", "price": 10468, "stock": 18}, {"sku": "SKU-00469", "name": "Produk 469", "price": 10469, "stock": 19}, {"sku": "SKU-00470", "name": "Produk 470", "price": 10470, "stock": 20}, {"sku": "SKU-00471", "name": "Produk 471", "price": 10471, "stock": 21}, {"sku": "SKU-00472", "name": "Produk 472", "price": 10472, "stock": 22}, {"sku": "SKU-00473", "name": "Produk 473", "price": 10473, "stock": 23}, {"sku": "SKU-00474", "name": "Produk 474", "price": 10474, "stock": 24}, {"sku": "SKU-00475", "name": "Produk 475", "price": 10475, "stock": 25}, {"sku": "SKU-00476", "name": "Produk 476", "price": 10476, "stock": 26}, {"sku": "SKU-00477", "name": "Produk 477", "price": 10477, "stock": 27}, {"sku": "SKU-00478", "name": "Produk 478", "price": 10478, "stock": 28}, {"sku": "SKU-00479", "name": "Produk 479", "price": 10479, "stock": 29}, {"sku": "SKU-00480", "name": "Produk 480", "price": 10480, "stock": 30}, {"sku": "SKU-00481", "name": "Produk 481", "price": 10481, "stock": 31}, {"sku": "SKU-00482", "name": "Produk 482", "price": 10482, "stock": 32}, {"sku": "SKU-00483", "name": "Produk 483", "price": 10483, "stock": 33}, {"sku": "SKU-00484", "name": "Produk 484", "price": 10484, "stock": 34}, {"sku": "SKU-00485", "name": "Produk 485", "price": 10485, "stock": 35}, {"sku": "SKU-00486", "name": "Produk 486", "price": 10486, "stock": 36}, {"sku": "SKU-00487", "name": "Produk 487", "price": 10487, "stock": 37}, {"sku": "SKU-00488", "name": "Produk 488", "price": 10488, "stock": 38}, {"sku": "SKU-00489", "name": "Produk 489", "price": 10489, "stock": 39}, {"sku": "SKU-00490", "name": "Produk 490", "price": 10490, "stock": 40}, {"sku": "SKU-00491", "name": "Produk 491", "price": 10491, "stock": 41}, {"sku": "SKU-00492", "name": "Produk 492", "price": 10492, "stock": 42}, {"sku": "SKU-00493", "name": "Produk 493", "price": 10493, "stock": 43}, {"sku": "SKU-00494", "name": "Produk 494", "price": 10494, "stock": 44}, {"sku": "SKU-00495", "name": "Produk 495", "price": 10495, "stock": 45}, {"sku": "SKU-00496", "name": "Produk 496", "price": 10496, "stock": 46}, {"sku": "SKU-00497", "name": "Produk 497", "price": 10497, "stock": 47}, {"sku": "SKU-00498", "name": "Produk 498", "price": 10498, "stock": 48}, {"sku": "SKU-00499", "name": "Produk 499", "price": 10499, "stock": 49}, {"sku": "SKU-00500", "name": "Produk 500", "price": 10500, "stock": 0}, {"sku": "SKU-00501", "name": "Produk 501", "price": 10501, "stock": 1}, {"sku": "SKU-00502", "name": "Produk 502", "price": 10502, "stock": 2}, {"sku": "SKU-00503", "name": "Produk 503", "price": 10503, "stock": 3}, {"sku": "SKU-00504", "name": "Produk 504", "price": 10504, "stock": 4}, {"sku": "SKU-00505", "name": "Produk 505", "price": 10505, "stock": 5}, {"sku": "SKU-00506", "name": "Produk 506", "price": 10506, "stock": 6}, {"sku": "SKU-00507", "name": "Produk 507", "price": 10507, "stock": 7}, {"sku": "SKU-00508", "name": "Produk 508", "price": 10508, "stock": 8}, {"sku": "SKU-00509", "name": "Produk 509", "price": 10509, "stock": 9}, {"sku": "SKU-00510", "name": "Produk 510", "price": 10510, "stock": 10}, {"sku": "SKU-00511", "name": "Produk 511", "price": 10511, "stock": 11}, {"sku": "SKU-00512", "name": "Produk 512", "price": 10512, "stock": 12}, {"sku": "SKU-00513", "name": "Produk 513", "price": 10513, "stock": 13}, {"sku": "SKU-00514", "name": "Produk 514", "price": 10514, "stock": 14}, {"sku": "SKU-00515", "name": "Produk 515", "price": 10515, "stock": 15}, {"sku": "SKU-00516", "name": "Produk 516", "price": 10516, "stock": 16}, {"sku": "SKU-00517", "name": "Produk 517", "price": 10517, "stock": 17}, {"sku": "SKU-00518", "name": "Produk 518", "price": 10518, "stock": 18}, {"sku": "SKU-00519", "name": "Produk 519", "price": 10519, "stock": 19}, {"sku": "SKU-00520", "name": "Produk 520", "price": 10520, "stock": 20}, {"sku": "SKU-00521", "name": "Produk 521", "price": 10521, "stock": 21}, {"sku": "SKU-00522", "name": "Produk 522", "price": 10522, "stock": 22}, {"sku": "SKU-00523", "name": "Produk 523", "price": 10523, "stock": 23}, {"sku": "SKU-00524", "name": "Produk 524", "price": 10524, "stock": 24}, {"sku": "SKU-00525", "name": "Produk 525", "price": 10525, "stock": 25}, {"sku": "SKU-00526", "name": "Produk 526", "price": 10526, "stock": 26}, {"sku": "SKU-00527", "name": "Produk 527", "price": 10527, "stock": 27}, {"sku": "SKU-00528", "name": "Produk 528", "price": 10528, "stock": 28}, {"sku": "SKU-00529", "name": "Produk 529", "price": 10529, "stock": 29}, {"sku": "SKU-00530", "name": "Produk 530", "price": 10530, "stock": 30}, {"sku": "SKU-00531", "name": "Produk 531", "price": 10531, "stock": 31}, {"sku": "SKU-00532", "name": "Produk 532", "price": 10532, "stock": 32}, {"sku": "SKU-00533", "name": "Produk 533", "price": 10533, "stock": 33}, {"sku": "SKU-00534", "name": "Produk 534", "price": 10534, "stock": 34}, {"sku": "SKU-00535", "name": "Produk 535", "price": 10535, "stock": 35}, {"sku": "SKU-00536", "name": "Produk 536", "price": 10536, "stock": 36}, {"sku": "SKU-00537", "name": "Produk 537", "price": 10537, "stock": 37}, {"sku": "SKU-00538", "name": "Produk 538", "price": 10538, "stock": 38}, {"sku": "SKU-00539", "name": "Produk 539", "price": 10539, "stock": 39}, {"sku": "SKU-00540", "name": "Produk 540", "price": 10540, "stock": 40}, {"sku": "SKU-00541", "name": "Produk 541", "price": 10541, "stock": 41}, {"sku": "SKU-00542", "name": "Produk 542", "price": 10542, "stock": 42}, {"sku": "SKU-00543", "name": "Produk 543", "price": 10543, "stock": 43}, {"sku": "SKU-00544", "name": "Produk 544", "price": 10544, "stock": 44}, {"sku": "SKU-00545", "name": "Produk 545", "price": 10545, "stock": 45}, {"sku": "SKU-00546", "name": "Produk 546", "price": 10546, "stock": 46}, {"sku": "SKU-00547", "name": "Produk 547", "price": 10547, "stock": 47}, {"sku": "SKU-00548", "name": "Produk 548", "price": 10548, "stock": 48}, {"sku": "SKU-00549", "name": "Produk 549", "price": 10549, "stock": 49}, {"sku": "SKU-00550", "name": "Produk 550", "price": 10550, "stock": 0}, {"sku": "SKU-00551", "name": "Produk 551", "price": 10551, "stock": 1}, {"sku": "SKU-00552", "name": "Produk 552", "price": 10552, "stock": 2}, {"sku": "SKU-00553", "name": "Produk 553", "price": 10553, "stock": 3}, {"sku": "SKU-00554", "name": "Produk 554", "price": 10554, "stock": 4}, {"sku": "SKU-00555", "name": "Produk 555", "price": 10555, "stock": 5}, {"sku": "SKU-00556", "name": "Produk 556", "price": 10556, "stock": 6}, {"sku": "SKU-00557", "name": "Produk 557", "price": 10557, "stock": 7}, {"sku": "SKU-00558", "name": "Produk 558", "price": 10558, "stock": 8}, {"sku": "SKU-00559", "name": "Produk 559", "price": 10559, "stock": 9}, {"sku": "SKU-00560", "name": "Produk 560", "price": 10560, "stock": 10}, {"sku": "SKU-00561", "name": "Produk 561", "price": 10561, "stock": 11}, {"sku": "SKU-00562", "name": "Produk 562", "price": 10562, "stock": 12}, {"sku": "SKU-00563", "name": "Produk 563", "price": 10563, "stock": 13}, {"sku": "SKU-00564", "name": "Produk 564", "price": 10564, "stock": 14}, {"sku": "SKU-00565", "name": "Produk 565", "price": 10565, "stock": 15}, {"sku": "SKU-00566", "name": "Produk 566", "price": 10566, "stock": 16}, {"sku": "SKU-00567", "name": "Produk 567", "price": 10567, "stock": 17}, {"sku": "SKU-00568", "name": "Produk 568", "price": 10568, "stock": 18}, {"sku": "SKU-00569", "name": "Produk 569", "price": 10569, "stock": 19}, {"sku": "SKU-00570", "name": "Produk 570", "price": 10570, "stock": 20}, {"sku": "SKU-00571", "name": "Produk 571", "price": 10571, "stock": 21}, {"sku": "SKU-00572", "name": "Produk 572", "price": 10572, "stock": 22}, {"sku": "SKU-00573", "name": "Produk 573", "price": 10573, "stock": 23}, {"sku": "SKU-00574", "name": "Produk 574", "price": 10574, "stock": 24}, {"sku": "SKU-00575", "name": "Produk 575", "price": 10575, "stock": 25}, {"sku": "SKU-00576", "name": "Produk 576", "price": 10576, "stock": 26}, {"sku": "SKU-00577", "name": "Produk 577", "price": 10577, "stock": 27}, {"sku": "SKU-00578", "name": "Produk 578", "price": 10578, "stock": 28}, {"sku": "SKU-00579", "name": "Produk 579", "price": 10579, "stock": 29}, {"sku": "SKU-00580", "name": "Produk 580", "price": 10580, "stock": 30}, {"sku": "SKU-00581", "name": "Produk 581", "price": 10581, "stock": 31}, {"sku": "SKU-00582", "name": "Produk 582", "price": 10582, "stock": 32}, {"sku": "SKU-00583", "name": "Produk 583", "price": 10583, "stock": 33}, {"sku": "SKU-00584", "name": "Produk 584", "price": 10584, "stock": 34}, {"sku": "SKU-00585", "name": "Produk 585", "price": 10585, "stock": 35}, {"sku": "SKU-00586", "name": "Produk 586", "price": 10586, "stock": 36}, {"sku": "SKU-00587", "name": "Produk 587", "price": 10587, "stock": 37}, {"sku": "SKU-00588", "name": "Produk 588", "price": 10588, "stock": 38}, {"sku": "SKU-00589", "name": "Produk 589", "price": 10589, "stock": 39}, {"sku": "SKU-00590", "name": "Produk 590", "price": 10590, "stock": 40}, {"sku": "SKU-00591", "name": "Produk 591", "price": 10591, "stock": 41}, {"sku": "SKU-00592", "name": "Produk 592", "price": 10592, "stock": 42}, {"sku": "SKU-00593", "name": "Produk 593", "price": 10593, "stock": 43}, {"sku": "SKU-00594", "name": "Produk 594", "price": 10594, "stock": 44}, {"sku": "SKU-00595", "name": "Produk 595", "price": 10595, "stock": 45}, {"sku": "SKU-00596", "name": "Produk 596", "price": 10596, "stock": 46}, {"sku": "SKU-00597", "name": "Produk 597", "price": 10597, "stock": 47}, {"sku": "SKU-00598", "name": "Produk 598", "price": 10598, "stock": 48}, {"sku": "SKU-00599", "name": "Produk 599", "price": 10599, "stock": 49}, {"sku": "SKU-00600", "name": "Produk 600", "price": 10600, "stock": 0}, {"sku": "SKU-00601", "name": "Produk 601", "price": 10601, "stock": 1}, {"sku": "SKU-00602", "name": "Produk 602", "price": 10602, "stock": 2}, {"sku": "SKU-00603", "name": "Produk 603", "price": 10603, "stock": 3}, {"sku": "SKU-00604", "name": "Produk 604", "price": 10604, "stock": 4}, {"sku": "SKU-00605", "name": "Produk 605", "price": 10605, "stock": 5}, {"sku": "SKU-00606", "name": "Produk 606", "price": 10606, "stock": 6}, {"sku": "SKU-00607", "name": "Produk 607", "price": 10607, "stock": 7}, {"sku": "SKU-00608", "name": "Produk 608", "price": 10608, "stock": 8}, {"sku": "SKU-00609", "name": "Produk 609", "price": 10609, "stock": 9}, {"sku": "SKU-00610", "name": "Produk 610", "price": 10610, "stock": 10}, {"sku": "SKU-00611", "name": "Produk 611", "price": 10611, "stock": 11}, {"sku": "SKU-00612", "name": "Produk 612", "price": 10612, "stock": 12}, {"sku": "SKU-00613", "name": "Produk 613", "price": 10613, "stock": 13}, {"sku": "SKU-00614", "name": "Produk 614", "price": 10614, "stock": 14}, {"sku": "SKU-00615", "name": "Produk 615", "price": 10615, "stock": 15}, {"sku": "SKU-00616", "name": "Produk 616", "price": 10616, "stock": 16}, {"sku": "SKU-00617", "name": "Produk 617", "price": 10617, "stock": 17}, {"sku": "SKU-00618", "name": "Produk 618", "price": 10618, "stock": 18}, {"sku": "SKU-00619", "name": "Produk 619", "price": 10619, "stock": 19}, {"sku": "SKU-00620", "name": "Produk 620", "price": 10620, "stock": 20}, {"sku": "SKU-00621", "name": "Produk 621", "price": 10621, "stock": 21}, {"sku": "SKU-00622", "name": "Produk 622", "price": 10622, "stock": 22}, {"sku": "SKU-00623", "name": "Produk 623", "price": 10623, "stock": 23}, {"sku": "SKU-00624", "name": "Produk 624", "price": 10624, "stock": 24}, {"sku": "SKU-00625", "name": "Produk 625", "price": 10625, "stock": 25}, {"sku": "SKU-00626", "name": "Produk 626", "price": 10626, "stock": 26}, {"sku": "SKU-00627", "name": "Produk 627", "price": 10627, "stock": 27}, {"sku": "SKU-00628", "name": "Produk 628", "price": 10628, "stock": 28}, {"sku": "SKU-00629", "name": "Produk 629", "price": 10629, "stock": 29}, {"sku": "SKU-00630", "name": "Produk 630", "price": 10630, "stock": 30}, {"sku": "SKU-00631", "name": "Produk 631", "price": 10631, "stock": 31}, {"sku": "SKU-00632", "name": "Produk 632", "price": 10632, "stock": 32}, {"sku": "SKU-00633", "name": "Produk 633", "price": 10633, "stock": 33}, {"sku": "SKU-00634", "name": "Produk 634", "price": 10634, "stock": 34}, {"sku": "SKU-00635", "name": "Produk 635", "price": 10635, "stock": 35}, {"sku": "SKU-00636", "name": "Produk 636", "price": 10636, "stock": 36}, {"sku": "SKU-00637", "name": "Produk 637", "price": 10637, "stock": 37}, {"sku": "SKU-00638", "name": "Produk 638", "price": 10638, "stock": 38}, {"sku": "SKU-00639", "name": "Produk 639", "price": 10639, "stock": 39}, {"sku": "SKU-00640", "name": "Produk 640", "price": 10640, "stock": 40}, {"sku": "SKU-00641", "name": "Produk 641", "price": 10641, "stock": 41}, {"sku": "SKU-00642", "name": "Produk 642", "price": 10642, "stock": 42}, {"sku": "SKU-00643", "name": "Produk 643", "price": 10643, "stock": 43}, {"sku": "SKU-00644", "name": "Produk 644", "price": 10644, "stock": 44}, {"sku": "SKU-00645", "name": "Produk 645", "price": 10645, "stock": 45}, {"sku": "SKU-00646", "name": "Produk 646", "price": 10646, "stock": 46}, {"sku": "SKU-00647", "name": "Produk 647", "price": 10647, "stock": 47}, {"sku": "SKU-00648", "name": "Produk 648", "price": 10648, "stock": 48}, {"sku": "SKU-00649", "name": "Produk 649", "price": 10649, "stock": 49}, {"sku": "SKU-00650", "name": "Produk 650", "price": 10650, "stock": 0}, {"sku": "SKU-00651", "name": "Produk 651", "price": 10651, "stock": 1}, {"sku": "SKU-00652", "name": "Produk 652", "price": 10652, "stock": 2}, {"sku": "SKU-00653", "name": "Produk 653", "price": 10653, "stock": 3}, {"sku": "SKU-00654", "name": "Produk 654", "price": 10654, "stock": 4}, {"sku": "SKU-00655", "name": "Produk 655", "price": 10655, "stock": 5}, {"sku": "SKU-00656", "name": "Produk 656", "price": 10656, "stock": 6}, {"sku": "SKU-00657", "name": "Produk 657", "price": 10657, "stock": 7}, {"sku": "SKU-00658", "name": "Produk 658", "price": 10658, "stock": 8}, {"sku": "SKU-00659", "name": "Produk 659", "price": 10659, "stock": 9}, {"sku": "SKU-00660", "name": "Produk 660", "price": 10660, "stock": 10}, {"sku": "SKU-00661", "name": "Produk 661", "price": 10661, "stock": 11}, {"sku": "SKU-00662", "name": "Produk 662", "price": 10662, "stock": 12}, {"sku": "SKU-00663", "name": "Produk 663", "price": 10663, "stock": 13}, {"sku": "SKU-00664", "name": "Produk 664", "price": 10664, "stock": 14}, {"sku": "SKU-00665", "name": "Produk 665", "price": 10665, "stock": 15}, {"sku": "SKU-00666", "name": "Produk 666", "price": 10666, "stock": 16}, {"sku": "SKU-00667", "name": "Produk 667", "price": 10667, "stock": 17}, {"sku": "SKU-00668", "name": "Produk 668", "price": 10668, "stock": 18}, {"sku": "SKU-00669", "name": "Produk 669", "price": 10669, "stock": 19}, {"sku": "SKU-00670", "name": "Produk 670", "price": 10670, "stock": 20}, {"sku": "SKU-00671", "name": "Produk 671", "price": 10671, "stock": 21}, {"sku": "SKU-00672", "name": "Produk 672", "price": 10672, "stock": 22}, {"sku": "SKU-00673", "name": "Produk 673", "price": 10673, "stock": 23}, {"sku": "SKU-00674", "name": "Produk 674", "price": 10674, "stock": 24}, {"sku": "SKU-00675", "name": "Produk 675", "price": 10675, "stock": 25}, {"sku": "SKU-00676", "name": "Produk 676", "price": 10676, "stock": 26}, {"sku": "SKU-00677", "name": "Produk 677", "price": 10677, "stock": 27}, {"sku": "SKU-00678", "name": "Produk 678", "price": 10678, "stock": 28}, {"sku": "SKU-00679", "name": "Produk 679", "price": 10679, "stock": 29}, {"sku": "SKU-00680", "name": "Produk 680", "price": 10680, "stock": 30}, {"sku": "SKU-00681", "name": "Produk 681", "price": 10681, "stock": 31}, {"sku": "SKU-00682", "name": "Produk 682", "price": 10682, "stock": 32}, {"sku": "SKU-00683", "name": "Produk 683", "price": 10683, "stock": 33}, {"sku": "SKU-00684", "name": "Produk 684", "price": 10684, "stock": 34}, {"sku": "SKU-00685", "name": "Produk 685", "price": 10685, "stock": 35}, {"sku": "SKU-00686", "name": "Produk 686", "price": 10686, "stock": 36}, {"sku": "SKU-00687", "name": "Produk 687", "price": 10687, "stock": 37}, {"sku": "SKU-00688", "name": "Produk 688", "price": 10688, "stock": 38}, {"sku": "SKU-00689", "name": "Produk 689", "price": 10689, "stock": 39}, {"sku": "SKU-00690", "name": "Produk 690", "price": 10690, "stock": 40}, {"sku": "SKU-00691", "name": "Produk 691", "price": 10691, "stock": 41}, {"sku": "SKU-00692", "name": "Produk 692", "price": 10692, "stock": 42}, {"sku": "SKU-00693", "name": "Produk 693", "price": 10693, "stock": 43}, {"sku": "SKU-00694", "name": "Produk 694", "price": 10694, "stock": 44}, {"sku": "SKU-00695", "name": "Produk 695", "price": 10695, "stock": 45}, {"sku": "SKU-00696", "name": "Produk 696", "price": 10696, "stock": 46}, {"sku": "SKU-00697", "name": "Produk 697", "price": 10697, "stock": 47}, {"sku": "SKU-00698", "name": "Produk 698", "price": 10698, "stock": 48}, {"sku": "SKU-00699", "name": "Produk 699", "price": 10699, "stock": 49}, {"sku": "SKU-00700", "name": "Produk 700", "price": 10700, "stock": 0}, {"sku": "SKU-00701", "name": "Produk 701", "price": 10701, "stock": 1}, {"sku": "SKU-00702", "name": "Produk 702", "price": 10702, "stock": 2}, {"sku": "SKU-00703", "name": "Produk 703", "price": 10703, "stock": 3}, {"sku": "SKU-00704", "name": "Produk 704", "price": 10704, "stock": 4}, {"sku": "SKU-00705", "name": "Produk 705", "price": 10705, "stock": 5}, {"sku": "SKU-00706", "name": "Produk 706", "price": 10706, "stock": 6}, {"sku": "SKU-00707", "name": "Produk 707", "price": 10707, "stock": 7}, {"sku": "SKU-00708", "name": "Produk 708", "price": 10708, "stock": 8}, {"sku": "SKU-00709", "name": "Produk 709", "price": 10709, "stock": 9}, {"sku": "SKU-00710", "name": "Produk 710", "price": 10710, "stock": 10}, {"sku": "SKU-00711", "name": "Produk 711", "price": 10711, "stock": 11}, {"sku": "SKU-00712", "name": "Produk 712", "price": 10712, "stock": 12}, {"sku": "SKU-00713", "name": "Produk 713", "price": 10713, "stock": 13}, {"sku": "SKU-00714", "name": "Produk 714", "price": 10714, "stock": 14}, {"sku": "SKU-00715", "name": "Produk 715", "price": 10715, "stock": 15}, {"sku": "SKU-00716", "name": "Produk 716", "price": 10716, "stock": 16}, {"sku": "SKU-00717", "name": "Produk 717", "price": 10717, "stock": 17}, {"sku": "SKU-00718", "name": "Produk 718", "price": 10718, "stock": 18}, {"sku": "SKU-00719", "name": "Produk 719", "price": 10719, "stock": 19}, {"sku": "SKU-00720", "name": "Produk 720", "price": 10720, "stock": 20}, {"sku": "SKU-00721", "name": "Produk 721", "price": 10721, "stock": 21}, {"sku": "SKU-00722", "name": "Produk 722", "price": 10722, "stock": 22}, {"sku": "SKU-00723", "name": "Produk 723", "price": 10723, "stock": 23}, {"sku": "SKU-00724", "name": "Produk 724", "price": 10724, "stock": 24}, {"sku": "SKU-00725", "name": "Produk 725", "price": 10725, "stock": 25}, {"sku": "SKU-00726", "name": "Produk 726", "price": 10726, "stock": 26}, {"sku": "SKU-00727", "name": "Produk 727", "price": 10727, "stock": 27}, {"sku": "SKU-00728", "name": "Produk 728", "price": 10728, "stock": 28}, {"sku": "SKU-00729", "name": "Produk 729", "price": 10729, "stock": 29}, {"sku": "SKU-00730", "name": "Produk 730", "price": 10730, "stock": 30}, {"sku": "SKU-00731", "name": "Produk 731", "price": 10731, "stock": 31}, {"sku": "SKU-00732", "name": "Produk 732", "price": 10732, "stock": 32}, {"sku": "SKU-00733", "name": "Produk 733", "price": 10733, "stock": 33}, {"sku": "SKU-00734", "name": "Produk 734", "price": 10734, "stock": 34}, {"sku": "SKU-00735", "name": "Produk 735", "price": 10735, "stock": 35}, {"sku": "SKU-00736", "name": "Produk 736", "price": 10736, "stock": 36}, {"sku": "SKU-00737", "name": "Produk 737", "price": 10737, "stock": 37}, {"sku": "SKU-00738", "name": "Produk 738", "price": 10738, "stock": 38}, {"sku": "SKU-00739", "name": "Produk 739", "price": 10739, "stock": 39}, {"sku": "SKU-00740", "name": "Produk 740", "price": 10740, "stock": 40}, {"sku": "SKU-00741", "name": "Produk 741", "price": 10741, "stock": 41}, {"sku": "SKU-00742", "name": "Produk 742", "price": 10742, "stock": 42}, {"sku": "SKU-00743", "name": "Produk 743", "price": 10743, "stock": 43}, {"sku": "SKU-00744", "name": "Produk 744", "price": 10744, "stock": 44}, {"sku": "SKU-00745", "name": "Produk 745", "price": 10745, "stock": 45}, {"sku": "SKU-00746", "name": "Produk 746", "price": 10746, "stock": 46}, {"sku": "SKU-00747", "name": "Produk 747", "price": 10747, "stock": 47}, {"sku": "SKU-00748", "name": "Produk 748", "price": 10748, "stock": 48}, {"sku": "SKU-00749", "name": "Produk 749", "price": 10749, "stock": 49}, {"sku": "SKU-00750", "name": "Produk 750", "price": 10750, "stock": 0}, {"sku": "SKU-00751", "name": "Produk 751", "price": 10751, "stock": 1}, {"sku": "SKU-00752", "name": "Produk 752", "price": 10752, "stock": 2}, {"sku": "SKU-00753", "name": "Produk 753", "price": 10753, "stock": 3}, {"sku": "SKU-00754", "name": "Produk 754", "price": 10754, "stock": 4}, {"sku": "SKU-00755", "name": "Produk 755", "price": 10755, "stock": 5}, {"sku": "SKU-00756", "name": "Produk 756", "price": 10756, "stock": 6}, {"sku": "SKU-00757", "name": "Produk 757", "price": 10757, "stock": 7}, {"sku": "SKU-00758", "name": "Produk 758", "price": 10758, "stock": 8}, {"sku": "SKU-00759", "name": "Produk 759", "price": 10759, "stock": 9}, {"sku": "SKU-00760", "name": "Produk 760", "price": 10760, "stock": 10}, {"sku": "SKU-00761", "name": "Produk 761", "price": 10761, "stock": 11}, {"sku": "SKU-00762", "name": "Produk 762", "price": 10762, "stock": 12}, {"sku": "SKU-00763", "name": "Produk 763", "price": 10763, "stock": 13}, {"sku": "SKU-00764", "name": "Produk 764", "price": 10764, "stock": 14}, {"sku": "SKU-00765", "name": "Produk 765", "price": 10765, "stock": 15}, {"sku": "SKU-00766", "name": "Produk 766", "price": 10766, "stock": 16}, {"sku": "SKU-00767", "name": "Produk 767", "price": 10767, "stock": 17}, {"sku": "SKU-00768", "name": "Produk 768", "price": 10768, "stock": 18}, {"sku": "SKU-00769", "name": "Produk 769", "price": 10769, "stock": 19}, {"sku": "SKU-00770", "name": "Produk 770", "price": 10770, "stock": 20}, {"sku": "SKU-00771", "name": "Produk 771", "price": 10771, "stock": 21}, {"sku": "SKU-00772", "name": "Produk 772", "price": 10772, "stock": 22}, {"sku": "SKU-00773", "name": "Produk 773", "price": 10773, "stock": 23}, {"sku": "SKU-00774", "name": "Produk 774", "price": 10774, "stock": 24}, {"sku": "SKU-00775", "name": "Produk 775", "price": 10775, "stock": 25}, {"sku": "SKU-00776", "name": "Produk 776", "price": 10776, "stock": 26}, {"sku": "SKU-00777", "name": "Produk 777", "price": 10777, "stock": 27}, {"sku": "SKU-00778", "name": "Produk 778", "price": 10778, "stock": 28}, {"sku": "SKU-00779", "name": "Produk 779", "price": 10779, "stock": 29}, {"sku": "SKU-00780", "name": "Produk 780", "price": 10780, "stock": 30}, {"sku": "SKU-00781", "name": "Produk 781", "price": 10781, "stock": 31}, {"sku": "SKU-00782", "name": "Produk 782", "price": 10782, "stock": 32}, {"sku": "SKU-00783", "name": "Produk 783", "price": 10783, "stock": 33}, {"sku": "SKU-00784", "name": "Produk 784", "price": 10784, "stock": 34}, {"sku": "SKU-00785", "name": "Produk 785", "price": 10785, "stock": 35}, {"sku": "SKU-00786", "name": "Produk 786", "price": 10786, "stock": 36}, {"sku": "SKU-00787", "name": "Produk 787", "price": 10787, "stock": 37}, {"sku": "SKU-00788", "name": "Produk 788", "price": 10788, "stock": 38}, {"sku": "SKU-00789", "name": "Produk 789", "price": 10789, "stock": 39}, {"sku": "SKU-00790", "name": "Produk 790", "price": 10790, "stock": 40}, {"sku": "SKU-00791", "name": "Produk 791", "price": 10791, "stock": 41}, {"sku": "SKU-00792", "name": "Produk 792", "price": 10792, "stock": 42}, {"sku": "SKU-00793", "name": "Produk 793", "price": 10793, "stock": 43}, {"sku": "SKU-00794", "name": "Produk 794", "price": 10794, "stock": 44}, {"sku": "SKU-00795", "name": "Produk 795", "price": 10795, "stock": 45}, {"sku": "SKU-00796", "name": "Produk 796", "price": 10796, "stock": 46}, {"sku": "SKU-00797", "name": "Produk 797", "price": 10797, "stock": 47}, {"sku": "SKU-00798", "name": "Produk 798", "price": 10798, "stock": 48}, {"sku": "SKU-00799", "name": "Produk 799", "price": 10799, "stock": 49}, {"sku": "SKU-00800", "name": "Produk 800", "price": 10800, "stock": 0}, {"sku": "SKU-00801", "name": "Produk 801", "price": 10801, "stock": 1}, {"sku": "SKU-00802", "name": "Produk 802", "price": 10802, "stock": 2}, {"sku": "SKU-00803", "name": "Produk 803", "price": 10803, "stock": 3}, {"sku": "SKU-00804", "name": "Produk 804", "price": 10804, "stock": 4}, {"sku": "SKU-00805", "name": "Produk 805", "price": 10805, "stock": 5}, {"sku": "SKU-00806", "name": "Produk 806", "price": 10806, "stock": 6}, {"sku": "SKU-00807", "name": "Produk 807", "price": 10807, "stock": 7}, {"sku": "SKU-00808", "name": "Produk 808", "price": 10808, "stock": 8}, {"sku": "SKU-00809", "name": "Produk 809", "price": 10809, "stock": 9}, {"sku": "SKU-00810", "name": "Produk 810", "price": 10810, "stock": 10}, {"sku": "SKU-00811", "name": "Produk 811", "price": 10811, "stock": 11}, {"sku": "SKU-00812", "name": "Produk 812", "price": 10812, "stock": 12}, {"sku": "SKU-00813", "name": "Produk 813", "price": 10813, "stock": 13}, {"sku": "SKU-00814", "name": "Produk 814", "price": 10814, "stock": 14}, {"sku": "SKU-00815", "name": "Produk 815", "price": 10815, "stock": 15}, {"sku": "SKU-00816", "name": "Produk 816", "price": 10816, "stock": 16}, {"sku": "SKU-00817", "name": "Produk 817", "price": 10817, "stock": 17}, {"sku": "SKU-00818", "name": "Produk 818", "price": 10818, "stock": 18}, {"sku": "SKU-00819", "name": "Produk 819", "price": 10819, "stock": 19}, {"sku": "SKU-00820", "name": "Produk 820", "price": 10820, "stock": 20}, {"sku": "SKU-00821", "name": "Produk 821", "price": 10821, "stock": 21}, {"sku": "SKU-00822", "name": "Produk 822", "price": 10822, "stock": 22}, {"sku": "SKU-00823", "name": "Produk 823", "price": 10823, "stock": 23}, {"sku": "SKU-00824", "name": "Produk 824", "price": 10824, "stock": 24}, {"sku": "SKU-00825", "name": "Produk 825", "price": 10825, "stock": 25}, {"sku": "SKU-00826", "name": "Produk 826", "price": 10826, "stock": 26}, {"sku": "SKU-00827", "name": "Produk 827", "price": 10827, "stock": 27}, {"sku": "SKU-00828", "name": "Produk 828", "price": 10828, "stock": 28}, {"sku": "SKU-00829", "name": "Produk 829", "price": 10829, "stock": 29}, {"sku": "SKU-00830", "name": "Produk 830", "price": 10830, "stock": 30}, {"sku": "SKU-00831", "name": "Produk 831", "price": 10831, "stock": 31}, {"sku": "SKU-00832", "name": "Produk 832", "price": 10832, "stock": 32}, {"sku": "SKU-00833", "name": "Produk 833", "price": 10833, "stock": 33}, {"sku": "SKU-00834", "name": "Produk 834", "price": 10834, "stock": 34}, {"sku": "SKU-00835", "name": "Produk 835", "price": 10835, "stock": 35}, {"sku": "SKU-00836", "name": "Produk 836", "price": 10836, "stock": 36}, {"sku": "SKU-00837", "name": "Produk 837", "price": 10837, "stock": 37}, {"sku": "SKU-00838", "name": "Produk 838", "price": 10838, "stock": 38}, {"sku": "SKU-00839", "name": "Produk 839", "price": 10839, "stock": 39}, {"sku": "SKU-00840", "name": "Produk 840", "price": 10840, "stock": 40}, {"sku": "SKU-00841", "name": "Produk 841", "price": 10841, "stock": 41}, {"sku": "SKU-00842", "name": "Produk 842", "price": 10842, "stock": 42}, {"sku": "SKU-00843", "name": "Produk 843", "price": 10843, "stock": 43}, {"sku": "SKU-00844", "name": "Produk 844", "price": 10844, "stock": 44}, {"sku": "SKU-00845", "name": "Produk 845", "price": 10845, "stock": 45}, {"sku": "SKU-00846", "name": "Produk 846", "price": 10846, "stock": 46}, {"sku": "SKU-00847", "name": "Produk 847", "price": 10847, "stock": 47}, {"sku": "SKU-00848", "name": "Produk 848", "price": 10848, "stock": 48}, {"sku": "SKU-00849", "name": "Produk 849", "price": 10849, "stock": 49}, {"sku": "SKU-00850", "name": "Produk 850", "price": 10850, "stock": 0}, {"sku": "SKU-00851", "name": "Produk 851", "price": 10851, "stock": 1}, {"sku": "SKU-00852", "name": "Produk 852", "price": 10852, "stock": 2}, {"sku": "SKU-00853", "name": "Produk 853", "price": 10853, "stock": 3}, {"sku": "SKU-00854", "name": "Produk 854", "price": 10854, "stock": 4}, {"sku": "SKU-00855", "name": "Produk 855", "price": 10855, "stock": 5}, {"sku": "SKU-00856", "name": "Produk 856", "price": 10856, "stock": 6}, {"sku": "SKU-00857", "name": "Produk 857", "price": 10857, "stock": 7}, {"sku": "SKU-00858", "name": "Produk 858", "price": 10858, "stock": 8}, {"sku": "SKU-00859", "name": "Produk 859", "price": 10859, "stock": 9}, {"sku": "SKU-00860", "name": "Produk 860", "price": 10860, "stock": 10}, {"sku": "SKU-00861", "name": "Produk 861", "price": 10861, "stock": 11}, {"sku": "SKU-00862", "name": "Produk 862", "price": 10862, "stock": 12}, {"sku": "SKU-00863", "name": "Produk 863", "price": 10863, "stock": 13}, {"sku": "SKU-00864", "name": "Produk 864", "price": 10864, "stock": 14}, {"sku": "SKU-00865", "name": "Produk 865", "price": 10865, "stock": 15}, {"sku": "SKU-00866", "name": "Produk 866", "price": 10866, "stock": 16}, {"sku": "SKU-00867", "name": "Produk 867", "price": 10867, "stock": 17}, {"sku": "SKU-00868", "name": "Produk 868", "price": 10868, "stock": 18}, {"sku": "SKU-00869", "name": "Produk 869", "price": 10869, "stock": 19}, {"sku": "SKU-00870", "name": "Produk 870", "price": 10870, "stock": 20}, {"sku": "SKU-00871", "name": "Produk 871", "price": 10871, "stock": 21}, {"sku": "SKU-00872", "name": "Produk 872", "price": 10872, "stock": 22}, {"sku": "SKU-00873", "name": "Produk 873", "price": 10873, "stock": 23}, {"sku": "SKU-00874", "name": "Produk 874", "price": 10874, "stock": 24}, {"sku": "SKU-00875", "name": "Produk 875", "price": 10875, "stock": 25}, {"sku": "SKU-00876", "name": "Produk 876", "price": 10876, "stock": 26}, {"sku": "SKU-00877", "name": "Produk 877", "price": 10877, "stock": 27}, {"sku": "SKU-00878", "name": "Produk 878", "price": 10878, "stock": 28}, {"sku": "SKU-00879", "name": "Produk 879", "price": 10879, "stock": 29}, {"sku": "SKU-00880", "name": "Produk 880", "price": 10880, "stock": 30}, {"sku": "SKU-00881", "name": "Produk 881", "price": 10881, "stock": 31}, {"sku": "SKU-00882", "name": "Produk 882", "price": 10882, "stock": 32}, {"sku": "SKU-00883", "name": "Produk 883", "price": 10883, "stock": 33}, {"sku": "SKU-00884", "name": "Produk 884", "price": 10884, "stock": 34}, {"sku": "SKU-00885", "name": "Produk 885", "price": 10885, "stock": 35}, {"sku": "SKU-00886", "name": "Produk 886", "price": 10886, "stock": 36}, {"sku": "SKU-00887", "name": "Produk 887", "price": 10887, "stock": 37}, {"sku": "SKU-00888", "name": "Produk 888", "price": 10888, "stock": 38}, {"sku": "SKU-00889", "name": "Produk 889", "price": 10889, "stock": 39}, {"sku": "SKU-00890", "name": "Produk 890", "price": 10890, "stock": 40}, {"sku": "SKU-00891", "name": "Produk 891", "price": 10891, "stock": 41}, {"sku": "SKU-00892", "name": "Produk 892", "price": 10892, "stock": 42}, {"sku": "SKU-00893", "name": "Produk 893", "price": 10893, "stock": 43}, {"sku": "SKU-00894", "name": "Produk 894", "price": 10894, "stock": 44}, {"sku": "SKU-00895", "name": "Produk 895", "price": 10895, "stock": 45}, {"sku": "SKU-00896", "name": "Produk 896", "price": 10896, "stock": 46}, {"sku": "SKU-00897", "name": "Produk 897", "price": 10897, "stock": 47}, {"sku": "SKU-00898", "name": "Produk 898", "price": 10898, "stock": 48}, {"sku": "SKU-00899", "name": "Produk 899", "price": 10899, "stock": 49}, {"sku": "SKU-00900", "name": "Produk 900", "price": 10900, "stock": 0}, {"sku": "SKU-00901", "name": "Produk 901", "price": 10901, "stock": 1}, {"sku": "SKU-00902", "name": "Produk 902", "price": 10902, "stock": 2}, {"sku": "SKU-00903", "name": "Produk 903", "price": 10903, "stock": 3}, {"sku": "SKU-00904", "name": "Produk 904", "price": 10904, "stock": 4}, {"sku": "SKU-00905", "name": "Produk 905", "price": 10905, "stock": 5}, {"sku": "SKU-00906", "name": "Produk 906", "price": 10906, "stock": 6}, {"sku": "SKU-00907", "name": "Produk 907", "price": 10907, "stock": 7}, {"sku": "SKU-00908", "name": "Produk 908", "price": 10908, "stock": 8}, {"sku": "SKU-00909", "name": "Produk 909", "price": 10909, "stock": 9}, {"sku": "SKU-00910", "name": "Produk 910", "price": 10910, "stock": 10}, {"sku": "SKU-00911", "name": "Produk 911", "price": 10911, "stock": 11}, {"sku": "SKU-00912", "name": "Produk 912", "price": 10912, "stock": 12}, {"sku": "SKU-00913", "name": "Produk 913", "price": 10913, "stock": 13}, {"sku": "SKU-00914", "name": "Produk 914", "price": 10914, "stock": 14}, {"sku": "SKU-00915", "name": "Produk 915", "price": 10915, "stock": 15}, {"sku": "SKU-00916", "name": "Produk 916", "price": 10916, "stock": 16}, {"sku": "SKU-00917", "name": "Produk 917", "price": 10917, "stock": 17}, {"sku": "SKU-00918", "name": "Produk 918", "price": 10918, "stock": 18}, {"sku": "SKU-00919", "name": "Produk 919", "price": 10919, "stock": 19}, {"sku": "SKU-00920", "name": "Produk 920", "price": 10920, "stock": 20}, {"sku": "SKU-00921", "name": "Produk 921", "price": 10921, "stock": 21}, {"sku": "SKU-00922", "name": "Produk 922", "price": 10922, "stock": 22}, {"sku": "SKU-00923", "name": "Produk 923", "price": 10923, "stock": 23}, {"sku": "SKU-00924", "name": "Produk 924", "price": 10924, "stock": 24}, {"sku": "SKU-00925", "name": "Produk 925", "price": 10925, "stock": 25}, {"sku": "SKU-00926", "name": "Produk 926", "price": 10926, "stock": 26}, {"sku": "SKU-00927", "name": "Produk 927", "price": 10927, "stock": 27}, {"sku": "SKU-00928", "name": "Produk 928", "price": 10928, "stock": 28}, {"sku": "SKU-00929", "name": "Produk 929", "price": 10929, "stock": 29}, {"sku": "SKU-00930", "name": "Produk 930", "price": 10930, "stock": 30}, {"sku": "SKU-00931", "name": "Produk 931", "price": 10931, "stock": 31}, {"sku": "SKU-00932", "name": "Produk 932", "price": 10932, "stock": 32}, {"sku": "SKU-00933", "name": "Produk 933", "price": 10933, "stock": 33}, {"sku": "SKU-00934", "name": "Produk 934", "price": 10934, "stock": 34}, {"sku": "SKU-00935", "name": "Produk 935", "price": 10935, "stock": 35}, {"sku": "SKU-00936", "name": "Produk 936", "price": 10936, "stock": 36}, {"sku": "SKU-00937", "name": "Produk 937", "price": 10937, "stock": 37}, {"sku": "SKU-00938", "name": "Produk 938", "price": 10938, "stock": 38}, {"sku": "SKU-00939", "name": "Produk 939", "price": 10939, "stock": 39}, {"sku": "SKU-00940", "name": "Produk 940", "price": 10940, "stock": 40}, {"sku": "SKU-00941", "name": "Produk 941", "price": 10941, "stock": 41}, {"sku": "SKU-00942", "name": "Produk 942", "price": 10942, "stock": 42}, {"sku": "SKU-00943", "name": "Produk 943", "price": 10943, "stock": 43}, {"sku": "SKU-00944", "name": "Produk 944", "price": 10944, "stock": 44}, {"sku": "SKU-00945", "name": "Produk 945", "price": 10945, "stock": 45}, {"sku": "SKU-00946", "name": "Produk 946", "price": 10946, "stock": 46}, {"sku": "SKU-00947", "name": "Produk 947", "price": 10947, "stock": 47}, {"sku": "SKU-00948", "name": "Produk 948", "price": 10948, "stock": 48}, {"sku": "SKU-00949", "name": "Produk 949", "price": 10949, "stock": 49}, {"sku": "SKU-00950", "name": "Produk 950", "price": 10950, "stock": 0}, {"sku": "SKU-00951", "name": "Produk 951", "price": 10951, "stock": 1}, {"sku": "SKU-00952", "name": "Produk 952", "price": 10952, "stock": 2}, {"sku": "SKU-00953", "name": "Produk 953", "price": 10953, "stock": 3}, {"sku": "SKU-00954", "name": "Produk 954", "price": 10954, "stock": 4}, {"sku": "SKU-00955", "name": "Produk 955", "price": 10955, "stock": 5}, {"sku": "SKU-00956", "name": "Produk 956", "price": 10956, "stock": 6}, {"sku": "SKU-00957", "name": "Produk 957", "price": 10957, "stock": 7}, {"sku": "SKU-00958", "name": "Produk 958", "price": 10958, "stock": 8}, {"sku": "SKU-00959", "name": "Produk 959", "price": 10959, "stock": 9}, {"sku": "SKU-00960", "name": "Produk 960", "price": 10960, "stock": 10}, {"sku": "SKU-00961", "name": "Produk 961", "price": 10961, "stock": 11}, {"sku": "SKU-00962", "name": "Produk 962", "price": 10962, "stock": 12}, {"sku": "SKU-00963", "name": "Produk 963", "price": 10963, "stock": 13}, {"sku": "SKU-00964", "name": "Produk 964", "price": 10964, "stock": 14}, {"sku": "SKU-00965", "name": "Produk 965", "price": 10965, "stock": 15}, {"sku": "SKU-00966", "name": "Produk 966", "price": 10966, "stock": 16}, {"sku": "SKU-00967", "name": "Produk 967", "price": 10967, "stock": 17}, {"sku": "SKU-00968", "name": "Produk 968", "price": 10968, "stock": 18}, {"sku": "SKU-00969", "name": "Produk 969", "price": 10969, "stock": 19}, {"sku": "SKU-00970", "name": "Produk 970", "price": 10970, "stock": 20}, {"sku": "SKU-00971", "name": "Produk 971", "price": 10971, "stock": 21}, {"sku": "SKU-00972", "name": "Produk 972", "price": 10972, "stock": 22}, {"sku": "SKU-00973", "name": "Produk 973", "price": 10973, "stock": 23}, {"sku": "SKU-00974", "name": "Produk 974", "price": 10974, "stock": 24}, {"sku": "SKU-00975", "name": "Produk 975", "price": 10975, "stock": 25}, {"sku": "SKU-00976", "name": "Produk 976", "price": 10976, "stock": 26}, {"sku": "SKU-00977", "name": "Produk 977", "price": 10977, "stock": 27}, {"sku": "SKU-00978", "name": "Produk 978", "price": 10978, "stock": 28}, {"sku": "SKU-00979", "name": "Produk 979", "price": 10979, "stock": 29}, {"sku": "SKU-00980", "name": "Produk 980", "price": 10980, "stock": 30}, {"sku": "SKU-00981", "name": "Produk 981", "price": 10981, "stock": 31}, {"sku": "SKU-00982", "name": "Produk 982", "price": 10982, "stock": 32}, {"sku": "SKU-00983", "name": "Produk 983", "price": 10983, "stock": 33}, {"sku": "SKU-00984", "name": "Produk 984", "price": 10984, "stock": 34}, {"sku": "SKU-00985", "name": "Produk 985", "price": 10985, "stock": 35}, {"sku": "SKU-00986", "name": "Produk 986", "price": 10986, "stock": 36}, {"sku": "SKU-00987", "name": "Produk 987", "price": 10987, "stock": 37}, {"sku": "SKU-00988", "name": "Produk 988", "price": 10988, "stock": 38}, {"sku": "SKU-00989", "name": "Produk 989", "price": 10989, "stock": 39}, {"sku": "SKU-00990", "name": "Produk 990", "price": 10990, "stock": 40}, {"sku": "SKU-00991", "name": "Produk 991", "price": 10991, "stock": 41}, {"sku": "SKU-00992", "name": "Produk 992", "price": 10992, "stock": 42}, {"sku": "SKU-00993", "name": "Produk 993", "price": 10993, "stock": 43}, {"sku": "SKU-00994", "name": "Produk 994", "price": 10994, "stock": 44}, {"sku": "SKU-00995", "name": "Produk 995", "price": 10995, "stock": 45}, {"sku": "SKU-00996", "name": "Produk 996", "price": 10996, "stock": 46}, {"sku": "SKU-00997", "name": "Produk 997", "price": 10997, "stock": 47}, {"sku": "SKU-00998", "name": "Produk 998", "price": 10998, "stock": 48}, {"sku": "SKU-00999", "name": "Produk 999", "price": 10999, "stock": 49}, {"sku": "SKU-01000", "name": "Produk 1000", "price": 11000, "stock": 0}, {"sku": "SKU-01001", "name": "Produk 1001", "price": 11001, "stock": 1}, {"sku": "SKU-01002", "name": "Produk 1002", "price": 11002, "stock": 2}, {"sku": "SKU-01003", "name": "Produk 1003", "price": 11003, "stock": 3}, {"sku": "SKU-01004", "name": "Produk 1004", "price": 11004, "stock": 4}, {"sku": "SKU-01005", "name": "Produk 1005", "price": 11005, "stock": 5}, {"sku": "SKU-01006", "name": "Produk 1006", "price": 11006, "stock": 6}, {"sku": "SKU-01007", "name": "Produk 1007", "price": 11007, "stock": 7}, {"sku": "SKU-01008", "name": "Produk 1008", "price": 11008, "stock": 8}, {"sku": "SKU-01009", "name": "Produk 1009", "price": 11009, "stock": 9}, {"sku": "SKU-01010", "name": "Produk 1010", "price": 11010, "stock": 10}, {"sku": "SKU-01011", "name": "Produk 1011", "price": 11011, "stock": 11}, {"sku": "SKU-01012", "name": "Produk 1012", "price": 11012, "stock": 12}, {"sku": "SKU-01013", "name": "Produk 1013", "price": 11013, "stock": 13}, {"sku": "SKU-01014", "name": "Produk 1014", "price": 11014, "stock": 14}, {"sku": "SKU-01015", "name": "Produk 1015", "price": 11015, "stock": 15}, {"sku": "SKU-01016", "name": "Produk 1016", "price": 11016, "stock": 16}, {"sku": "SKU-01017", "name": "Produk 1017", "price": 11017, "stock": 17}, {"sku": "SKU-01018", "name": "Produk 1018", "price": 11018, "stock": 18}, {"sku": "SKU-01019", "name": "Produk 1019", "price": 11019, "stock": 19}, {"sku": "SKU-01020", "name": "Produk 1020", "price": 11020, "stock": 20}, {"sku": "SKU-01021", "name": "Produk 1021", "price": 11021, "stock": 21}, {"sku": "SKU-01022", "name": "Produk 1022", "price": 11022, "stock": 22}, {"sku": "SKU-01023", "name": "Produk 1023", "price": 11023, "stock": 23}, {"sku": "SKU-01024", "name": "Produk 1024", "price": 11024, "stock": 24}, {"sku": "SKU-01025", "name": "Produk 1025", "price": 11025, "stock": 25}, {"sku": "SKU-01026", "name": "Produk 1026", "price": 11026, "stock": 26}, {"sku": "SKU-01027", "name": "Produk 1027", "price": 11027, "stock": 27}, {"sku": "SKU-01028", "name": "Produk 1028", "price": 11028, "stock": 28}, {"sku": "SKU-01029", "name": "Produk 1029", "price": 11029, "stock": 29}, {"sku": "SKU-01030", "name": "Produk 1030", "price": 11030, "stock": 30}, {"sku": "SKU-01031", "name": "Produk 1031", "price": 11031, "stock": 31}, {"sku": "SKU-01032", "name": "Produk 1032", "price": 11032, "stock": 32}, {"sku": "SKU-01033", "name": "Produk 1033", "price": 11033, "stock": 33}, {"sku": "SKU-01034", "name": "Produk 1034", "price": 11034, "stock": 34}, {"sku": "SKU-01035", "name": "Produk 1035", "price": 11035, "stock": 35}, {"sku": "SKU-01036", "name": "Produk 1036", "price": 11036, "stock": 36}, {"sku": "SKU-01037", "name": "Produk 1037", "price": 11037, "stock": 37}, {"sku": "SKU-01038", "name": "Produk 1038", "price": 11038, "stock": 38}, {"sku": "SKU-01039", "name": "Produk 1039", "price": 11039, "stock": 39}, {"sku": "SKU-01040", "name": "Produk 1040", "price": 11040, "stock": 40}, {"sku": "SKU-01041", "name": "Produk 1041", "price": 11041, "stock": 41}, {"sku": "SKU-01042", "name": "Produk 1042", "price": 11042, "stock": 42}, {"sku": "SKU-01043", "name": "Produk 1043", "price": 11043, "stock": 43}, {"sku": "SKU-01044", "name": "Produk 1044", "price": 11044, "stock": 44}, {"sku": "SKU-01045", "name": "Produk 1045", "price": 11045, "stock": 45}, {"sku": "SKU-01046", "name": "Produk 1046", "price": 11046, "stock": 46}, {"sku": "SKU-01047", "name": "Produk 1047", "price": 11047, "stock": 47}, {"sku": "SKU-01048", "name": "Produk 1048", "price": 11048, "stock": 48}, {"sku": "SKU-01049", "name": "Produk 1049", "price": 11049, "stock": 49}, {"sku": "SKU-01050", "name": "Produk 1050", "price": 11050, "stock": 0}, {"sku": "SKU-01051", "name": "Produk 1051", "price": 11051, "stock": 1}, {"sku": "SKU-01052", "name": "Produk 1052", "price": 11052, "stock": 2}, {"sku": "SKU-01053", "name": "Produk 1053", "price": 11053, "stock": 3}, {"sku": "SKU-01054", "name": "Produk 1054", "price": 11054, "stock": 4}, {"sku": "SKU-01055", "name": "Produk 1055", "price": 11055, "stock": 5}, {"sku": "SKU-01056", "name": "Produk 1056", "price": 11056, "stock": 6}, {"sku": "SKU-01057", "name": "Produk 1057", "price": 11057, "stock": 7}, {"sku": "SKU-01058", "name": "Produk 1058", "price": 11058, "stock": 8}, {"sku": "SKU-01059", "name": "Produk 1059", "price": 11059, "stock": 9}, {"sku": "SKU-01060", "name": "Produk 1060", "price": 11060, "stock": 10}, {"sku": "SKU-01061", "name": "Produk 1061", "price": 11061, "stock": 11}, {"sku": "SKU-01062", "name": "Produk 1062", "price": 11062, "stock": 12}, {"sku": "SKU-01063", "name": "Produk 1063", "price": 11063, "stock": 13}, {"sku": "SKU-01064", "name": "Produk 1064", "price": 11064, "stock": 14}, {"sku": "SKU-01065", "name": "Produk 1065", "price": 11065, "stock": 15}, {"sku": "SKU-01066", "name": "Produk 1066", "price": 11066, "stock": 16}, {"sku": "SKU-01067", "name": "Produk 1067", "price": 11067, "stock": 17}, {"sku": "SKU-01068", "name": "Produk 1068", "price": 11068, "stock": 18}, {"sku": "SKU-01069", "name": "Produk 1069", "price": 11069, "stock": 19}, {"sku": "SKU-01070", "name": "Produk 1070", "price": 11070, "stock": 20}, {"sku": "SKU-01071", "name": "Produk 1071", "price": 11071, "stock": 21}, {"sku": "SKU-01072", "name": "Produk 1072", "price": 11072, "stock": 22}, {"sku": "SKU-01073", "name": "Produk 1073", "price": 11073, "stock": 23}, {"sku": "SKU-01074", "name": "Produk 1074", "price": 11074, "stock": 24}, {"sku": "SKU-01075", "name": "Produk 1075", "price": 11075, "stock": 25}, {"sku": "SKU-01076", "name": "Produk 1076", "price": 11076, "stock": 26}, {"sku": "SKU-01077", "name": "Produk 1077", "price": 11077, "stock": 27}, {"sku": "SKU-01078", "name": "Produk 1078", "price": 11078, "stock": 28}, {"sku": "SKU-01079", "name": "Produk 1079", "price": 11079, "stock": 29}, {"sku": "SKU-01080", "name": "Produk 1080", "price": 11080, "stock": 30}, {"sku": "SKU-01081", "name": "Produk 1081", "price": 11081, "stock": 31}, {"sku": "SKU-01082", "name": "Produk 1082", "price": 11082, "stock": 32}, {"sku": "SKU-01083", "name": "Produk 1083", "price": 11083, "stock": 33}, {"sku": "SKU-01084", "name": "Produk 1084", "price": 11084, "stock": 34}, {"sku": "SKU-01085", "name": "Produk 1085", "price": 11085, "stock": 35}, {"sku": "SKU-01086", "name": "Produk 1086", "price": 11086, "stock": 36}, {"sku": "SKU-01087", "name": "Produk 1087", "price": 11087, "stock": 37}, {"sku": "SKU-01088", "name": "Produk 1088", "price": 11088, "stock": 38}, {"sku": "SKU-01089", "name": "Produk 1089", "price": 11089, "stock": 39}, {"sku": "SKU-01090", "name": "Produk 1090", "price": 11090, "stock": 40}, {"sku": "SKU-01091", "name": "Produk 1091", "price": 11091, "stock": 41}, {"sku": "SKU-01092", "name": "Produk 1092", "price": 11092, "stock": 42}, {"sku": "SKU-01093", "name": "Produk 1093", "price": 11093, "stock": 43}, {"sku": "SKU-01094", "name": "Produk 1094", "price": 11094, "stock": 44}, {"sku": "SKU-01095", "name": "Produk 1095", "price": 11095, "stock": 45}, {"sku": "SKU-01096", "name": "Produk 1096", "price": 11096, "stock": 46}, {"sku": "SKU-01097", "name": "Produk 1097", "price": 11097, "stock": 47}, {"sku": "SKU-01098", "name": "Produk 1098", "price": 11098, "stock": 48}, {"sku": "SKU-01099", "name": "Produk 1099", "price": 11099, "stock": 49}, {"sku": "SKU-01100", "name": "Produk 1100", "price": 11100, "stock": 0}, {"sku": "SKU-01101", "name": "Produk 1101", "price": 11101, "stock": 1}, {"sku": "SKU-01102", "name": "Produk 1102", "price": 11102, "stock": 2}, {"sku": "SKU-01103", "name": "Produk 1103", "price": 11103, "stock": 3}, {"sku": "SKU-01104", "name": "Produk 1104", "price": 11104, "stock": 4}, {"sku": "SKU-01105", "name": "Produk 1105", "price": 11105, "stock": 5}, {"sku": "SKU-01106", "name": "Produk 1106", "price": 11106, "stock": 6}, {"sku": "SKU-01107", "name": "Produk 1107", "price": 11107, "stock": 7}, {"sku": "SKU-01108", "name": "Produk 1108", "price": 11108, "stock": 8}, {"sku": "SKU-01109", "name": "Produk 1109", "price": 11109, "stock": 9}, {"sku": "SKU-01110", "name": "Produk 1110", "price": 11110, "stock": 10}, {"sku": "SKU-01111", "name": "Produk 1111", "price": 11111, "stock": 11}, {"sku": "SKU-01112", "name": "Produk 1112", "price": 11112, "stock": 12}, {"sku": "SKU-01113", "name": "Produk 1113", "price": 11113, "stock": 13}, {"sku": "SKU-01114", "name": "Produk 1114", "price": 11114, "stock": 14}, {"sku": "SKU-01115", "name": "Produk 1115", "price": 11115, "stock": 15}, {"sku": "SKU-01116", "name": "Produk 1116", "price": 11116, "stock": 16}, {"sku": "SKU-01117", "name": "Produk 1117", "price": 11117, "stock": 17}, {"sku": "SKU-01118", "name": "Produk 1118", "price": 11118, "stock": 18}, {"sku": "SKU-01119", "name": "Produk 1119", "price": 11119, "stock": 19}, {"sku": "SKU-01120", "name": "Produk 1120", "price": 11120, "stock": 20}, {"sku": "SKU-01121", "name": "Produk 1121", "price": 11121, "stock": 21}, {"sku": "SKU-01122", "name": "Produk 1122", "price": 11122, "stock": 22}, {"sku": "SKU-01123", "name": "Produk 1123", "price": 11123, "stock": 23}, {"sku": "SKU-01124", "name": "Produk 1124", "price": 11124, "stock": 24}, {"sku": "SKU-01125", "name": "Produk 1125", "price": 11125, "stock": 25}, {"sku": "SKU-01126", "name": "Produk 1126", "price": 11126, "stock": 26}, {"sku": "SKU-01127", "name": "Produk 1127", "price": 11127, "stock": 27}, {"sku": "SKU-01128", "name": "Produk 1128", "price": 11128, "stock": 28}, {"sku": "SKU-01129", "name": "Produk 1129", "price": 11129, "stock": 29}, {"sku": "SKU-01130", "name": "Produk 1130", "price": 11130, "stock": 30}, {"sku": "SKU-01131", "name": "Produk 1131", "price": 11131, "stock": 31}, {"sku": "SKU-01132", "name": "Produk 1132", "price": 11132, "stock": 32}, {"sku": "SKU-01133", "name": "Produk 1133", "price": 11133, "stock": 33}, {"sku": "SKU-01134", "name": "Produk 1134", "price": 11134, "stock": 34}, {"sku": "SKU-01135", "name": "Produk 1135", "price": 11135, "stock": 35}, {"sku": "SKU-01136", "name": "Produk 1136", "price": 11136, "stock": 36}, {"sku": "SKU-01137", "name": "Produk 1137", "price": 11137, "stock": 37}, {"sku": "SKU-01138", "name": "Produk 1138", "price": 11138, "stock": 38}, {"sku": "SKU-01139", "name": "Produk 1139", "price": 11139, "stock": 39}, {"sku": "SKU-01140", "name": "Produk 1140", "price": 11140, "stock": 40}, {"sku": "SKU-01141", "name": "Produk 1141", "price": 11141, "stock": 41}, {"sku": "SKU-01142", "name": "Produk 1142", "price": 11142, "stock": 42}, {"sku": "SKU-01143", "name": "Produk 1143", "price": 11143, "stock": 43}, {"sku": "SKU-01144", "name": "Produk 1144", "price": 11144, "stock": 44}, {"sku": "SKU-01145", "name": "Produk 1145", "price": 11145, "stock": 45}, {"sku": "SKU-01146", "name": "Produk 1146", "price": 11146, "stock": 46}, {"sku": "SKU-01147", "name": "Produk 1147", "price": 11147, "stock": 47}, {"sku": "SKU-01148", "name": "Produk 1148", "price": 11148, "stock": 48}, {"sku": "SKU-01149", "name": "Produk 1149", "price": 11149, "stock": 49}, {"sku": "SKU-01150", "name": "Produk 1150", "price": 11150, "stock": 0}, {"sku": "SKU-01151", "name": "Produk 1151", "price": 11151, "stock": 1}, {"sku": "SKU-01152", "name": "Produk 1152", "price": 11152, "stock": 2}, {"sku": "SKU-01153", "name": "Produk 1153", "price": 11153, "stock": 3}, {"sku": "SKU-01154", "name": "Produk 1154", "price": 11154, "stock": 4}, {"sku": "SKU-01155", "name": "Produk 1155", "price": 11155, "stock": 5}, {"sku": "SKU-01156", "name": "Produk 1156", "price": 11156, "stock": 6}, {"sku": "SKU-01157", "name": "Produk 1157", "price": 11157, "stock": 7}, {"sku": "SKU-01158", "name": "Produk 1158", "price": 11158, "stock": 8}, {"sku": "SKU-01159", "name": "Produk 1159", "price": 11159, "stock": 9}, {"sku": "SKU-01160", "name": "Produk 1160", "price": 11160, "stock": 10}, {"sku": "SKU-01161", "name": "Produk 1161", "price": 11161, "stock": 11}, {"sku": "SKU-01162", "name": "Produk 1162", "price": 11162, "stock": 12}, {"sku": "SKU-01163", "name": "Produk 1163", "price": 11163, "stock": 13}, {"sku": "SKU-01164", "name": "Produk 1164", "price": 11164, "stock": 14}, {"sku": "SKU-01165", "name": "Produk 1165", "price": 11165, "stock": 15}, {"sku": "SKU-01166", "name": "Produk 1166", "price": 11166, "stock": 16}, {"sku": "SKU-01167", "name": "Produk 1167", "price": 11167, "stock": 17}, {"sku": "SKU-01168", "name": "Produk 1168", "price": 11168, "stock": 18}, {"sku": "SKU-01169", "name": "Produk 1169", "price": 11169, "stock": 19}, {"sku": "SKU-01170", "name": "Produk 1170", "price": 11170, "stock": 20}, {"sku": "SKU-01171", "name": "Produk 1171", "price": 11171, "stock": 21}, {"sku": "SKU-01172", "name": "Produk 1172", "price": 11172, "stock": 22}, {"sku": "SKU-01173", "name": "Produk 1173", "price": 11173, "stock": 23}, {"sku": "SKU-01174", "name": "Produk 1174", "price": 11174, "stock": 24}, {"sku": "SKU-01175", "name": "Produk 1175", "price": 11175, "stock": 25}, {"sku": "SKU-01176", "name": "Produk 1176", "price": 11176, "stock": 26}, {"sku": "SKU-01177", "name": "Produk 1177", "price": 11177, "stock": 27}, {"sku": "SKU-01178", "name": "Produk 1178", "price": 11178, "stock": 28}, {"sku": "SKU-01179", "name": "Produk 1179", "price": 11179, "stock": 29}, {"sku": "SKU-01180", "name": "Produk 1180", "price": 11180, "stock": 30}, {"sku": "SKU-01181", "name": "Produk 1181", "price": 11181, "stock": 31}, {"sku": "SKU-01182", "name": "Produk 1182", "price": 11182, "stock": 32}, {"sku": "SKU-01183", "name": "Produk 1183", "price": 11183, "stock": 33}, {"sku": "SKU-01184", "name": "Produk 1184", "price": 11184, "stock": 34}, {"sku": "SKU-01185", "name": "Produk 1185", "price": 11185, "stock": 35}, {"sku": "SKU-01186", "name": "Produk 1186", "price": 11186, "stock": 36}, {"sku": "SKU-01187", "name": "Produk 1187", "price": 11187, "stock": 37}, {"sku": "SKU-01188", "name": "Produk 1188", "price": 11188, "stock": 38}, {"sku": "SKU-01189", "name": "Produk 1189", "price": 11189, "stock": 39}, {"sku": "SKU-01190", "name": "Produk 1190", "price": 11190, "stock": 40}, {"sku": "SKU-01191", "name": "Produk 1191", "price": 11191, "stock": 41}, {"sku": "SKU-01192", "name": "Produk 1192", "price": 11192, "stock": 42}, {"sku": "SKU-01193", "name": "Produk 1193", "price": 11193, "stock": 43}, {"sku": "SKU-01194", "name": "Produk 1194", "price": 11194, "stock": 44}, {"sku": "SKU-01195", "name": "Produk 1195", "price": 11195, "stock": 45}, {"sku": "SKU-01196", "name": "Produk 1196", "price": 11196, "stock": 46}, {"sku": "SKU-01197", "name": "Produk 1197", "price": 11197, "stock": 47}, {"sku": "SKU-01198", "name": "Produk 1198", "price": 11198, "stock": 48}, {"sku": "SKU-01199", "name": "Produk 1199", "price": 11199, "stock": 49}, {"sku": "SKU-01200", "name": "Produk 1200", "price": 11200, "stock": 0}, {"sku": "SKU-01201", "name": "Produk 1201", "price": 11201, "stock": 1}, {"sku": "SKU-01202", "name": "Produk 1202", "price": 11202, "stock": 2}, {"sku": "SKU-01203", "name": "Produk 1203", "price": 11203, "stock": 3}, {"sku": "SKU-01204", "name": "Produk 1204", "price": 11204, "stock": 4}, {"sku": "SKU-01205", "name": "Produk 1205", "price": 11205, "stock": 5}, {"sku": "SKU-01206", "name": "Produk 1206", "price": 11206, "stock": 6}, {"sku": "SKU-01207", "name": "Produk 1207", "price": 11207, "stock": 7}, {"sku": "SKU-01208", "name": "Produk 1208", "price": 11208, "stock": 8}, {"sku": "SKU-01209", "name": "Produk 1209", "price": 11209, "stock": 9}, {"sku": "SKU-01210", "name": "Produk 1210", "price": 11210, "stock": 10}, {"sku": "SKU-01211", "name": "Produk 1211", "price": 11211, "stock": 11}, {"sku": "SKU-01212", "name": "Produk 1212", "price": 11212, "stock": 12}, {"sku": "SKU-01213", "name": "Produk 1213", "price": 11213, "stock": 13}, {"sku": "SKU-01214", "name": "Produk 1214", "price": 11214, "stock": 14}, {"sku": "SKU-01215", "name": "Produk 1215", "price": 11215, "stock": 15}, {"sku": "SKU-01216", "name": "Produk 1216", "price": 11216, "stock": 16}, {"sku": "SKU-01217", "name": "Produk 1217", "price": 11217, "stock": 17}, {"sku": "SKU-01218", "name": "Produk 1218", "price": 11218, "stock": 18}, {"sku": "SKU-01219", "name": "Produk 1219", "price": 11219, "stock": 19}, {"sku": "SKU-01220", "name": "Produk 1220", "price": 11220, "stock": 20}, {"sku": "SKU-01221", "name": "Produk 1221", "price": 11221, "stock": 21}, {"sku": "SKU-01222", "name": "Produk 1222", "price": 11222, "stock": 22}, {"sku": "SKU-01223", "name": "Produk 1223", "price": 11223, "stock": 23}, {"sku": "SKU-01224", "name": "Produk 1224", "price": 11224, "stock": 24}, {"sku": "SKU-01225", "name": "Produk 1225", "price": 11225, "stock": 25}, {"sku": "SKU-01226", "name": "Produk 1226", "price": 11226, "stock": 26}, {"sku": "SKU-01227", "name": "Produk 1227", "price": 11227, "stock": 27}, {"sku": "SKU-01228", "name": "Produk 1228", "price": 11228, "stock": 28}, {"sku": "SKU-01229", "name": "Produk 1229", "price": 11229, "stock": 29}, {"sku": "SKU-01230", "name": "Produk 1230", "price": 11230, "stock": 30}, {"sku": "SKU-01231", "name": "Produk 1231", "price": 11231, "stock": 31}, {"sku": "SKU-01232", "name": "Produk 1232", "price": 11232, "stock": 32}, {"sku": "SKU-01233", "name": "Produk 1233", "price": 11233, "stock": 33}, {"sku": "SKU-01234", "name": "Produk 1234", "price": 11234, "stock": 34}, {"sku": "SKU-01235", "name": "Produk 1235", "price": 11235, "stock": 35}, {"sku": "SKU-01236", "name": "Produk 1236", "price": 11236, "stock": 36}, {"sku": "SKU-01237", "name": "Produk 1237", "price": 11237, "stock": 37}, {"sku": "SKU-01238", "name": "Produk 1238", "price": 11238, "stock": 38}, {"sku": "SKU-01239", "name": "Produk 1239", "price": 11239, "stock": 39}, {"sku": "SKU-01240", "name": "Produk 1240", "price": 11240, "stock": 40}, {"sku": "SKU-01241", "name": "Produk 1241", "price": 11241, "stock": 41}, {"sku": "SKU-01242", "name": "Produk 1242", "price": 11242, "stock": 42}, {"sku": "SKU-01243", "name": "Produk 1243", "price": 11243, "stock": 43}, {"sku": "SKU-01244", "name": "Produk 1244", "price": 11244, "stock": 44}, {"sku": "SKU-01245", "name": "Produk 1245", "price": 11245, "stock": 45}, {"sku": "SKU-01246", "name": "Produk 1246", "price": 11246, "stock": 46}, {"sku": "SKU-01247", "name": "Produk 1247", "price": 11247, "stock": 47}, {"sku": "SKU-01248", "name": "Produk 1248", "price": 11248, "stock": 48}, {"sku": "SKU-01249", "name": "Produk 1249", "price": 11249, "stock": 49}, {"sku": "SKU-01250", "name": "Produk 1250", "price": 11250, "stock": 0}, {"sku": "SKU-01251", "name": "Produk 1251", "price": 11251, "stock": 1}, {"sku": "SKU-01252", "name": "Produk 1252", "price": 11252, "stock": 2}, {"sku": "SKU-01253", "name": "Produk 1253", "price": 11253, "stock": 3}, {"sku": "SKU-01254", "name": "Produk 1254", "price": 11254, "stock": 4}, {"sku": "SKU-01255", "name": "Produk 1255", "price": 11255, "stock": 5}, {"sku": "SKU-01256", "name": "Produk 1256", "price": 11256, "stock": 6}, {"sku": "SKU-01257", "name": "Produk 1257", "price": 11257, "stock": 7}, {"sku": "SKU-01258", "name": "Produk 1258", "price": 11258, "stock": 8}, {"sku": "SKU-01259", "name": "Produk 1259", "price": 11259, "stock": 9}, {"sku": "SKU-01260", "name": "Produk 1260", "price": 11260, "stock": 10}, {"sku": "SKU-01261", "name": "Produk 1261", "price": 11261, "stock": 11}, {"sku": "SKU-01262", "name": "Produk 1262", "price": 11262, "stock": 12}, {"sku": "SKU-01263", "name": "Produk 1263", "price": 11263, "stock": 13}, {"sku": "SKU-01264", "name": "Produk 1264", "price": 11264, "stock": 14}, {"sku": "SKU-01265", "name": "Produk 1265", "price": 11265, "stock": 15}, {"sku": "SKU-01266", "name": "Produk 1266", "price": 11266, "stock": 16}, {"sku": "SKU-01267", "name": "Produk 1267", "price": 11267, "stock": 17}, {"sku": "SKU-01268", "name": "Produk 1268", "price": 11268, "stock": 18}, {"sku": "SKU-01269", "name": "Produk 1269", "price": 11269, "stock": 19}, {"sku": "SKU-01270", "name": "Produk 1270", "price": 11270, "stock": 20}, {"sku": "SKU-01271", "name": "Produk 1271", "price": 11271, "stock": 21}, {"sku": "SKU-01272", "name": "Produk 1272", "price": 11272, "stock": 22}, {"sku": "SKU-01273", "name": "Produk 1273", "price": 11273, "stock": 23}, {"sku": "SKU-01274", "name": "Produk 1274", "price": 11274, "stock": 24}, {"sku": "SKU-01275", "name": "Produk 1275", "price": 11275, "stock": 25}, {"sku": "SKU-01276", "name": "Produk 1276", "price": 11276, "stock": 26}, {"sku": "SKU-01277", "name": "Produk 1277", "price": 11277, "stock": 27}, {"sku": "SKU-01278", "name": "Produk 1278", "price": 11278, "stock": 28}, {"sku": "SKU-01279", "name": "Produk 1279", "price": 11279, "stock": 29}, {"sku": "SKU-01280", "name": "Produk 1280", "price": 11280, "stock": 30}, {"sku": "SKU-01281", "name": "Produk 1281", "price": 11281, "stock": 31}, {"sku": "SKU-01282", "name": "Produk 1282", "price": 11282, "stock": 32}, {"sku": "SKU-01283", "name": "Produk 1283", "price": 11283, "stock": 33}, {"sku": "SKU-01284", "name": "Produk 1284", "price": 11284, "stock": 34}, {"sku": "SKU-01285", "name": "Produk 1285", "price": 11285, "stock": 35}, {"sku": "SKU-01286", "name": "Produk 1286", "price": 11286, "stock": 36}, {"sku": "SKU-01287", "name": "Produk 1287", "price": 11287, "stock": 37}, {"sku": "SKU-01288", "name": "Produk 1288", "price": 11288, "stock": 38}, {"sku": "SKU-01289", "name": "Produk 1289", "price": 11289, "stock": 39}, {"sku": "SKU-01290", "name": "Produk 1290", "price": 11290, "stock": 40}, {"sku": "SKU-01291", "name": "Produk 1291", "price": 11291, "stock": 41}, {"sku": "SKU-01292", "name": "Produk 1292", "price": 11292, "stock": 42}, {"sku": "SKU-01293", "name": "Produk 1293", "price": 11293, "stock": 43}, {"sku": "SKU-01294", "name": "Produk 1294", "price": 11294, "stock": 44}, {"sku": "SKU-01295", "name": "Produk 1295", "price": 11295, "stock": 45}, {"sku": "SKU-01296", "name": "Produk 1296", "price": 11296, "stock": 46}, {"sku": "SKU-01297", "name": "Produk 1297", "price": 11297, "stock": 47}, {"sku": "SKU-01298", "name": "Produk 1298", "price": 11298, "stock": 48}, {"sku": "SKU-01299", "name": "Produk 1299", "price": 11299, "stock": 49}, {"sku": "SKU-01300", "name": "Produk 1300", "price": 11300, "stock": 0}, {"sku": "SKU-01301", "name": "Produk 1301", "price": 11301, "stock": 1}, {"sku": "SKU-01302", "name": "Produk 1302", "price": 11302, "stock": 2}, {"sku": "SKU-01303", "name": "Produk 1303", "price": 11303, "stock": 3}, {"sku": "SKU-01304", "name": "Produk 1304", "price": 11304, "stock": 4}, {"sku": "SKU-01305", "name": "Produk 1305", "price": 11305, "stock": 5}, {"sku": "SKU-01306", "name": "Produk 1306", "price": 11306, "stock": 6}, {"sku": "SKU-01307", "name": "Produk 1307", "price": 11307, "stock": 7}, {"sku": "SKU-01308", "name": "Produk 1308", "price": 11308, "stock": 8}, {"sku": "SKU-01309", "name": "Produk 1309", "price": 11309, "stock": 9}, {"sku": "SKU-01310", "name": "Produk 1310", "price": 11310, "stock": 10}, {"sku": "SKU-01311", "name": "Produk 1311", "price": 11311, "stock": 11}, {"sku": "SKU-01312", "name": "Produk 1312", "price": 11312, "stock": 12}, {"sku": "SKU-01313", "name": "Produk 1313", "price": 11313, "stock": 13}, {"sku": "SKU-01314", "name": "Produk 1314", "price": 11314, "stock": 14}, {"sku": "SKU-01315", "name": "Produk 1315", "price": 11315, "stock": 15}, {"sku": "SKU-01316", "name": "Produk 1316", "price": 11316, "stock": 16}, {"sku": "SKU-01317", "name": "Produk 1317", "price": 11317, "stock": 17}, {"sku": "SKU-01318", "name": "Produk 1318", "price": 11318, "stock": 18}, {"sku": "SKU-01319", "name": "Produk 1319", "price": 11319, "stock": 19}, {"sku": "SKU-01320", "name": "Produk 1320", "price": 11320, "stock": 20}, {"sku": "SKU-01321", "name": "Produk 1321", "price": 11321, "stock": 21}, {"sku": "SKU-01322", "name": "Produk 1322", "price": 11322, "stock": 22}, {"sku": "SKU-01323", "name": "Produk 1323", "price": 11323, "stock": 23}, {"sku": "SKU-01324", "name": "Produk 1324", "price": 11324, "stock": 24}, {"sku": "SKU-01325", "name": "Produk 1325", "price": 11325, "stock": 25}, {"sku": "SKU-01326", "name": "Produk 1326", "price": 11326, "stock": 26}, {"sku": "SKU-01327", "name": "Produk 1327", "price": 11327, "stock": 27}, {"sku": "SKU-01328", "name": "Produk 1328", "price": 11328, "stock": 28}, {"sku": "SKU-01329", "name": "Produk 1329", "price": 11329, "stock": 29}, {"sku": "SKU-01330", "name": "Produk 1330", "price": 11330, "stock": 30}, {"sku": "SKU-01331", "name": "Produk 1331", "price": 11331, "stock": 31}, {"sku": "SKU-01332", "name": "Produk 1332", "price": 11332, "stock": 32}, {"sku": "SKU-01333", "name": "Produk 1333", "price": 11333, "stock": 33}, {"sku": "SKU-01334", "name": "Produk 1334", "price": 11334, "stock": 34}, {"sku": "SKU-01335", "name": "Produk 1335", "price": 11335, "stock": 35}, {"sku": "SKU-01336", "name": "Produk 1336", "price": 11336, "stock": 36}, {"sku": "SKU-01337", "name": "Produk 1337", "price": 11337, "stock": 37}, {"sku": "SKU-01338", "name": "Produk 1338", "price": 11338, "stock": 38}, {"sku": "SKU-01339", "name": "Produk 1339", "price": 11339, "stock": 39}, {"sku": "SKU-01340", "name": "Produk 1340", "price": 11340, "stock": 40}, {"sku": "SKU-01341", "name": "Produk 1341", "price": 11341, "stock": 41}, {"sku": "SKU-01342", "name": "Produk 1342", "price": 11342, "stock": 42}, {"sku": "SKU-01343", "name": "Produk 1343", "price": 11343, "stock": 43}, {"sku": "SKU-01344", "name": "Produk 1344", "price": 11344, "stock": 44}, {"sku": "SKU-01345", "name": "Produk 1345", "price": 11345, "stock": 45}, {"sku": "SKU-01346", "name": "Produk 1346", "price": 11346, "stock": 46}, {"sku": "SKU-01347", "name": "Produk 1347", "price": 11347, "stock": 47}, {"sku": "SKU-01348", "name": "Produk 1348", "price": 11348, "stock": 48}, {"sku": "SKU-01349", "name": "Produk 1349", "price": 11349, "stock": 49}, {"sku": "SKU-01350", "name": "Produk 1350", "price": 11350, "stock": 0}, {"sku": "SKU-01351", "name": "Produk 1351", "price": 11351, "stock": 1}, {"sku": "SKU-01352", "name": "Produk 1352", "price": 11352, "stock": 2}, {"sku": "SKU-01353", "name": "Produk 1353", "price": 11353, "stock": 3}, {"sku": "SKU-01354", "name": "Produk 1354", "price": 11354, "stock": 4}, {"sku": "SKU-01355", "name": "Produk 1355", "price": 11355, "stock": 5}, {"sku": "SKU-01356", "name": "Produk 1356", "price": 11356, "stock": 6}, {"sku": "SKU-01357", "name": "Produk 1357", "price": 11357, "stock": 7}, {"sku": "SKU-01358", "name": "Produk 1358", "price": 11358, "stock": 8}, {"sku": "SKU-01359", "name": "Produk 1359", "price": 11359, "stock": 9}, {"sku": "SKU-01360", "name": "Produk 1360", "price": 11360, "stock": 10}, {"sku": "SKU-01361", "name": "Produk 1361", "price": 11361, "stock": 11}, {"sku": "SKU-01362", "name": "Produk 1362", "price": 11362, "stock": 12}, {"sku": "SKU-01363", "name": "Produk 1363", "price": 11363, "stock": 13}, {"sku": "SKU-01364", "name": "Produk 1364", "price": 11364, "stock": 14}, {"sku": "SKU-01365", "name": "Produk 1365", "price": 11365, "stock": 15}, {"sku": "SKU-01366", "name": "Produk 1366", "price": 11366, "stock": 16}, {"sku": "SKU-01367", "name": "Produk 1367", "price": 11367, "stock": 17}, {"sku": "SKU-01368", "name": "Produk 1368", "price": 11368, "stock": 18}, {"sku": "SKU-01369", "name": "Produk 1369", "price": 11369, "stock": 19}, {"sku": "SKU-01370", "name": "Produk 1370", "price": 11370, "stock": 20}, {"sku": "SKU-01371", "name": "Produk 1371", "price": 11371, "stock": 21}, {"sku": "SKU-01372", "name": "Produk 1372", "price": 11372, "stock": 22}, {"sku": "SKU-01373", "name": "Produk 1373", "price": 11373, "stock": 23}, {"sku": "SKU-01374", "name": "Produk 1374", "price": 11374, "stock": 24}, {"sku": "SKU-01375", "name": "Produk 1375", "price": 11375, "stock": 25}, {"sku": "SKU-01376", "name": "Produk 1376", "price": 11376, "stock": 26}, {"sku": "SKU-01377", "name": "Produk 1377", "price": 11377, "stock": 27}, {"sku": "SKU-01378", "name": "Produk 1378", "price": 11378, "stock": 28}, {"sku": "SKU-01379", "name": "Produk 1379", "price": 11379, "stock": 29}, {"sku": "SKU-01380", "name": "Produk 1380", "price": 11380, "stock": 30}, {"sku": "SKU-01381", "name": "Produk 1381", "price": 11381, "stock": 31}, {"sku": "SKU-01382", "name": "Produk 1382", "price": 11382, "stock": 32}, {"sku": "SKU-01383", "name": "Produk 1383", "price": 11383, "stock": 33}, {"sku": "SKU-01384", "name": "Produk 1384", "price": 11384, "stock": 34}, {"sku": "SKU-01385", "name": "Produk 1385", "price": 11385, "stock": 35}, {"sku": "SKU-01386", "name": "Produk 1386", "price": 11386, "stock": 36}, {"sku": "SKU-01387", "name": "Produk 1387", "price": 11387, "stock": 37}, {"sku": "SKU-01388", "name": "Produk 1388", "price": 11388, "stock": 38}, {"sku": "SKU-01389", "name": "Produk 1389", "price": 11389, "stock": 39}, {"sku": "SKU-01390", "name": "Produk 1390", "price": 11390, "stock": 40}, {"sku": "SKU-01391", "name": "Produk 1391", "price": 11391, "stock": 41}, {"sku": "SKU-01392", "name": "Produk 1392", "price": 11392, "stock": 42}, {"sku": "SKU-01393", "name": "Produk 1393", "price": 11393, "stock": 43}, {"sku": "SKU-01394", "name": "Produk 1394", "price": 11394, "stock": 44}, {"sku": "SKU-01395", "name": "Produk 1395", "price": 11395, "stock": 45}, {"sku": "SKU-01396", "name": "Produk 1396", "price": 11396, "stock": 46}, {"sku": "SKU-01397", "name": "Produk 1397", "price": 11397, "stock": 47}, {"sku": "SKU-01398", "name": "Produk 1398", "price": 11398, "stock": 48}, {"sku": "SKU-01399", "name": "Produk 1399", "price": 11399, "stock": 49}]}'
+  ct: application/json

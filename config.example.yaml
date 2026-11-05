@@ -1,0 +1,57 @@
+# Bima production config.
+# Secrets via env: BIMA_TELEGRAM_TOKEN, BIMA_TELEGRAM_CHAT_ID, BIMA_DISCORD_WEBHOOK, BIMA_REDIS_PASSWORD
+listen: "127.0.0.1:12345"
+metrics_addr: "127.0.0.1:9101"   # /healthz /metrics /bans /report — keep private
+mode: detect                      # shadow mode first; switch to enforce after tuning (GET /report)
+host: api.example.com
+allowlist: []                     # office / monitoring / payment-provider webhook CIDRs
+max_body_inspect: 65536
+crs:
+  enabled: true
+  paranoia: 1
+  inbound_threshold: 5
+  allowed_methods: "GET HEAD POST OPTIONS PUT PATCH DELETE"
+  fast_path: true                 # skip CRS when every input is plain (signatures still run)
+  extra_directives: ""
+score:
+  tarpit: 50
+  ban: 80
+  half_life: 5m
+  window: 1m
+group:                            # distributed enumeration (many IPs, one ASN / fingerprint)
+  by: [asn, fingerprint]
+  distinct_404: 60
+  min_ips: 3
+  member_404: 3
+  penalty: 80
+  flag_ttl: 10m
+state:
+  # memory: single agent, bans persisted to ban_file.
+  # redis : several agents (and HAProxy nodes) share scores, windows and bans.
+  backend: memory
+  ban_file: /var/lib/bima/bans.json
+  redis:
+    addr: ""                      # e.g. 10.0.0.5:6379
+    prefix: "bima:"
+geoip:                            # MMDB: GeoLite2 (MaxMind) or DB-IP Lite (free, no key)
+  country_db: ""                  # /usr/share/GeoIP/dbip-country-lite.mmdb
+  asn_db: ""                      # /usr/share/GeoIP/dbip-asn-lite.mmdb
+ban:
+  enabled: true
+  runtime_apis: ["unix:/var/run/haproxy/admin.sock"]   # one entry per HAProxy node
+  map_file: /etc/haproxy/bima-blocklist.map
+  durations: [10m, 1h, 24h]
+  reconcile_interval: 2s
+alert:
+  dedup_window: 5m
+  digest_interval: 5m
+  telegram:
+    enabled: true
+    api_base: https://api.telegram.org
+  discord:
+    enabled: true
+exclusions: []
+#  - rules: ["CRS-941160"]           # from GET /report → suggested_exclusion
+#    path: "^/api/products$"
+#    locations: ["body:json.description"]
+#    reason: "rich text editor"

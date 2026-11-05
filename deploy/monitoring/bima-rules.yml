@@ -1,0 +1,44 @@
+groups:
+  - name: bima
+    rules:
+      - alert: BimaAgentDown
+        expr: up{job="bima"} == 0
+        for: 30s
+        labels: {severity: critical}
+        annotations:
+          summary: "Bima agent {{ $labels.instance }} is DOWN"
+          description: "HAProxy fails open: requests routed to this agent are NOT inspected."
+      - alert: BimaNoAgentInHAProxy
+        expr: haproxy_backend_active_servers{proxy="be_bima_agents"} == 0
+        for: 30s
+        labels: {severity: critical}
+        annotations:
+          summary: "HAProxy {{ $labels.instance }} has no healthy Bima agent"
+          description: "All traffic through this HAProxy is passing uninspected (fail-open)."
+      - alert: BimaAlertDeliveryFailing
+        expr: increase(bima_alerts_sent_total{status="error"}[5m]) > 0
+        labels: {severity: warning}
+        annotations:
+          summary: "Bima cannot deliver alerts via {{ $labels.notifier }}"
+      - alert: BimaStateStoreErrors
+        expr: increase(bima_store_errors_total[5m]) > 0
+        labels: {severity: warning}
+        annotations:
+          summary: "Bima state store (Redis) errors on {{ $labels.instance }} — scoring is degraded (fail-open)"
+      - alert: BimaRuntimeAPIErrors
+        expr: increase(bima_runtime_api_errors_total[5m]) > 3
+        labels: {severity: warning}
+        annotations:
+          summary: "Bima cannot reach an HAProxy Runtime API — bans may not be enforced"
+      - alert: BimaInspectLatencyHigh
+        expr: histogram_quantile(0.99, sum by (le) (rate(bima_inspect_duration_seconds_bucket{stage="total"}[5m]))) > 0.05
+        for: 5m
+        labels: {severity: warning}
+        annotations:
+          summary: "Bima p99 inspection latency above 50ms (SPOE timeout is 100ms)"
+      - alert: BimaAttackSpike
+        expr: sum(rate(bima_verdicts_total{action=~"block|tarpit|would_block|would_tarpit"}[5m])) > 5
+        for: 2m
+        labels: {severity: info}
+        annotations:
+          summary: "Sustained attack traffic: {{ $value | printf \"%.1f\" }} blocked req/s"

@@ -1,0 +1,17 @@
+# Production template. Secrets: use *_file options or templating in your deploy tooling.
+route:
+  receiver: chat
+  group_by: [alertname, instance]
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 4h
+receivers:
+  - name: chat
+    telegram_configs:
+      - bot_token_file: /etc/alertmanager/secrets/telegram_token
+        chat_id: -1000000000000        # replace
+        parse_mode: HTML
+        send_resolved: true
+    discord_configs:
+      - webhook_url_file: /etc/alertmanager/secrets/discord_webhook
+        send_resolved: true

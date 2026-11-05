@@ -1,0 +1,404 @@
+{
+ "uid": "bima-waf",
+ "title": "Bima WAF",
+ "schemaVersion": 39,
+ "time": {
+  "from": "now-1h",
+  "to": "now"
+ },
+ "refresh": "10s",
+ "panels": [
+  {
+   "type": "stat",
+   "title": "Agents up",
+   "gridPos": {
+    "x": 0,
+    "y": 0,
+    "w": 4,
+    "h": 4
+   },
+   "datasource": {
+    "type": "prometheus",
+    "uid": "prometheus"
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "short"
+    },
+    "overrides": []
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "expr": "sum(up{job=\"bima\"})",
+     "legendFormat": "agents up"
+    }
+   ]
+  },
+  {
+   "type": "stat",
+   "title": "Active bans",
+   "gridPos": {
+    "x": 4,
+    "y": 0,
+    "w": 4,
+    "h": 4
+   },
+   "datasource": {
+    "type": "prometheus",
+    "uid": "prometheus"
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "short"
+    },
+    "overrides": []
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "expr": "max(bima_active_bans)",
+     "legendFormat": "bans"
+    }
+   ]
+  },
+  {
+   "type": "stat",
+   "title": "Mode (1=detect)",
+   "gridPos": {
+    "x": 8,
+    "y": 0,
+    "w": 4,
+    "h": 4
+   },
+   "datasource": {
+    "type": "prometheus",
+    "uid": "prometheus"
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "short"
+    },
+    "overrides": []
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "expr": "max(bima_mode{mode=\"detect\"})",
+     "legendFormat": "detect"
+    }
+   ]
+  },
+  {
+   "type": "stat",
+   "title": "Blocked req/s",
+   "gridPos": {
+    "x": 12,
+    "y": 0,
+    "w": 4,
+    "h": 4
+   },
+   "datasource": {
+    "type": "prometheus",
+    "uid": "prometheus"
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "reqps"
+    },
+    "overrides": []
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "expr": "sum(rate(bima_verdicts_total{action=~\"block|tarpit\"}[1m]))",
+     "legendFormat": "blocked"
+    }
+   ]
+  },
+  {
+   "type": "stat",
+   "title": "Alert delivery errors (1h)",
+   "gridPos": {
+    "x": 16,
+    "y": 0,
+    "w": 4,
+    "h": 4
+   },
+   "datasource": {
+    "type": "prometheus",
+    "uid": "prometheus"
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "short"
+    },
+    "overrides": []
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "expr": "sum(increase(bima_alerts_sent_total{status=\"error\"}[1h])) or vector(0)",
+     "legendFormat": "errors"
+    }
+   ]
+  },
+  {
+   "type": "stat",
+   "title": "Store errors (1h)",
+   "gridPos": {
+    "x": 20,
+    "y": 0,
+    "w": 4,
+    "h": 4
+   },
+   "datasource": {
+    "type": "prometheus",
+    "uid": "prometheus"
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "short"
+    },
+    "overrides": []
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "expr": "sum(increase(bima_store_errors_total[1h])) or vector(0)",
+     "legendFormat": "errors"
+    }
+   ]
+  },
+  {
+   "type": "timeseries",
+   "title": "Inspected requests/s",
+   "gridPos": {
+    "x": 0,
+    "y": 4,
+    "w": 12,
+    "h": 8
+   },
+   "datasource": {
+    "type": "prometheus",
+    "uid": "prometheus"
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "reqps"
+    },
+    "overrides": []
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "expr": "sum(rate(bima_requests_total[1m]))",
+     "legendFormat": "bima"
+    },
+    {
+     "refId": "B",
+     "expr": "sum(rate(haproxy_frontend_http_requests_total{proxy=\"fe_web\"}[1m]))",
+     "legendFormat": "haproxy fe_web"
+    }
+   ]
+  },
+  {
+   "type": "timeseries",
+   "title": "Verdicts",
+   "gridPos": {
+    "x": 12,
+    "y": 4,
+    "w": 12,
+    "h": 8
+   },
+   "datasource": {
+    "type": "prometheus",
+    "uid": "prometheus"
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "reqps"
+    },
+    "overrides": []
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "expr": "sum by (action) (rate(bima_verdicts_total[1m]))",
+     "legendFormat": "{{action}}"
+    }
+   ]
+  },
+  {
+   "type": "timeseries",
+   "title": "Inspection latency p50/p99 by stage",
+   "gridPos": {
+    "x": 0,
+    "y": 12,
+    "w": 12,
+    "h": 8
+   },
+   "datasource": {
+    "type": "prometheus",
+    "uid": "prometheus"
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "s"
+    },
+    "overrides": []
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "expr": "histogram_quantile(0.99, sum by (le, stage) (rate(bima_inspect_duration_seconds_bucket[5m])))",
+     "legendFormat": "p99 {{stage}}"
+    },
+    {
+     "refId": "B",
+     "expr": "histogram_quantile(0.5, sum by (le, stage) (rate(bima_inspect_duration_seconds_bucket[5m])))",
+     "legendFormat": "p50 {{stage}}"
+    }
+   ]
+  },
+  {
+   "type": "bargauge",
+   "title": "Top rules (1h)",
+   "gridPos": {
+    "x": 12,
+    "y": 12,
+    "w": 12,
+    "h": 8
+   },
+   "datasource": {
+    "type": "prometheus",
+    "uid": "prometheus"
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "short"
+    },
+    "overrides": []
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "expr": "topk(10, sum by (rule) (increase(bima_detections_total[1h])))",
+     "legendFormat": "{{rule}}"
+    }
+   ]
+  },
+  {
+   "type": "timeseries",
+   "title": "Detections by category",
+   "gridPos": {
+    "x": 0,
+    "y": 20,
+    "w": 12,
+    "h": 8
+   },
+   "datasource": {
+    "type": "prometheus",
+    "uid": "prometheus"
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "reqps"
+    },
+    "overrides": []
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "expr": "sum by (category) (rate(bima_detections_total[5m]))",
+     "legendFormat": "{{category}}"
+    }
+   ]
+  },
+  {
+   "type": "timeseries",
+   "title": "Alerts sent",
+   "gridPos": {
+    "x": 12,
+    "y": 20,
+    "w": 12,
+    "h": 8
+   },
+   "datasource": {
+    "type": "prometheus",
+    "uid": "prometheus"
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "reqps"
+    },
+    "overrides": []
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "expr": "sum by (notifier, status) (rate(bima_alerts_sent_total[5m]))",
+     "legendFormat": "{{notifier}} {{status}}"
+    }
+   ]
+  },
+  {
+   "type": "timeseries",
+   "title": "Bans placed",
+   "gridPos": {
+    "x": 0,
+    "y": 28,
+    "w": 12,
+    "h": 8
+   },
+   "datasource": {
+    "type": "prometheus",
+    "uid": "prometheus"
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "short"
+    },
+    "overrides": []
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "expr": "sum(increase(bima_bans_total[5m]))",
+     "legendFormat": "bans/5m"
+    }
+   ]
+  },
+  {
+   "type": "timeseries",
+   "title": "HAProxy denied (L0 + Bima)",
+   "gridPos": {
+    "x": 12,
+    "y": 28,
+    "w": 12,
+    "h": 8
+   },
+   "datasource": {
+    "type": "prometheus",
+    "uid": "prometheus"
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "reqps"
+    },
+    "overrides": []
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "expr": "sum by (proxy) (rate(haproxy_frontend_requests_denied_total[1m]))",
+     "legendFormat": "{{proxy}}"
+    }
+   ]
+  }
+ ],
+ "tags": [
+  "security",
+  "waf"
+ ]
+}
