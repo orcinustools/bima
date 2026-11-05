@@ -41,6 +41,7 @@ Usage:
   bima init       [flags]                      generate config, HAProxy snippet, SPOE, systemd unit, monitoring
   bima test-alert -config FILE                 send a test alert to every notifier
   bima unban      -config FILE IP...           lift bans (all HAProxy nodes) and reset scores
+  bima relay      -config FILE [-listen ADDR]  Alertmanager webhook → Bima notifiers (Discord bot, Telegram)
   bima skills     list | show [NAME [FILE]] | install [--dir DIR] [--force]
                                                agent skills embedded in this binary (e.g. for Claude Code)
   bima version
@@ -66,6 +67,8 @@ func main() {
 		os.Exit(cmdTestAlert(args))
 	case "unban":
 		os.Exit(cmdUnban(args))
+	case "relay":
+		os.Exit(cmdRelay(args))
 	case "skills":
 		os.Exit(cmdSkills(args))
 	case "version", "--version":

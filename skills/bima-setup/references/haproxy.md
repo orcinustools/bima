@@ -9,6 +9,9 @@ stats socket /var/run/haproxy/admin.sock mode 660 level admin   # Bima adds/remo
 tune.bufsize 65536                  # largest request body Bima can inspect (req.body)
 tune.ssl.capture-buffer-size 128    # keep TLS ClientHello → JA3 fingerprint
 ```
+- Changing an existing `stats socket` line (mode/group/level) needs a **restart**,
+  not a reload: in master-worker mode the socket is inherited across reloads with
+  its old permissions (`bima check` reports `permission denied`).
 - If a `stats socket` with `level admin` already exists, reuse it and pass its path to `--runtime-api`. Don't add a second admin socket on a TCP port reachable from outside.
 - `tune.bufsize` raises memory per connection (2 × bufsize). 65536 is fine for typical
   hosts; with very high connection counts consider 32768 and `max_body_inspect: 32768`.
@@ -40,6 +43,47 @@ Ordering rules:
 5. If the frontend already has `http-request` rules that redirect/deny, keep them; insert the Bima block after authentication-free routing rules but before `use_backend`.
 - `timeout tarpit` in `defaults` controls how long tarpitted clients wait (e.g. `5s`).
 - Optional `http-request deny deny_status 429 if { sc_http_req_rate(0) gt 300 }` with a stick-table is a cheap L0 rate limit; only add it if the user wants rate limiting.
+
+## HTTPS behind `mode tcp` (TLS passthrough)
+A frontend in `mode tcp` only sees encrypted bytes: Bima cannot inspect it, and the
+backend loses the client IP (it sees HAProxy). Terminate TLS in HAProxy only for
+the hostnames you protect and keep passthrough for everything else:
+```
+frontend https-in
+    mode tcp
+    bind *:443
+    tcp-request inspect-delay 2s          # on timeout: plain passthrough (served, not inspected)
+    tcp-request content accept if { req.ssl_hello_type 1 }
+    use_backend be_bima_tls if { req.ssl_sni -i app.example.com api.example.com }
+    default_backend be_passthrough       # unchanged
+
+backend be_bima_tls
+    mode tcp
+    server local abns@bima-tls send-proxy-v2
+
+frontend fe_bima_tls
+    mode http
+    bind abns@bima-tls accept-proxy ssl crt /etc/haproxy/certs/app.pem alpn h2,http/1.1
+    # ... the Bima frontend block from haproxy-bima.cfg ...
+    http-request del-header X-Forwarded-For   # after send-spoe-group: client values are untrusted
+    http-request set-header X-Real-IP %[src]
+    option forwardfor                          # backend now sees the real client IP
+    default_backend be_reencrypt
+
+backend be_reencrypt
+    mode http
+    server app1 10.0.0.10:443 ssl verify none sni ssl_fc_sni alpn http/1.1
+```
+Certificates: Let's Encrypt with `certbot certonly --standalone --http-01-address 127.0.0.1
+--http-01-port 8888` and, in the port-80 frontend, an ACME route that only exists while
+certbot listens (so a backend doing its own ACME is not disturbed):
+```
+use_backend be_acme if { path_beg /.well-known/acme-challenge/ } { nbsrv(be_acme) gt 0 } { hdr(host),field(1,:) -i app.example.com }
+backend be_acme
+    server certbot 127.0.0.1:8888 check inter 300ms rise 1 fall 1
+```
+plus a deploy hook that writes `fullchain+privkey` to `/etc/haproxy/certs/<name>.pem` and
+reloads HAProxy.
 
 ## backend
 ```

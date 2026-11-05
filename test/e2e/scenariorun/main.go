@@ -8,6 +8,7 @@ package main
 
 import (
 	"bufio"
+	"crypto/tls"
 	"encoding/json"
 	"flag"
 	"fmt"
@@ -24,7 +25,7 @@ import (
 	"github.com/orcinustools/bima/test/scenarios"
 )
 
-var target string
+var target, hostHeader string
 
 type resp struct {
 	status int
@@ -37,13 +38,28 @@ type resp struct {
 func send(ip, method, path string, headers map[string]string, body string) resp {
 	u, _ := url.Parse(target)
 	start := time.Now()
-	conn, err := net.DialTimeout("tcp", u.Host, 5*time.Second)
+	addr := u.Host
+	if u.Port() == "" {
+		port := "80"
+		if u.Scheme == "https" {
+			port = "443"
+		}
+		addr = net.JoinHostPort(u.Hostname(), port)
+	}
+	var conn net.Conn
+	var err error
+	if u.Scheme == "https" {
+		d := &net.Dialer{Timeout: 5 * time.Second}
+		conn, err = tls.DialWithDialer(d, "tcp", addr, &tls.Config{ServerName: hostHeader, NextProtos: []string{"http/1.1"}})
+	} else {
+		conn, err = net.DialTimeout("tcp", addr, 5*time.Second)
+	}
 	if err != nil {
 		return resp{err: err}
 	}
 	defer conn.Close()
 	_ = conn.SetDeadline(time.Now().Add(15 * time.Second))
-	h := map[string]string{"Host": "shop.example.com", "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) Chrome/130", "Accept": "*/*"}
+	h := map[string]string{"Host": hostHeader, "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) Chrome/130", "Accept": "*/*"}
 	for k, v := range headers {
 		for hk := range h {
 			if strings.EqualFold(hk, k) {
@@ -118,6 +134,7 @@ type result struct {
 
 func main() {
 	flag.StringVar(&target, "url", "http://haproxy:8080", "HAProxy frontend")
+	flag.StringVar(&hostHeader, "host", "shop.example.com", "default Host header")
 	jsonOut := flag.String("json", "", "write full results to this file")
 	only := flag.String("only", "", "comma-separated parts: corpus,flows,spoof (default corpus,flows; run spoof from its own container: it gets that container banned)")
 	flag.Parse()

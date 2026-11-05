@@ -14,6 +14,7 @@ non-interactive and print machine-readable output with `--json`:
 | `bima check -config F [--json] [--send]` | Validate config and live wiring (CRS, Runtime API, map, SPOE backend, agent, Redis, GeoIP, notifiers) |
 | `bima run -config F` | Run the agent (what systemd starts) |
 | `bima test-alert -config F` | Send one test alert to every notifier |
+| `bima relay -config F` | Alertmanager webhook → Bima notifiers (separate service; delivers agent-down alerts) |
 | `bima unban -config F IP...` | Lift bans on every HAProxy node and reset the score (false positive / support request) |
 | `bima skills show bima-setup <file>` | Print a reference file of this skill |
 
@@ -31,6 +32,7 @@ non-interactive and print machine-readable output with `--json`:
 Collect before generating anything (ask the user only for what you cannot find):
 - `haproxy -vv` — need **≥ 2.8** (3.0 LTS recommended); note if built with OpenSSL (for JA3).
 - Path of the active config (`systemctl cat haproxy`, usually `/etc/haproxy/haproxy.cfg`) and the frontend(s) serving the app.
+- Whether port 443 is `mode tcp` (TLS passthrough): then HTTPS can't be inspected until TLS is terminated in HAProxy for the protected hostnames (see `references/haproxy.md`, "HTTPS behind mode tcp").
 - Existing `stats socket` line (reuse it if it has `level admin`; otherwise one must be added).
 - Is HAProxy behind a CDN/LB? If yes, the trusted proxy CIDRs (needed to restore the client IP).
 - One node or several HAProxy nodes? Several → Redis is required (`--state redis`).

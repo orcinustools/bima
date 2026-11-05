@@ -63,6 +63,8 @@ bima run        -config FILE                     # run the agent (default comman
 bima init       [--json] [flags]                 # generate config, HAProxy snippet, SPOE, systemd unit, env, monitoring
 bima check      -config FILE [--json] [--send]   # validate live wiring, with a hint for every failure
 bima test-alert -config FILE
+bima unban      -config FILE IP...               # lift bans everywhere, reset score
+bima relay      -config FILE                     # Alertmanager → Discord bot / Telegram
 bima skills     list | show [NAME [FILE]] | install [--dir ~/.claude/skills]
 bima version
 ```

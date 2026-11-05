@@ -9,6 +9,17 @@ Bima cannot alert about itself being down — Prometheus + Alertmanager do that.
 - `alertmanager.yml` — Telegram + Discord receivers (secrets via `*_file`).
 - `grafana/dashboards/bima.json` + provisioning — dashboard "Bima WAF".
 
+## Alert routing: `bima relay`
+Alertmanager has no Discord *bot* support and Bima can't announce its own death.
+Run `bima relay -config /etc/bima/config.yaml -listen 127.0.0.1:9098` as its own
+systemd service (same EnvironmentFile as bima) and point Alertmanager at it:
+```yaml
+receivers:
+  - name: bima-relay
+    webhook_configs: [{url: http://127.0.0.1:9098/alertmanager, send_resolved: true}]
+```
+It forwards through the configured notifiers (Telegram, Discord webhook or bot).
+
 ## Prometheus scrape config
 ```yaml
 scrape_configs:
