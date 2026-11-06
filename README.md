@@ -65,10 +65,11 @@ bima check      -config FILE [--json] [--send]   # validate live wiring, with a 
 bima test-alert -config FILE
 bima unban      -config FILE IP...               # lift bans everywhere, reset score
 bima relay      -config FILE                     # Alertmanager → Discord bot / Telegram
+bima cloudflare rules | apply | ips | sync      # Cloudflare WAF custom rules, edge ban list, edge ranges
 bima skills     list | show [NAME [FILE]] | install [--dir ~/.claude/skills]
 bima version
 ```
-The `bima-setup` skill (SKILL.md + 5 references) is **embedded in the binary**. After
+The `bima-setup` skill (SKILL.md + 6 references) is **embedded in the binary**. After
 `bima skills install`, coding agents such as Claude Code can install, verify and tune
 Bima on their own, following safe defaults: start in `detect`, ask before reloading
 HAProxy, keep secrets in the environment.
@@ -80,11 +81,52 @@ HAProxy, keep secrets in the environment.
 | `deploy/bima-spoe.conf` | SPOE config (identical for every environment) |
 | `config.example.yaml` | Production Bima config (starts in `mode: detect`) |
 | `deploy/monitoring/` | Prometheus rules, Alertmanager template, Grafana dashboard |
+| `deploy/e2e-cf/` | Origin behind a (simulated) Cloudflare edge, mock Cloudflare API |
 | `Dockerfile` target `runtime` | Production image (agent only) |
 
 **HA:** `state.backend: redis` and list every HAProxy node in `ban.runtime_apis`. Bans
 live in Redis (sorted set); each agent reconciles them into every map every 2 s.
 **Single node:** `state.backend: memory` with `ban_file`, so bans survive restarts.
+
+## Cloudflare
+Bima works with Cloudflare in three independent, opt-in ways. Bima's own detection rules
+and defaults do not change.
+
+**1. Cloudflare WAF custom rules generated from Bima's signatures** — for zones where Bima
+cannot run at the origin, or as a first layer in front of it:
+```bash
+bima cloudflare rules                    # paste into Security > WAF > Custom rules (or -format json|terraform)
+BIMA_CLOUDFLARE_API_TOKEN=… bima cloudflare apply -zone ZONE_ID -account ACCOUNT_ID        # plan
+BIMA_CLOUDFLARE_API_TOKEN=… bima cloudflare apply -zone ZONE_ID -account ACCOUNT_ID -yes   # apply
+```
+- 5 rules by default (the Free plan's limit): Bima ban list, sensitive files, injection in
+  URI and headers (two rules), scanner tools and fake crawlers. Every expression stays
+  under Cloudflare's 4096-character limit.
+- Only fields and functions available on every plan are used: `lower`, `url_decode(…, "r")`,
+  `contains`, `starts_with`, `ends_with`, `in`, `cf.client.bot`, `ip.src.asnum` and IP lists.
+- `apply` updates its own rules in place (`ref` prefixed `bima_`) and keeps every other rule.
+  `-replace-existing` drops the other rules (e.g. older hand-written copies).
+- Site-specific options: `-script-hosts`, `-exempt-path`, `-ai-bots`, `-cloud-asn`,
+  `-block-empty-ua` / `-empty-ua-allow`, `-action managed_challenge`.
+- The rules are tested against the scenario corpus: no false positive on benign traffic,
+  and 76% of the URI/header attacks stopped at the edge. Cloudflare custom rules cannot read
+  request bodies below Enterprise, so body attacks and anything needing a parser stay
+  Bima's job at the origin.
+
+**2. Ban sync to the edge** (`cloudflare.ban_sync`): Bima mirrors its bans into the account
+IP list `bima_blocklist`, and the rule `ip.src in $bima_blocklist` stops banned clients at
+Cloudflare. Private addresses are never sent, and IPv6 is sent as /64. Only items whose
+comment starts with `bima` are touched.
+
+**3. Origin behind Cloudflare** (`cloudflare.trust_edge`, `bima init --cloudflare[-only]`):
+- HAProxy takes the client IP from `CF-Connecting-IP`, but only when the peer is a
+  Cloudflare edge.
+- `--cloudflare-only` refuses direct hits on the origin.
+- Bima trusts the edge ranges and never bans an edge address. It also ignores the edge's
+  TLS fingerprint (JA3) and the `cf-*` headers when it fingerprints clients.
+- Refresh the edge ranges with `bima cloudflare ips -fetch -o /etc/haproxy/bima-cloudflare.lst`.
+
+Details: `bima skills show bima-setup references/cloudflare.md`.
 
 ## Fail-open and latency budget
 - SPOE timeout is 100 ms. If the agent is down or times out the request passes and
@@ -118,6 +160,7 @@ bash test/e2e/setup.sh                           # HA stack: 2×HAProxy, 2×Bima
 cd deploy/e2e && bash ../../test/e2e/run.sh      # every phase (or e.g. run.sh 4 5 S)
 bash test/e2e/run-prod.sh                        # deploy/haproxy.cfg + runtime image, unmodified
 bash test/e2e/run-skill.sh                       # skill workflow: plain HAProxy → init → merge → check → detect → enforce
+bash test/e2e/run-cf.sh                          # behind Cloudflare (init --cloudflare-only), ban sync, cloudflare apply (mock API)
 ```
 
 ## License

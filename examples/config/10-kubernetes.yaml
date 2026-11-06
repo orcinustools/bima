@@ -1,0 +1,20 @@
+# Kubernetes: HAProxy ingress pods + a Bima Deployment behind a ClusterIP
+# Service, state in Redis. HAProxy reaches the agents via the Service
+# (be_bima_agents server bima bima.waf.svc:12345); Bima reaches each HAProxy
+# pod's Runtime API over TCP (list them, or one headless-service entry per pod).
+listen: "0.0.0.0:12345"           # pod network; restrict with a NetworkPolicy
+metrics_addr: "0.0.0.0:9101"      # scraped by Prometheus; NetworkPolicy!
+mode: enforce
+host: ingress.example.com
+trusted_proxies:
+  - 10.96.0.0/12                  # cluster/LB ranges that may set X-Forwarded-For
+state:
+  backend: redis
+  redis: {addr: "redis.waf.svc:6379", prefix: "bima:"}
+ban:
+  runtime_apis:
+    - tcp:haproxy-0.haproxy.ingress.svc:9999
+    - tcp:haproxy-1.haproxy.ingress.svc:9999
+  map_file: /etc/haproxy/bima-blocklist.map
+alert:
+  discord: {enabled: true}

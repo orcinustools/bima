@@ -1,0 +1,19 @@
+# HAProxy behind a cloud load balancer / reverse proxy that appends the client
+# IP to X-Forwarded-For. haproxy.cfg must restore it ONLY from these ranges:
+#   acl bima_trusted_proxy src -f /etc/haproxy/bima-trusted.lst
+#   http-request set-src hdr_ip(x-forwarded-for,-1) if bima_trusted_proxy { req.hdr(x-forwarded-for) -m found }
+# Keep trusted_proxies identical to that file: Bima then holds the TCP peer
+# accountable whenever a forwarding header came from anyone else (forged XFF).
+listen: "127.0.0.1:12345"
+metrics_addr: "127.0.0.1:9101"
+mode: enforce
+host: app.example.com
+trusted_proxies:
+  - 10.0.0.0/16                   # VPC subnets of the load balancer
+  - 10.1.0.0/16
+state: {backend: memory, ban_file: /var/lib/bima/bans.json}
+ban:
+  runtime_apis: ["unix:/var/run/haproxy/admin.sock"]
+  map_file: /etc/haproxy/bima-blocklist.map
+alert:
+  telegram: {enabled: true}

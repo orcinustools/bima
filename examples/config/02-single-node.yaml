@@ -1,0 +1,28 @@
+# Typical single server: HAProxy terminates TLS, the app runs behind it.
+# Telegram alerts; secrets in /etc/bima/bima.env:
+#   BIMA_TELEGRAM_TOKEN=...  BIMA_TELEGRAM_CHAT_ID=...
+listen: "127.0.0.1:12345"
+metrics_addr: "127.0.0.1:9101"
+mode: enforce
+host: shop.example.com
+allowlist:
+  - 203.0.113.10/32               # office
+bots: {verify: true, timeout: 2s}
+max_body_inspect: 65536
+crs: {enabled: true, paranoia: 1, inbound_threshold: 5, fast_path: true}
+score: {tarpit: 50, ban: 80, half_life: 5m, window: 1m}
+state:
+  backend: memory
+  ban_file: /var/lib/bima/bans.json
+geoip:
+  country_db: /usr/share/GeoIP/dbip-country-lite.mmdb
+  asn_db: /usr/share/GeoIP/dbip-asn-lite.mmdb
+ban:
+  enabled: true
+  runtime_apis: ["unix:/var/run/haproxy/admin.sock"]
+  map_file: /etc/haproxy/bima-blocklist.map
+  durations: [10m, 1h, 24h]
+alert:
+  dedup_window: 5m
+  digest_interval: 5m
+  telegram: {enabled: true}

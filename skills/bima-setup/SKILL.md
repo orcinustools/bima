@@ -16,6 +16,7 @@ non-interactive and print machine-readable output with `--json`:
 | `bima test-alert -config F` | Send one test alert to every notifier |
 | `bima relay -config F` | Alertmanager webhook → Bima notifiers (separate service; delivers agent-down alerts) |
 | `bima unban -config F IP...` | Lift bans on every HAProxy node and reset the score (false positive / support request) |
+| `bima cloudflare rules\|apply\|ips\|sync` | Cloudflare WAF custom rules from Bima's signatures, ban sync to an edge IP list, edge ranges |
 | `bima skills show bima-setup <file>` | Print a reference file of this skill |
 
 ## Ground rules (production safety)
@@ -34,7 +35,7 @@ Collect before generating anything (ask the user only for what you cannot find):
 - Path of the active config (`systemctl cat haproxy`, usually `/etc/haproxy/haproxy.cfg`) and the frontend(s) serving the app.
 - Whether port 443 is `mode tcp` (TLS passthrough): then HTTPS can't be inspected until TLS is terminated in HAProxy for the protected hostnames (see `references/haproxy.md`, "HTTPS behind mode tcp").
 - Existing `stats socket` line (reuse it if it has `level admin`; otherwise one must be added).
-- Is HAProxy behind a CDN/LB? If yes, the trusted proxy CIDRs (needed to restore the client IP).
+- Is HAProxy behind a CDN/LB? If yes, the trusted proxy CIDRs (needed to restore the client IP). Behind **Cloudflare**: use `--cloudflare` (see `references/cloudflare.md`).
 - One node or several HAProxy nodes? Several → Redis is required (`--state redis`).
 - Alert channels the user wants (Telegram, Discord webhook, Discord bot).
 
@@ -89,3 +90,4 @@ Read with `bima skills show bima-setup <file>` (or from the installed skill dir)
 - `references/tuning.md` — shadow mode, `/report`, writing exclusions safely
 - `references/troubleshooting.md` — symptom → cause → fix table
 - `references/monitoring.md` — Prometheus/Alertmanager/Grafana wiring
+- `references/cloudflare.md` — origin behind Cloudflare, edge custom rules, ban sync

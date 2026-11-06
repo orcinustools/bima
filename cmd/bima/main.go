@@ -20,6 +20,7 @@ import (
 	"github.com/dropmorepackets/haproxy-go/spop"
 	"github.com/orcinustools/bima/internal/alert"
 	"github.com/orcinustools/bima/internal/ban"
+	"github.com/orcinustools/bima/internal/cloudflare"
 	"github.com/orcinustools/bima/internal/config"
 	"github.com/orcinustools/bima/internal/detect"
 	"github.com/orcinustools/bima/internal/engine"
@@ -42,6 +43,7 @@ Usage:
   bima test-alert -config FILE                 send a test alert to every notifier
   bima unban      -config FILE IP...           lift bans (all HAProxy nodes) and reset scores
   bima relay      -config FILE [-listen ADDR]  Alertmanager webhook → Bima notifiers (Discord bot, Telegram)
+  bima cloudflare rules | apply | ips | sync     Cloudflare WAF custom rules, edge ban list, edge IP ranges
   bima skills     list | show [NAME [FILE]] | install [--dir DIR] [--force]
                                                agent skills embedded in this binary (e.g. for Claude Code)
   bima version
@@ -71,6 +73,8 @@ func main() {
 		os.Exit(cmdRelay(args))
 	case "skills":
 		os.Exit(cmdSkills(args))
+	case "cloudflare", "cf":
+		os.Exit(cmdCloudflare(args))
 	case "version", "--version":
 		fmt.Println("bima", version)
 	case "help", "-h", "--help":
@@ -218,6 +222,21 @@ func cmdRun(args []string) {
 		fatal("ban manager", err)
 	}
 	go bans.Run(ctx, cfg.Ban.ReconcileInterval)
+
+	if bs := cfg.Cloudflare.BanSync; bs.Enabled {
+		cf := cloudflare.NewSyncer(cloudflare.NewClient(cfg.Cloudflare.APIBase, cfg.Cloudflare.APIToken),
+			bs.AccountID, bs.ListName, bs.Interval, bans.Active)
+		bans.OnChange = cf.Kick
+		go cf.Run(ctx)
+		metrics.CounterFunc("bima_cloudflare_sync_errors_total", "Failed Cloudflare IP list syncs.", func() float64 { return float64(cf.Errors.Load()) })
+		metrics.CounterFunc("bima_cloudflare_items_added_total", "Bans pushed to the Cloudflare IP list.", func() float64 { return float64(cf.Added.Load()) })
+		metrics.CounterFunc("bima_cloudflare_items_removed_total", "Lifted bans removed from the Cloudflare IP list.", func() float64 { return float64(cf.Removed.Load()) })
+		metrics.GaugeFunc("bima_cloudflare_list_items", "Items in the Cloudflare IP list after the last sync.", func() float64 { return float64(cf.Items.Load()) })
+		slog.Info("cloudflare ban sync enabled", "list", bs.ListName, "interval", bs.Interval.String())
+	}
+	if cfg.Cloudflare.TrustEdge {
+		slog.Info("behind cloudflare: edge ranges trusted, edge addresses never banned", "trusted_proxies", len(cfg.TrustedProxies))
+	}
 
 	th := enum.DefaultThresholds
 	th.GroupDistinct404, th.GroupMinIPs, th.GroupMember404 = cfg.Group.Distinct404, cfg.Group.MinIPs, cfg.Group.Member404

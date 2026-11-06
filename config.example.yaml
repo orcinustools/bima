@@ -56,6 +56,15 @@ alert:
     api_base: https://api.telegram.org
   discord:
     enabled: true
+# Cloudflare (optional). See README "Cloudflare" and `bima cloudflare -h`.
+cloudflare:
+  trust_edge: false                    # true when HAProxy sits behind Cloudflare (with init --cloudflare)
+  # edge_ips_file: /etc/haproxy/bima-cloudflare.lst   # default: ranges built into bima
+  ban_sync:                            # mirror bans into a Cloudflare IP list → blocked at the edge
+    enabled: false
+    account_id: ""
+    list_name: bima_blocklist          # rule: ip.src in $bima_blocklist
+    interval: 30s                      # token: BIMA_CLOUDFLARE_API_TOKEN (Account Filter Lists: Edit)
 exclusions: []
 #  - rules: ["CRS-941160"]           # from GET /report → suggested_exclusion
 #    path: "^/api/products$"

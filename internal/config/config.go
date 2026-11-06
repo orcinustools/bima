@@ -9,6 +9,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/orcinustools/bima/internal/cloudflare"
 	"gopkg.in/yaml.v3"
 )
 
@@ -103,6 +104,25 @@ type Config struct {
 		ASNDB     string `yaml:"asn_db"`
 	} `yaml:"geoip"`
 
+	// Cloudflare integration (all optional, off by default).
+	Cloudflare struct {
+		// TrustEdge: HAProxy sits behind Cloudflare. Cloudflare's edge ranges
+		// are added to trusted_proxies (client IP from CF-Connecting-IP), and
+		// edge addresses are never banned.
+		TrustEdge   bool   `yaml:"trust_edge"`
+		EdgeIPsFile string `yaml:"edge_ips_file"` // default: ranges built into Bima
+		APIBase     string `yaml:"api_base"`
+		APIToken    string `yaml:"api_token"` // env BIMA_CLOUDFLARE_API_TOKEN
+		// BanSync mirrors Bima's bans into a Cloudflare IP list so banned
+		// clients are stopped at the edge (rule: ip.src in $<list_name>).
+		BanSync struct {
+			Enabled   bool          `yaml:"enabled"`
+			AccountID string        `yaml:"account_id"`
+			ListName  string        `yaml:"list_name"`
+			Interval  time.Duration `yaml:"interval"`
+		} `yaml:"ban_sync"`
+	} `yaml:"cloudflare"`
+
 	// Exclusions suppress findings (false-positive tuning). A finding is
 	// dropped when its rule matches one of Rules (exact, or prefix with
 	// trailing '*'), the request path matches Path (regex, optional) and its
@@ -196,6 +216,8 @@ func Default() *Config {
 	c.Alert.DedupWindow = 5 * time.Minute
 	c.Alert.DigestInterval = 5 * time.Minute
 	c.Alert.Telegram.APIBase = "https://api.telegram.org"
+	c.Cloudflare.BanSync.ListName = "bima_blocklist"
+	c.Cloudflare.BanSync.Interval = 30 * time.Second
 	return c
 }
 
@@ -228,6 +250,9 @@ func Load(path string) (*Config, error) {
 	}
 	if v := os.Getenv("BIMA_DISCORD_API_BASE"); v != "" {
 		c.Alert.Discord.APIBase = v
+	}
+	if v := os.Getenv("BIMA_CLOUDFLARE_API_TOKEN"); v != "" {
+		c.Cloudflare.APIToken = v
 	}
 	if v := os.Getenv("BIMA_MODE"); v != "" {
 		c.Mode = Mode(v)
@@ -270,8 +295,26 @@ func Load(path string) (*Config, error) {
 	if c.allow, err = parsePrefixes(c.Allowlist); err != nil {
 		return nil, fmt.Errorf("allowlist: %w", err)
 	}
+	if c.Cloudflare.TrustEdge {
+		edge, err := cloudflare.LoadRanges(c.Cloudflare.EdgeIPsFile)
+		if err != nil {
+			return nil, fmt.Errorf("cloudflare.edge_ips_file: %w", err)
+		}
+		c.TrustedProxies = append(c.TrustedProxies, edge...)
+	}
 	if c.trusted, err = parsePrefixes(c.TrustedProxies); err != nil {
 		return nil, fmt.Errorf("trusted_proxies: %w", err)
+	}
+	if bs := c.Cloudflare.BanSync; bs.Enabled {
+		if bs.AccountID == "" {
+			return nil, fmt.Errorf("cloudflare.ban_sync.account_id required")
+		}
+		if c.Cloudflare.APIToken == "" {
+			return nil, fmt.Errorf("cloudflare.ban_sync: API token missing (set BIMA_CLOUDFLARE_API_TOKEN in the env file)")
+		}
+		if bs.ListName == "" {
+			return nil, fmt.Errorf("cloudflare.ban_sync.list_name required")
+		}
 	}
 	return c, nil
 }

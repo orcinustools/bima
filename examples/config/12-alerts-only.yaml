@@ -1,0 +1,15 @@
+# Watch only: detect mode never blocks, and ban.enabled=false keeps Bima away
+# from the HAProxy maps (no Runtime API access needed). Alerts go to Telegram
+# and Discord. Useful for staging or for a site owned by another team.
+listen: "127.0.0.1:12345"
+metrics_addr: "127.0.0.1:9101"
+mode: detect
+host: staging.example.com
+ban:
+  enabled: false
+state: {backend: memory}
+alert:
+  dedup_window: 30m               # quieter channel
+  digest_interval: 30m
+  telegram: {enabled: true}
+  discord: {enabled: true}

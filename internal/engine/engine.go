@@ -306,13 +306,32 @@ func (e *Engine) filter(fs []detect.Finding, path string) []detect.Finding {
 func (e *Engine) fingerprint(r *Request) string {
 	names := make([]string, 0, len(r.Headers))
 	for _, h := range r.Headers {
-		switch strings.ToLower(h[0]) {
-		case "x-forwarded-for", "x-real-ip", "cookie", "content-length", "x-request-id":
+		n := strings.ToLower(h[0])
+		switch n {
+		case "x-forwarded-for", "x-real-ip", "cookie", "content-length", "x-request-id",
+			"x-forwarded-proto", "true-client-ip", "cdn-loop":
 			continue // per-request / proxy-added, not client behaviour
+		}
+		if strings.HasPrefix(n, "cf-") {
+			continue // added by Cloudflare
 		}
 		names = append(names, h[0])
 	}
-	return fingerprint.Client(r.JA3, names, r.Header("user-agent"))
+	ja3 := r.JA3
+	if e.viaTrustedProxy(r) {
+		ja3 = "" // the TLS handshake is the CDN's, not the client's
+	}
+	return fingerprint.Client(ja3, names, r.Header("user-agent"))
+}
+
+// viaTrustedProxy reports whether the request reached HAProxy through a
+// configured CDN/LB (the TCP peer is a trusted proxy, not the client).
+func (e *Engine) viaTrustedProxy(r *Request) bool {
+	if !r.Peer.IsValid() || r.Peer.Unmap() == r.IP.Unmap() {
+		return false
+	}
+	t, _ := e.cfg.Trusted(r.Peer)
+	return t
 }
 
 // OnRequest is called for each request (SPOE check-request).
@@ -512,6 +531,13 @@ func (e *Engine) ban(ip string, score float64) string {
 	}
 	if e.bans.IsBanned(ip) {
 		return ""
+	}
+	if a, err := netip.ParseAddr(ip); err == nil {
+		if t, _ := e.cfg.Trusted(a); t {
+			// never ban a CDN/LB edge: it would cut off every client behind it
+			slog.Error("refusing to ban a trusted proxy address (check set-src / trusted_proxies)", "ip", ip, "score", score)
+			return ""
+		}
 	}
 	level := e.scorer.NextBanLevel(ip)
 	d, placed, err := e.bans.Ban(ip, level)

@@ -14,6 +14,7 @@ import (
 	"text/template"
 
 	"github.com/orcinustools/bima"
+	"github.com/orcinustools/bima/internal/cloudflare"
 )
 
 type initOpts struct {
@@ -27,6 +28,10 @@ type initOpts struct {
 	AgentAddr                               string // host:port HAProxy uses to reach the agent
 	SocketLine                              string
 	JSON, Force                             bool
+	// Cloudflare in front of HAProxy
+	Cloudflare, CloudflareOnly bool
+	CloudflareFile             string
+	CloudflareAccount          string
 }
 
 func cmdInit(args []string) int {
@@ -51,6 +56,9 @@ func cmdInit(args []string) int {
 	f.StringVar(&o.GeoCountry, "geoip-country", "", "country MMDB path (GeoLite2/DB-IP Lite)")
 	f.StringVar(&o.GeoASN, "geoip-asn", "", "ASN MMDB path")
 	f.StringVar(&o.TLSCrtDir, "tls-crt-dir", "", "directory of cert+key PEMs; adds a :443 bind to the example haproxy.cfg")
+	f.BoolVar(&o.Cloudflare, "cloudflare", false, "HAProxy is behind Cloudflare: client IP from CF-Connecting-IP (edge ranges only), trust_edge in config")
+	f.BoolVar(&o.CloudflareOnly, "cloudflare-only", false, "with --cloudflare: refuse requests that do not come through Cloudflare (origin lockdown)")
+	f.StringVar(&o.CloudflareAccount, "cloudflare-account", "", "Cloudflare account ID: enable ban sync to an IP list (token in bima.env)")
 	f.BoolVar(&o.JSON, "json", false, "print a JSON summary")
 	f.BoolVar(&o.Force, "force", false, "overwrite existing files")
 	_ = f.Parse(args)
@@ -62,6 +70,10 @@ func cmdInit(args []string) int {
 		return 2
 	}
 	o.TrustedFile = path.Join(path.Dir(o.MapFile), "bima-trusted.lst")
+	o.CloudflareFile = path.Join(path.Dir(o.MapFile), "bima-cloudflare.lst")
+	if o.CloudflareOnly {
+		o.Cloudflare = true
+	}
 	o.AgentAddr = o.Listen
 	if strings.HasPrefix(o.AgentAddr, ":") {
 		o.AgentAddr = "127.0.0.1" + o.AgentAddr
@@ -80,6 +92,10 @@ func cmdInit(args []string) int {
 		"bima.env":           render(envTmpl, o),
 		"bima-blocklist.map": "",
 		"NEXT_STEPS.md":      render(nextTmpl, o),
+	}
+	if o.Cloudflare {
+		files["bima-cloudflare.lst"] = "# Cloudflare edge ranges — refresh: bima cloudflare ips -fetch -o " + o.CloudflareFile + "\n" +
+			strings.Join(cloudflare.EdgeRanges, "\n") + "\n"
 	}
 	if len(o.TrustedProxies) > 0 {
 		files["bima-trusted.lst"] = strings.Join(o.TrustedProxies, "\n") + "\n"
@@ -225,12 +241,30 @@ alert:
     api_base: https://api.telegram.org
   discord:
     enabled: {{or .Discord .DiscordBot}}
+{{- if or .Cloudflare .CloudflareAccount}}
+cloudflare:
+  trust_edge: {{.Cloudflare}}                    # behind Cloudflare: edge ranges trusted, never banned
+  # edge_ips_file: {{.CloudflareFile}}   # default: ranges built into bima
+  ban_sync:                            # mirror bans into a Cloudflare IP list (edge blocking)
+    enabled: {{if .CloudflareAccount}}true{{else}}false{{end}}
+    account_id: {{quote .CloudflareAccount}}
+    list_name: bima_blocklist          # rule: ip.src in $bima_blocklist (bima cloudflare rules)
+    interval: 30s
+{{- end}}
 exclusions: []                         # add from GET /report suggested_exclusion
 `))
 
 const frontendBlock = `    option http-buffer-request
     unique-id-format %{+X}o\ %ci:%cp_%fi:%fp_%Ts_%rt:%pid
     unique-id-header X-Request-ID
+{{- if .Cloudflare}}
+    # behind Cloudflare: real client IP from CF-Connecting-IP, only when the peer is a Cloudflare edge
+    acl bima_cf_edge src -f {{.CloudflareFile}}
+{{- if .CloudflareOnly}}
+    http-request deny deny_status 403 if !bima_cf_edge      # origin lockdown: Cloudflare only
+{{- end}}
+    http-request set-src req.hdr_ip(cf-connecting-ip) if bima_cf_edge { req.hdr(cf-connecting-ip) -m found }
+{{- end}}
 {{- if .TrustedProxies}}
     # restore the real client IP — only from trusted CDN/LB addresses
     acl bima_trusted_proxy src -f {{.TrustedFile}}
@@ -346,6 +380,9 @@ BIMA_DISCORD_WEBHOOK=
 BIMA_DISCORD_BOT_TOKEN=
 BIMA_DISCORD_CHANNEL_ID=
 {{- end}}
+{{- if .CloudflareAccount}}
+BIMA_CLOUDFLARE_API_TOKEN=             # Account Filter Lists: Edit
+{{- end}}
 {{- if eq .State "redis"}}
 BIMA_REDIS_PASSWORD=
 {{- end}}
@@ -364,6 +401,9 @@ var nextTmpl = template.Must(template.New("next").Parse(`# Next steps (generated
 {{- if .TrustedProxies}}
    install -m 644 bima-trusted.lst {{.TrustedFile}}
 {{- end}}
+{{- if .Cloudflare}}
+   install -m 644 bima-cloudflare.lst {{.CloudflareFile}}   # refresh monthly: bima cloudflare ips -fetch -o {{.CloudflareFile}}
+{{- end}}
    install -m 644 bima.service /etc/systemd/system/bima.service
 
 2. Merge haproxy-bima.cfg into the HAProxy config (see haproxy.cfg for a complete example), then:
@@ -380,4 +420,11 @@ var nextTmpl = template.Must(template.New("next").Parse(`# Next steps (generated
 5. Tune in detect mode: curl -s http://{{.Metrics}}/report | jq   → add exclusions → mode: enforce.
 
 6. Monitoring: monitoring/bima-rules.yml, monitoring/alertmanager.yml, monitoring/grafana/.
+{{- if or .Cloudflare .CloudflareAccount}}
+
+7. Cloudflare edge rules (optional, blocks before traffic reaches you):
+   bima cloudflare rules                          # review / paste into Security > WAF > Custom rules
+   BIMA_CLOUDFLARE_API_TOKEN=... bima cloudflare apply -zone <ZONE_ID> -account <ACCOUNT_ID>        # plan
+   BIMA_CLOUDFLARE_API_TOKEN=... bima cloudflare apply -zone <ZONE_ID> -account <ACCOUNT_ID> -yes   # apply
+{{- end}}
 `))

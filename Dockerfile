@@ -9,6 +9,7 @@ RUN CGO_ENABLED=0 go build -trimpath -ldflags="-s -w -X main.version=${VERSION}"
 # test-only tools (mocks, load generator, fake GeoIP DBs for documentation IP ranges)
 RUN CGO_ENABLED=0 go build -trimpath -ldflags="-s -w" -o /out/test/mockapp ./test/e2e/mockapp \
  && CGO_ENABLED=0 go build -trimpath -ldflags="-s -w" -o /out/test/mocknotify ./test/e2e/mocknotify \
+ && CGO_ENABLED=0 go build -trimpath -ldflags="-s -w" -o /out/test/mockcf ./test/e2e/mockcf \
  && CGO_ENABLED=0 go build -trimpath -ldflags="-s -w" -o /out/test/loadgen ./test/e2e/loadgen \
  && CGO_ENABLED=0 go build -trimpath -ldflags="-s -w" -o /out/test/scenariorun ./test/e2e/scenariorun \
  && go run ./test/e2e/genmmdb /out/geo

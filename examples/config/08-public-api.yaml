@@ -1,0 +1,32 @@
+# JSON API with many legitimate clients behind carrier-grade NAT (mobile apps)
+# and partners calling from cloud servers. Group detection by ASN only (CGNAT
+# shares fingerprints), more tolerant 404 thresholds (API versioning, probes by
+# SDKs), partner webhooks allowlisted.
+listen: "127.0.0.1:12345"
+metrics_addr: "127.0.0.1:9101"
+mode: enforce
+host: api.example.com
+allowlist:
+  - 192.0.2.0/27                  # payment provider webhooks (from its docs)
+crs:
+  enabled: true
+  paranoia: 1
+  inbound_threshold: 5
+  allowed_methods: "GET HEAD POST OPTIONS PUT PATCH DELETE"
+group:
+  by: [asn]
+  distinct_404: 150
+  min_ips: 5
+  member_404: 5
+  penalty: 80
+score: {tarpit: 60, ban: 90, half_life: 5m, window: 1m}
+max_body_inspect: 65536
+state: {backend: memory, ban_file: /var/lib/bima/bans.json}
+geoip:
+  country_db: /usr/share/GeoIP/dbip-country-lite.mmdb
+  asn_db: /usr/share/GeoIP/dbip-asn-lite.mmdb
+ban:
+  runtime_apis: ["unix:/var/run/haproxy/admin.sock"]
+  map_file: /etc/haproxy/bima-blocklist.map
+alert:
+  discord: {enabled: true}

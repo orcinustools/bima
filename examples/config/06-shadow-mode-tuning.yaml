@@ -1,0 +1,40 @@
+# First weeks in production: shadow mode plus narrow exclusions for the false
+# positives seen in GET /report. Each exclusion names the rule(s), the path and
+# the exact input location, so the rest of the request is still inspected.
+listen: "127.0.0.1:12345"
+metrics_addr: "127.0.0.1:9101"
+mode: detect
+host: app.example.com
+state: {backend: memory, ban_file: /var/lib/bima/bans.json}
+ban:
+  runtime_apis: ["unix:/var/run/haproxy/admin.sock"]
+  map_file: /etc/haproxy/bima-blocklist.map
+alert:
+  discord: {enabled: true}
+exclusions:
+  # GraphQL documents ({ field(arg: $var) { ... } }) trip CRS command/NoSQL
+  # heuristics. Only the document text is excluded; variables stay inspected.
+  - rules: ["CRS-932*", "CRS-942290"]
+    path: "^/graphql$"
+    locations: ["body:json.query"]
+    reason: "GraphQL document syntax"
+  # Analytics cookie holding JSON with $-prefixed keys (PostHog)
+  - rules: ["CRS-942290"]
+    locations: ["cookie:ph_"]
+    reason: "PostHog cookie"
+  # Rich text editor saving HTML
+  - rules: ["CRS-941*", "BIMA-SSTI-007"]
+    path: "^/api/posts(/\\d+)?$"
+    locations: ["body:json.content"]
+    reason: "WYSIWYG HTML"
+  # Merchant server-to-server API whose JSON carries callback URLs: body only,
+  # path/query/headers/scoring still apply
+  - rules: ["*"]
+    path: "^/public-api/v[12](/|$)"
+    locations: ["body"]
+    reason: "payment API callback URLs"
+  # Support tickets quoting file paths
+  - rules: ["BIMA-LFI-008"]
+    path: "^/api/tickets$"
+    locations: ["body:json.message"]
+    reason: "users paste paths like /etc/hosts"

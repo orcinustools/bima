@@ -26,6 +26,10 @@ syntax (`10m`, `1h`). Secrets are env-only.
 | `state.ban_file` | `""` | e.g. `/var/lib/bima/bans.json` (memory backend). |
 | `state.redis.addr` / `prefix` | `""` / `bima:` | Password via `BIMA_REDIS_PASSWORD`. |
 | `geoip.country_db` / `asn_db` | `""` | MMDB files (GeoLite2 or DB-IP Lite). Adds `ASxxx ORG, CC` to alerts. |
+| `cloudflare.trust_edge` | `false` | HAProxy is behind Cloudflare: edge ranges are added to `trusted_proxies`, edge addresses are never banned, and the edge's JA3 / `cf-*` headers are ignored when fingerprinting. Pair with `bima init --cloudflare`. |
+| `cloudflare.edge_ips_file` | built-in list | Edge ranges file (same as the HAProxy acl); refresh with `bima cloudflare ips -fetch -o FILE`. |
+| `cloudflare.ban_sync.enabled` / `account_id` / `list_name` / `interval` | `false` / — / `bima_blocklist` / `30s` | Mirror bans into a Cloudflare IP list (edge blocking). Token `BIMA_CLOUDFLARE_API_TOKEN` (Account Filter Lists: Edit). See `references/cloudflare.md`. |
+| `cloudflare.api_base` | Cloudflare API v4 | Override for tests. |
 | `ban.enabled` | `true` | |
 | `ban.runtime_apis` | — | One per HAProxy node: `unix:/path` or `tcp:host:port`. |
 | `ban.map_file` | — | Must equal the path in the HAProxy `map_ip(...)` rule. |

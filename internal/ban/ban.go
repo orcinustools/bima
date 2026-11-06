@@ -31,6 +31,16 @@ type Manager struct {
 	cache map[string]time.Time
 
 	Reconciles, APIErrors atomic.Uint64
+
+	// OnChange, if set, is called after a ban is placed or lifted here
+	// (e.g. to push bans to a Cloudflare IP list right away).
+	OnChange func()
+}
+
+func (m *Manager) changed() {
+	if m.OnChange != nil {
+		m.OnChange()
+	}
 }
 
 func New(st store.Store, runtimeAPIs []string, mapFile string, ladder []time.Duration, enabled bool) (*Manager, error) {
@@ -147,6 +157,7 @@ func (m *Manager) Ban(ip string, level int) (time.Duration, bool, error) {
 	m.mu.Lock()
 	m.cache[ip] = until
 	m.mu.Unlock()
+	m.changed()
 	if !m.enabled {
 		return d, true, nil
 	}
@@ -170,6 +181,7 @@ func (m *Manager) Unban(ip string) error {
 	m.mu.Lock()
 	delete(m.cache, ip)
 	m.mu.Unlock()
+	m.changed()
 	for _, api := range m.apis {
 		_, _ = m.cmd(api, fmt.Sprintf("del map %s %s", m.mapFile, ip))
 	}

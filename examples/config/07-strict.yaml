@@ -1,0 +1,29 @@
+# Strict profile for an admin panel or internal tool with a small, known user
+# base: higher CRS paranoia, faster tarpit/ban, longer bans, small body window.
+# Only after a tuning period in detect mode.
+listen: "127.0.0.1:12345"
+metrics_addr: "127.0.0.1:9101"
+mode: enforce
+host: admin.example.com
+allowlist:
+  - 198.51.100.0/28               # VPN egress
+crs:
+  enabled: true
+  paranoia: 2
+  inbound_threshold: 5
+  allowed_methods: "GET HEAD POST OPTIONS"
+  fast_path: true
+score:
+  tarpit: 30
+  ban: 60
+  half_life: 15m
+  window: 2m
+max_body_inspect: 32768
+state: {backend: memory, ban_file: /var/lib/bima/bans.json}
+ban:
+  runtime_apis: ["unix:/var/run/haproxy/admin.sock"]
+  map_file: /etc/haproxy/bima-blocklist.map
+  durations: [1h, 24h, 168h]
+alert:
+  dedup_window: 15m
+  telegram: {enabled: true}

@@ -1,0 +1,27 @@
+# Busy site: keep the agent well inside the 100 ms SPOE budget. CRS has a
+# tighter deadline (verdict falls back to Bima signatures), the body window is
+# smaller (cap big uploads per endpoint in HAProxy), Redis for several agents.
+# Env: GOGC=400 GOMEMLIMIT=1GiB
+listen: "127.0.0.1:12345"
+metrics_addr: "127.0.0.1:9101"
+mode: enforce
+host: www.example.com
+max_body_inspect: 32768
+crs:
+  enabled: true
+  paranoia: 1
+  inbound_threshold: 5
+  fast_path: true                 # skip CRS when every input is plain
+  timeout: 30ms
+bots: {verify: true, timeout: 1s}
+state:
+  backend: redis
+  redis: {addr: "10.0.0.5:6379"}
+ban:
+  runtime_apis: ["unix:/var/run/haproxy/admin.sock"]
+  map_file: /etc/haproxy/bima-blocklist.map
+  reconcile_interval: 5s
+alert:
+  dedup_window: 10m
+  digest_interval: 10m
+  telegram: {enabled: true}

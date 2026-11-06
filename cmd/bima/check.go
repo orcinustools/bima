@@ -16,6 +16,7 @@ import (
 
 	"github.com/orcinustools/bima/internal/alert"
 	"github.com/orcinustools/bima/internal/ban"
+	"github.com/orcinustools/bima/internal/cloudflare"
 	"github.com/orcinustools/bima/internal/config"
 	"github.com/orcinustools/bima/internal/detect"
 	"github.com/orcinustools/bima/internal/geoip"
@@ -58,8 +59,31 @@ func cmdCheck(args []string) int {
 	if len(cfg.TrustedProxies) == 0 {
 		c.add("trusted_proxies", "warn", "empty: fine only if HAProxy never takes the client IP from X-Forwarded-For",
 			"if haproxy.cfg uses set-src from a header, list those proxies here so forged headers cannot frame or impersonate clients")
+	} else if cfg.Cloudflare.TrustEdge {
+		c.add("trusted_proxies", "pass", fmt.Sprintf("%d ranges incl. Cloudflare edge (trust_edge)", len(cfg.TrustedProxies)), "")
 	} else {
 		c.add("trusted_proxies", "pass", strings.Join(cfg.TrustedProxies, ", "), "")
+	}
+	if bs := cfg.Cloudflare.BanSync; bs.Enabled {
+		ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
+		cl := cloudflare.NewClient(cfg.Cloudflare.APIBase, cfg.Cloudflare.APIToken)
+		if err := cl.VerifyToken(ctx, bs.AccountID); err != nil {
+			c.add("cloudflare", "fail", "API token: "+err.Error(), "BIMA_CLOUDFLARE_API_TOKEN in bima.env; permission Account > Account Filter Lists > Edit")
+		} else if ls, err := cl.Lists(ctx, bs.AccountID); err != nil {
+			c.add("cloudflare", "fail", "lists of account "+bs.AccountID+": "+err.Error(), "check account_id and the token's Account Filter Lists permission")
+		} else {
+			found := false
+			for _, l := range ls {
+				if l.Name == bs.ListName {
+					found = true
+					c.add("cloudflare", "pass", fmt.Sprintf("ban sync → list %s (%d items)", l.Name, l.NumItems), "")
+				}
+			}
+			if !found {
+				c.add("cloudflare", "warn", "list "+bs.ListName+" not found", "the agent creates it on first sync; then add rule `ip.src in $"+bs.ListName+"` (bima cloudflare rules)")
+			}
+		}
+		cancel()
 	}
 	if cfg.CRS.Enabled {
 		t := time.Now()

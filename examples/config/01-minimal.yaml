@@ -1,0 +1,11 @@
+# Smallest working config: one HAProxy, one agent, shadow mode, no alerts.
+# Everything not listed uses the defaults (see skills/bima-setup/references/config.md).
+listen: "127.0.0.1:12345"
+metrics_addr: "127.0.0.1:9101"
+mode: detect                      # alerts only; read GET /report, then switch to enforce
+ban:
+  runtime_apis: ["unix:/var/run/haproxy/admin.sock"]
+  map_file: /etc/haproxy/bima-blocklist.map
+state:
+  backend: memory
+  ban_file: /var/lib/bima/bans.json

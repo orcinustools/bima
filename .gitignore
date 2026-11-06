@@ -13,3 +13,4 @@ deploy/e2e-prod/bima-blocklist.map
 *.env
 !deploy/**/*.env.example
 .DS_Store
+deploy/e2e-cf/gen/

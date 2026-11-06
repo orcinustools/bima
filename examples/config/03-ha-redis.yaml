@@ -1,0 +1,33 @@
+# Two HAProxy nodes, one Bima agent per node, shared state in Redis.
+# Scores, enumeration windows and bans are shared; every agent reconciles the
+# bans into BOTH HAProxy maps. Same file on both nodes (only `host` differs).
+# Secrets: BIMA_REDIS_PASSWORD, BIMA_DISCORD_BOT_TOKEN, BIMA_DISCORD_CHANNEL_ID
+listen: "10.0.0.11:12345"         # reachable from both HAProxy nodes (internal VLAN)
+metrics_addr: "10.0.0.11:9101"    # monitoring VLAN only
+mode: enforce
+host: lb1.example.com
+state:
+  backend: redis
+  redis:
+    addr: 10.0.0.5:6379
+    db: 0
+    prefix: "bima:"
+ban:
+  enabled: true
+  runtime_apis:                   # one per HAProxy node; Runtime API on an internal interface
+    - tcp:10.0.0.11:9999
+    - tcp:10.0.0.12:9999
+  map_file: /etc/haproxy/bima-blocklist.map
+  durations: [10m, 1h, 24h]
+  reconcile_interval: 2s
+group:                            # distributed enumeration across the fleet
+  by: [asn, fingerprint]
+  distinct_404: 60
+  min_ips: 3
+  member_404: 3
+  penalty: 80
+  flag_ttl: 10m
+geoip:
+  asn_db: /usr/share/GeoIP/dbip-asn-lite.mmdb
+alert:
+  discord: {enabled: true}        # bot token + channel id from the env

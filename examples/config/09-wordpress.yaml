@@ -1,0 +1,28 @@
+# WordPress / PHP site. Editors post HTML and shortcodes from wp-admin; that is
+# excluded narrowly for logged-in editing endpoints only. xmlrpc.php should be
+# denied in HAProxy instead (http-request deny if { path /xmlrpc.php }).
+listen: "127.0.0.1:12345"
+metrics_addr: "127.0.0.1:9101"
+mode: enforce
+host: blog.example.com
+allowlist:
+  - 203.0.113.20/32               # editors' office
+crs: {enabled: true, paranoia: 1, inbound_threshold: 5, fast_path: true}
+group:
+  by: [asn, fingerprint]
+  distinct_404: 40                # WordPress sites are scanned constantly
+state: {backend: memory, ban_file: /var/lib/bima/bans.json}
+ban:
+  runtime_apis: ["unix:/var/run/haproxy/admin.sock"]
+  map_file: /etc/haproxy/bima-blocklist.map
+alert:
+  telegram: {enabled: true}
+exclusions:
+  - rules: ["CRS-941*", "CRS-932*", "BIMA-SSTI-007"]
+    path: "^/wp-admin/(post\\.php|admin-ajax\\.php)$"
+    locations: ["body:content", "body:excerpt"]
+    reason: "editor HTML/shortcodes"
+  - rules: ["CRS-941*"]
+    path: "^/wp-json/wp/v2/(posts|pages)(/\\d+)?$"
+    locations: ["body:json.content"]
+    reason: "block editor (Gutenberg)"
